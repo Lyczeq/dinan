@@ -2,22 +2,39 @@
 pragma solidity ^0.8.9;
 import "./Exam.sol";
 import "./utils.sol";
+import "hardhat/console.sol";
 
 contract ExamController {
-    Exam[] private exams;
+    ExamHelper[] exams;
 
-    function addExam(string memory _name, Question[] calldata _questions)
-        public
-    {
-        uint256 timestamp = block.timestamp;
-        Exam newExam = new Exam(timestamp, _name);
-        for (uint256 i = 0; i < _questions.length; i++) {
-            newExam.addQuestion(_questions[i]);
-        }
-        exams.push(newExam);
+    struct ExamHelper {
+        string name;
+        string description;
+        address examAddress;
     }
 
-    function getExams() public view returns (Exam[] memory) {
+    function addExam(
+        string calldata _name,
+        string calldata _description,
+        Question[] calldata _questions
+    ) public {
+        require(
+            _questions.length <= 30,
+            "The maximum number of questions you can add is 30"
+        );
+
+        uint256 timestamp = block.timestamp;
+        address creatorAddress = msg.sender;
+        Exam newExam = new Exam(timestamp, _name, _description, creatorAddress);
+        // add questions
+        for (uint8 i = 0; i < _questions.length; i++) {
+            newExam.addQuestion(_questions[i]);
+        }
+
+        exams.push(ExamHelper(_name, _description, newExam.getAddress()));
+    }
+
+    function getExams() public view returns (ExamHelper[] memory) {
         return exams;
     }
 }
