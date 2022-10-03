@@ -1,5 +1,6 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
+import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
 import { MOCK_QUESTIONS } from './utils';
 
@@ -29,14 +30,24 @@ describe('ExamController', () => {
     ).to.be.revertedWith("The questions array you've provided is empty.");
   });
 
-  it('Should add a new Exam to the Exams array.', async () => {
+  it("Should add a new Exam to the Exams array and check whether the Exams' data is the same.", async () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
 
     await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
     const exams = await examController.getExams();
-    expect(exams[0]).to.haveOwnProperty('examAddress');
-    expect(exams[0]).to.haveOwnProperty('name', EXAM_NAME);
-    expect(exams[0]).to.haveOwnProperty('description', EXAM_DESCRIPTION);
+
+    const firstExam = exams.at(0)!;
+
+    expect(firstExam.examAddress).be.properAddress;
+    expect(firstExam).to.haveOwnProperty('name', EXAM_NAME);
+    expect(firstExam).to.haveOwnProperty('description', EXAM_DESCRIPTION);
+
+    const blockNumber = await ethers.provider.getBlockNumber();
+    const block = await ethers.provider.getBlock(blockNumber);
+    const timestamp = block.timestamp;
+
+    const examTimestamp: BigNumber = exams.at(0)?.timestamp!;
+    expect(examTimestamp).to.be.equal(BigNumber.from(timestamp));
   });
 
   it("Should't include users' addreses in the given Exam array.", async () => {
@@ -51,6 +62,7 @@ describe('ExamController', () => {
 
     const exams = await examController.getExams();
     const examAddresses = exams.map(e => e.examAddress);
+
     expect(examAddresses).to.not.include(owner.address);
     expect(examAddresses).to.not.include(otherAccount.address);
   });

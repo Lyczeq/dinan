@@ -10,6 +10,7 @@ contract ExamController {
         string name;
         string description;
         address examAddress;
+        uint256 timestamp;
     }
 
     function addExam(
@@ -36,7 +37,9 @@ contract ExamController {
             newExam.addQuestion(_questions[i]);
         }
 
-        exams.push(ExamHelper(_name, _description, newExam.getAddress()));
+        exams.push(
+            ExamHelper(_name, _description, newExam.getAddress(), timestamp)
+        );
     }
 
     function getExams() public view returns (ExamHelper[] memory) {
