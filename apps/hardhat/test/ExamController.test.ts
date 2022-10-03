@@ -61,8 +61,8 @@ describe('ExamController', () => {
 
   it("Shouldn't add Exam with more than 30 questions", async () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
-
-    const tooManyQuestions = Array(31).fill(MOCK_QUESTIONS[0]);
+    const firstQuestion = MOCK_QUESTIONS.at(0);
+    const tooManyQuestions = Array(31).fill(firstQuestion);
 
     await expect(
       examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
