@@ -58,4 +58,14 @@ describe('ExamController', () => {
     const examAddresses = exams.map(e => e.examAddress);
     expect(examAddresses[0]).to.not.be.equal(examAddresses[1]);
   });
+
+  it("Shouldn't add Exam with more than 30 questions", async () => {
+    const { examController } = await loadFixture(deployExamControllerFixture);
+
+    const tooManyQuestions = Array(31).fill(MOCK_QUESTIONS[0]);
+
+    await expect(
+      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
+    ).to.be.revertedWith('The maximum number of questions you can add is 30');
+  });
 });

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.9;
 import "./Exam.sol";
 import "./utils.sol";
-import "hardhat/console.sol";
 
 contract ExamController {
     ExamHelper[] exams;
@@ -26,6 +25,7 @@ contract ExamController {
         uint256 timestamp = block.timestamp;
         address creatorAddress = msg.sender;
         Exam newExam = new Exam(timestamp, _name, _description, creatorAddress);
+
         // add questions
         for (uint8 i = 0; i < _questions.length; i++) {
             newExam.addQuestion(_questions[i]);
