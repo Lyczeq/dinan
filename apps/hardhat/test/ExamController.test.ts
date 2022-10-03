@@ -22,6 +22,13 @@ describe('ExamController', () => {
     expect(exams).to.be.an('array').that.is.empty;
   });
 
+  it('Should be reverted when adding an Exam with an empty questions array.', async () => {
+    const { examController } = await loadFixture(deployExamControllerFixture);
+    await expect(
+      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, [])
+    ).to.be.revertedWith("The questions array you've provided is empty.");
+  });
+
   it('Should add a new Exam to the Exams array.', async () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
 
@@ -48,7 +55,7 @@ describe('ExamController', () => {
     expect(examAddresses).to.not.include(otherAccount.address);
   });
 
-  it('Should test that created Exams of the same data and the same creator have different addreses.', async () => {
+  it('Should test that created Exams by the same creator and of the same data have different addreses.', async () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
 
     await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
@@ -66,6 +73,6 @@ describe('ExamController', () => {
 
     await expect(
       examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
-    ).to.be.revertedWith('The maximum number of questions you can add is 30');
+    ).to.be.revertedWith('The maximum number of questions you can add is 30.');
   });
 });

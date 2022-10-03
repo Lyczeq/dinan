@@ -18,8 +18,13 @@ contract ExamController {
         Question[] calldata _questions
     ) public {
         require(
+            _questions.length > 0,
+            "The questions array you've provided is empty."
+        );
+
+        require(
             _questions.length <= 30,
-            "The maximum number of questions you can add is 30"
+            "The maximum number of questions you can add is 30."
         );
 
         uint256 timestamp = block.timestamp;
