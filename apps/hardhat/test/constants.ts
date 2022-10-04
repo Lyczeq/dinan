@@ -1,11 +1,13 @@
 import { Answer, Question } from '../types/Exam';
 
-const answers: Answer[] = [
+export const MOCK_ANSWERS: Answer[] = [
   {
+    id: 1,
     answerText: 'aText1',
     isCorrect: false,
   },
   {
+    id: 2,
     answerText: 'aText2',
     isCorrect: true,
   },
@@ -13,13 +15,12 @@ const answers: Answer[] = [
 
 export const MOCK_QUESTIONS: Question[] = [
   {
+    id: 1,
     header: 'questionHeader',
     description: 'questionDescription',
-    answers,
+    answers: MOCK_ANSWERS,
   },
 ];
 
 export const EXAM_NAME = 'examName';
 export const EXAM_DESCRIPTION = 'examDescription';
-
-

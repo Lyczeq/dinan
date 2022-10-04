@@ -24,11 +24,19 @@ contract Exam {
     }
 
     function addQuestion(Question calldata _question) public {
+        require(
+            _question.answers.length < 7,
+            "The maximum number of answers you can add to a single question is 6."
+        );
         questions.push(_question);
     }
 
-    function getQuestions() public view returns (Question[] memory) {
-        return questions;
+    function getQuestionsWithoutCorrectAnswers()
+        public
+        view
+        returns (Question[] memory)
+    {
+        // return questions;
     }
 
     function getAddress() public view returns (address) {

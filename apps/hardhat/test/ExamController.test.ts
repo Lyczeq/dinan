@@ -4,7 +4,13 @@ import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
 
 import { getTimestampFixture } from './utils';
-import { MOCK_QUESTIONS, EXAM_DESCRIPTION, EXAM_NAME } from './constants';
+import {
+  MOCK_QUESTIONS,
+  EXAM_DESCRIPTION,
+  EXAM_NAME,
+  MOCK_ANSWERS,
+} from './constants';
+import { Question } from '../types/Exam';
 
 describe('ExamController tests', () => {
   async function deployExamControllerFixture() {
@@ -83,5 +89,36 @@ describe('ExamController tests', () => {
     await expect(
       examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
     ).to.be.revertedWith('The maximum number of questions you can add is 30.');
+  });
+
+  it("Shouldn't add Exam with more than 6 answers to a single question", async () => {
+    const { examController } = await loadFixture(deployExamControllerFixture);
+
+    const basicAnswer = MOCK_ANSWERS.at(0)!;
+
+    const answersArray = new Array(7).fill(0).map((e, idx) => ({
+      ...basicAnswer,
+      id: idx,
+    }));
+
+    const questionsWithTooManyAnswers: Question[] = [
+      ...MOCK_QUESTIONS,
+      {
+        id: 2,
+        description: EXAM_DESCRIPTION,
+        header: EXAM_NAME,
+        answers: answersArray,
+      },
+    ];
+
+    await expect(
+      examController.addExam(
+        EXAM_NAME,
+        EXAM_DESCRIPTION,
+        questionsWithTooManyAnswers
+      )
+    ).to.be.revertedWith(
+      'The maximum number of answers you can add to a single question is 6.'
+    );
   });
 });
