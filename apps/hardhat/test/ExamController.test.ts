@@ -44,7 +44,7 @@ describe('ExamController tests', () => {
     const timestamp = await getTimestampFixture();
     const examTimestamp: BigNumber = exams.at(0)?.timestamp!;
 
-    expect(examTimestamp).to.be.equal(BigNumber.from(timestamp));
+    expect(examTimestamp).to.be.closeTo(BigNumber.from(timestamp), 10);
   });
 
   it("Should't include users' addreses in the given Exam array.", async () => {
