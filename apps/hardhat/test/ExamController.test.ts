@@ -2,12 +2,11 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
-import { MOCK_QUESTIONS } from './utils';
 
-const EXAM_NAME = 'examName';
-const EXAM_DESCRIPTION = 'examDescription';
+import { getTimestampFixture } from './utils';
+import { MOCK_QUESTIONS, EXAM_DESCRIPTION, EXAM_NAME } from './constants';
 
-describe('ExamController', () => {
+describe('ExamController tests', () => {
   async function deployExamControllerFixture() {
     const [owner, otherAccount] = await ethers.getSigners();
 
@@ -42,11 +41,9 @@ describe('ExamController', () => {
     expect(firstExam).to.haveOwnProperty('name', EXAM_NAME);
     expect(firstExam).to.haveOwnProperty('description', EXAM_DESCRIPTION);
 
-    const blockNumber = await ethers.provider.getBlockNumber();
-    const block = await ethers.provider.getBlock(blockNumber);
-    const timestamp = block.timestamp;
-
+    const timestamp = await getTimestampFixture();
     const examTimestamp: BigNumber = exams.at(0)?.timestamp!;
+
     expect(examTimestamp).to.be.equal(BigNumber.from(timestamp));
   });
 

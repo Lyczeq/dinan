@@ -1,20 +1,7 @@
-import { Answer, Question } from '../types/Exam';
+import { ethers } from 'hardhat';
 
-const answers: Answer[] = [
-  {
-    answerText: 'aText1',
-    isCorrect: false,
-  },
-  {
-    answerText: 'aText2',
-    isCorrect: true,
-  },
-];
-
-export const MOCK_QUESTIONS: Question[] = [
-  {
-    header: 'questionHeader',
-    description: 'questionDescription',
-    answers,
-  },
-];
+export async function getTimestampFixture() {
+  const blockNumber = await ethers.provider.getBlockNumber();
+  const block = await ethers.provider.getBlock(blockNumber);
+  return block.timestamp;
+}
