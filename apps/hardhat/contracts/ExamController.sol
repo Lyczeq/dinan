@@ -18,7 +18,7 @@ contract ExamController {
         string calldata _name,
         string calldata _description,
         Question[] calldata _questions
-    ) internal pure {
+    ) private pure {
         require(
             calculateStringLength(_description) > 0,
             "The description of the Exam cannot be empty."
@@ -43,7 +43,7 @@ contract ExamController {
         string calldata _name,
         string calldata _description,
         Question[] calldata _questions
-    ) public {
+    ) external {
         validateAddExamData(_name, _description, _questions);
 
         uint256 timestamp = block.timestamp;

@@ -68,7 +68,7 @@ contract Exam {
         // return questions;
     }
 
-    function getAddress() public view returns (address) {
+    function getAddress() external view returns (address) {
         return address(this);
     }
 }
