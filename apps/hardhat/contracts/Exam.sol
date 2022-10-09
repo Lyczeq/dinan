@@ -15,7 +15,7 @@ contract Exam {
     modifier isExamControllerAddress() {
         require(
             msg.sender == examControllerAddress,
-            "The given address isn't the ExamController Contract address"
+            "Your address isn't the ExamController Contract address."
         );
         _; // modifier information
     }

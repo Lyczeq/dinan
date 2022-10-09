@@ -21,12 +21,12 @@ contract ExamController {
     ) internal pure {
         require(
             calculateStringLength(_description) > 0,
-            "The description of the Exam cannot be empty!"
+            "The description of the Exam cannot be empty."
         );
 
         require(
             calculateStringLength(_name) > 0,
-            "The name of the Exam cannot be empty!"
+            "The name of the Exam cannot be empty."
         );
         require(
             _questions.length > 0,
