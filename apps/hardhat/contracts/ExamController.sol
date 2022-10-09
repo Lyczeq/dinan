@@ -20,17 +20,17 @@ contract ExamController {
         Question[] calldata _questions
     ) private pure {
         require(
-            calculateStringLength(_description) > 0,
-            "The description of the Exam cannot be empty."
+            calculateStringLength(_description) >= 10,
+            "The exam description should be longer than 10 characters."
         );
 
         require(
-            calculateStringLength(_name) > 0,
-            "The name of the Exam cannot be empty."
+            calculateStringLength(_name) >= 5,
+            "The exam name should be longer than 5 characters."
         );
         require(
             _questions.length > 0,
-            "The questions array you've provided is empty."
+            "The minimum number of question you can add is one."
         );
 
         require(

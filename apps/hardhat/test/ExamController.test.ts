@@ -4,13 +4,7 @@ import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
 
 import { getTimestampFixture } from './utils';
-import {
-  MOCK_QUESTIONS,
-  EXAM_DESCRIPTION,
-  EXAM_NAME,
-  MOCK_ANSWERS,
-} from './constants';
-import { Question } from '../types/Exam';
+import { MOCK_QUESTIONS, EXAM_DESCRIPTION, EXAM_NAME } from './constants';
 
 describe('ExamController tests', () => {
   async function deployExamControllerFixture() {
@@ -32,7 +26,7 @@ describe('ExamController tests', () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
     await expect(
       examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, [])
-    ).to.be.revertedWith("The questions array you've provided is empty.");
+    ).to.be.revertedWith('The minimum number of question you can add is one.');
   });
 
   it("Should add a new Exam to the Exams array and check whether the Exams' data is the same.", async () => {
