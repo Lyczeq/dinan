@@ -9,21 +9,35 @@ contract Exam {
     uint256 timestamp;
     address creatorAddress;
     string description;
+    address examControllerAddress;
     Question[] questions;
+
+    modifier isExamControllerAddress() {
+        require(
+            msg.sender == examControllerAddress,
+            "The given address isn't the ExamController Contract address"
+        );
+        _; // modifier information
+    }
 
     constructor(
         uint256 _timestamp,
         string memory _name,
         string memory _description,
-        address _creatorAddress
+        address _creatorAddress,
+        address _examControllerAddress
     ) {
         timestamp = _timestamp;
         name = _name;
         description = _description;
         creatorAddress = _creatorAddress;
+        examControllerAddress = _examControllerAddress;
     }
 
-    function addQuestion(Question calldata _question) public {
+    function addQuestion(Question calldata _question)
+        external
+        isExamControllerAddress
+    {
         require(
             _question.answers.length <= 6,
             "The maximum number of answers you can add to a single question is 6."

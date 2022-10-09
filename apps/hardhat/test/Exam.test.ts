@@ -16,11 +16,15 @@ describe('Exam tests', () => {
 
     const Exam = await ethers.getContractFactory('Exam');
     const timestamp = await getTimestampFixture();
+
+    const mockExamControllerAddress = owner.address;
+
     const exam = await Exam.deploy(
       timestamp,
       EXAM_NAME,
       EXAM_DESCRIPTION,
-      owner.address
+      owner.address,
+      mockExamControllerAddress
     );
 
     return { exam, owner, otherAccount };
@@ -42,7 +46,7 @@ describe('Exam tests', () => {
 
     const basicAnswer = MOCK_ANSWERS.at(0)!;
 
-    const answersArray = new Array(7).fill(0).map((e, idx) => ({
+    const answersArray = new Array(7).fill(0).map((_, idx) => ({
       ...basicAnswer,
       id: idx,
     }));

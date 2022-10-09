@@ -30,7 +30,13 @@ contract ExamController {
 
         uint256 timestamp = block.timestamp;
         address creatorAddress = msg.sender;
-        Exam newExam = new Exam(timestamp, _name, _description, creatorAddress);
+        Exam newExam = new Exam(
+            timestamp,
+            _name,
+            _description,
+            creatorAddress,
+            address(this)
+        );
 
         // add questions
         for (uint8 i = 0; i < _questions.length; i++) {
