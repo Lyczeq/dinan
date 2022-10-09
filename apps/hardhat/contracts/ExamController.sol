@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "./Exam.sol";
+import "./types.sol";
 import "./utils.sol";
 
 contract ExamController {
@@ -13,11 +14,20 @@ contract ExamController {
         uint256 timestamp;
     }
 
-    function addExam(
+    function validateAddExamData(
         string calldata _name,
         string calldata _description,
         Question[] calldata _questions
-    ) public {
+    ) internal pure {
+        require(
+            calculateStringLength(_description) > 0,
+            "The description of the Exam cannot be empty!"
+        );
+
+        require(
+            calculateStringLength(_name) > 0,
+            "The name of the Exam cannot be empty!"
+        );
         require(
             _questions.length > 0,
             "The questions array you've provided is empty."
@@ -27,9 +37,18 @@ contract ExamController {
             _questions.length <= 30,
             "The maximum number of questions you can add is 30."
         );
+    }
+
+    function addExam(
+        string calldata _name,
+        string calldata _description,
+        Question[] calldata _questions
+    ) public {
+        validateAddExamData(_name, _description, _questions);
 
         uint256 timestamp = block.timestamp;
         address creatorAddress = msg.sender;
+
         Exam newExam = new Exam(
             timestamp,
             _name,
