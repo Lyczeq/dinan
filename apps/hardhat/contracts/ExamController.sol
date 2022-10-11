@@ -20,14 +20,15 @@ contract ExamController {
         Question[] calldata _questions
     ) private pure {
         require(
+            calculateStringLength(_name) >= 5,
+            "The exam name should be longer than 5 characters."
+        );
+
+        require(
             calculateStringLength(_description) >= 10,
             "The exam description should be longer than 10 characters."
         );
 
-        require(
-            calculateStringLength(_name) >= 5,
-            "The exam name should be longer than 5 characters."
-        );
         require(
             _questions.length > 0,
             "The minimum number of question you can add is one."
