@@ -3,46 +3,38 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { Question } from '../types/Exam';
 import {
-  MOCK_QUESTIONS,
   EXAM_DESCRIPTION,
   EXAM_NAME,
-  MOCK_ANSWERS,
+  MOCK_ANSWERS, MOCK_QUESTIONS
 } from './constants';
 import { getTimestampFixture } from './utils';
 
-describe('Exam tests', () => {
-  async function deployExamFixture() {
-    const [owner, otherAccount] = await ethers.getSigners();
+async function deployExamFixture() {
+  const [owner, otherAccount] = await ethers.getSigners();
 
-    const Exam = await ethers.getContractFactory('Exam');
-    const timestamp = await getTimestampFixture();
-    const exam = await Exam.deploy(
-      timestamp,
-      EXAM_NAME,
-      EXAM_DESCRIPTION,
-      owner.address
-    );
+  const Exam = await ethers.getContractFactory('Exam');
+  const timestamp = await getTimestampFixture();
 
-    return { exam, owner, otherAccount };
-  }
+  const mockExamControllerAddress = owner.address;
 
-  it('Creates a simple Exam without adding questions', async () => {
-    const { exam } = await loadFixture(deployExamFixture);
-    const examAddress = await exam.getAddress();
-    expect(examAddress).to.be.properAddress;
-  });
+  const exam = await Exam.deploy(
+    timestamp,
+    EXAM_NAME,
+    EXAM_DESCRIPTION,
+    owner.address,
+    mockExamControllerAddress
+  );
 
-  it('Adds questions to an Exam contract', async () => {
-    const { exam } = await loadFixture(deployExamFixture);
-    exam.addQuestion(MOCK_QUESTIONS.at(0)!);
-  });
+  return { exam, owner, otherAccount };
+}
 
-  it("Shouldn't add Exam with more than 6 answers to a single question", async () => {
+describe('Validation', () => {
+  it("Shouldn't add Exam with more than 6 answers in a single question.", async () => {
     const { exam } = await loadFixture(deployExamFixture);
 
     const basicAnswer = MOCK_ANSWERS.at(0)!;
 
-    const answersArray = new Array(7).fill(0).map((e, idx) => ({
+    const answersArray = new Array(7).fill(0).map((_, idx) => ({
       ...basicAnswer,
       id: idx,
     }));
@@ -59,5 +51,18 @@ describe('Exam tests', () => {
     ).to.be.revertedWith(
       'The maximum number of answers you can add to a single question is 6.'
     );
+  });
+});
+
+describe('Exam tests', () => {
+  it('Creates a simple Exam without adding questions.', async () => {
+    const { exam } = await loadFixture(deployExamFixture);
+    const examAddress = await exam.getAddress();
+    expect(examAddress).to.be.properAddress;
+  });
+
+  it('Adds questions to an Exam contract.', async () => {
+    const { exam } = await loadFixture(deployExamFixture);
+    exam.addQuestion(MOCK_QUESTIONS.at(0)!);
   });
 });
