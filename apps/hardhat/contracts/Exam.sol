@@ -6,9 +6,9 @@ import "hardhat/console.sol";
 
 contract Exam {
     string name;
+    string description;
     uint256 timestamp;
     address creatorAddress;
-    string description;
     address examControllerAddress;
     Question[] questions;
 
@@ -43,23 +43,10 @@ contract Exam {
             "The maximum number of answers you can add to a single question is 6."
         );
 
-        bool isTheSameId = false;
-
-        for (uint256 i = 0; i < questions.length; i++) {
-            if (questions[i].id == _question.id) {
-                isTheSameId = true;
-                break;
-            }
-        }
-
-        require(
-            !isTheSameId,
-            "Some of the questions you have provided have the same id."
-        );
-
         questions.push(_question);
     }
 
+    //TODO
     function getQuestionsWithoutCorrectAnswers()
         public
         view

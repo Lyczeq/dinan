@@ -13,6 +13,9 @@ export type Answer = {
 
 export type Exam = {
   name: string;
+  description: string;
   timestamp: number;
+  creatorAddress: string;
+  examControllerAddress: string;
   questions: Question[];
 };

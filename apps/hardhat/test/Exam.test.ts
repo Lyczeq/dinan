@@ -1,11 +1,13 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
+
 import { Question } from '../types/Exam';
 import {
   EXAM_DESCRIPTION,
   EXAM_NAME,
-  MOCK_ANSWERS, MOCK_QUESTIONS
+  MOCK_ANSWERS,
+  MOCK_QUESTIONS,
 } from './constants';
 import { getTimestampFixture } from './utils';
 
