@@ -20,9 +20,9 @@ const Home: NextPage = () => {
             <div className="flex items-center justify-around">
               <nav>
                 <ul className="flex items-center gap-6">
-                  <NavItem text="Exams" />
-                  <NavItem text="Created Exams" />
-                  <NavItem text="Certificates" />
+                  <NavItem href="/exams" text="Exams" />
+                  <NavItem href="created-exams" text="Created Exams" />
+                  <NavItem href="certificates" text="Certificates" />
                 </ul>
               </nav>
               <button
