@@ -16,7 +16,3 @@ export default function NavItem({ text }: NavItemProps) {
     </li>
   );
 }
-
-export const App: React.FC<{ message: string }> = ({ message }) => (
-  <div>{message}</div>
-);
