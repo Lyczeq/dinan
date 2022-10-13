@@ -1,9 +1,9 @@
-import React, { AnchorHTMLAttributes } from 'react';
+import React, { AnchorHTMLAttributes, ReactNode } from 'react';
 import Link from 'next/link';
 
 type NavItemProps = {
   href: string;
-  children: string;
+  children: ReactNode;
 } & AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export const NavbarItem = ({ children, href }: NavItemProps) => {
