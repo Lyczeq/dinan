@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        lobster: ['lobster', 'arial', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };

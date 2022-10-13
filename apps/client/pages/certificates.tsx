@@ -1,14 +1,14 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-const Home: NextPage = () => {
+const Certificates: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Dinan</title>
+        <title>Dinan | Certificates</title>
       </Head>
     </>
   );
 };
 
-export default Home;
+export default Certificates;
