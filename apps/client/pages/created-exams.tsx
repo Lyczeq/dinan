@@ -15,7 +15,7 @@ const ExamTile = () => {
       </div>
       <div className="flex items-center flex-col justify-self-end text-gray-700">
         <p className="">Created 20.11.2022</p>
-        <Button className="bg-red-400 p-0 px-2 py-1">
+        <Button className="bg-yellow-400 p-0 px-2 py-1">
           <p>Copy address</p>
         </Button>
       </div>
@@ -36,7 +36,9 @@ const CreatedExams: NextPage = () => {
             placeholder="Type exam name or address"
             className="w-1/3 border-yellow-400 border-2 p-2 rounded-md focus:outline-orange-400 text-gray-600"
           />
-          <button>Add new Exam</button>
+          <Button className="bg-yellow-400 border-2 border-yellow-400">
+            Add new Exam
+          </Button>
         </section>
         <section className="grid-cols-4 grid mx-4 gap-4 auto-rows-min ">
           <ExamTile />
