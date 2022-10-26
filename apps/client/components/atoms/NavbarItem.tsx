@@ -16,7 +16,7 @@ export const NavbarItem = ({ children, href }: NavItemProps) => {
     <li className="">
       <Link href={href}>
         <a
-          className={`inline-block  py-2 px-4 border border-white  transition-all duration-200 hover:border-b-orange-400 ${selectedRouteClassName}`}
+          className={`inline-block  py-2 px-4 border border-white transition-all duration-200 hover:border-b-orange-400 ${selectedRouteClassName}`}
         >
           {children}
         </a>
