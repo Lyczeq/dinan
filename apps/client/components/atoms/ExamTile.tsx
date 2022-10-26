@@ -1,5 +1,5 @@
 import copy from 'copy-to-clipboard';
-import Button from './Button';
+import { Button } from './Button';
 
 export const ExamTile = () => {
   const tempAddr = '0x0';
