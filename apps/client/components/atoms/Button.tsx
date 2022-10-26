@@ -6,7 +6,7 @@ type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-const Button = ({ className, children, onClick }: ButtonProps) => {
+export const Button = ({ className, children, onClick }: ButtonProps) => {
   return (
     <button
       className={`text-white rounded-md py-2 px-2 ${className}`}
@@ -16,5 +16,3 @@ const Button = ({ className, children, onClick }: ButtonProps) => {
     </button>
   );
 };
-
-export default Button;

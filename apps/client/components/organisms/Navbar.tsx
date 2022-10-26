@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { NavbarItem } from '../atoms/NavbarItem';
 
 export const Navbar = () => {

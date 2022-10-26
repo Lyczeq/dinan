@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Button from 'components/atoms/Button';
+import { Button } from 'components/atoms/Button';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { SearchInput } from 'components/atoms/SearchInput';
 import { Table } from 'components/organisms/Table/Table';
