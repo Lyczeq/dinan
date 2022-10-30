@@ -24,15 +24,4 @@ async function deployExamFixture() {
   return { exam, owner, otherAccount };
 }
 
-describe('Exam tests', () => {
-  it('Creates a simple Exam without adding questions.', async () => {
-    const { exam } = await loadFixture(deployExamFixture);
-    const examAddress = await exam.getAddress();
-    expect(examAddress).to.be.properAddress;
-  });
-
-  it('Adds questions to an Exam contract.', async () => {
-    const { exam } = await loadFixture(deployExamFixture);
-    exam.addQuestion(MOCK_QUESTIONS.at(0)!);
-  });
-});
+describe('Exam tests', () => {});
