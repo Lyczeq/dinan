@@ -15,45 +15,6 @@ async function deployExamControllerFixture() {
   return { examController, owner, otherAccount };
 }
 
-describe('Validation', () => {
-  it('Should be reverted when adding Exam with name shorter than 5 characters', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const tooShortName = 'test';
-
-    await expect(
-      examController.addExam(tooShortName, EXAM_DESCRIPTION, MOCK_QUESTIONS)
-    ).to.be.revertedWith('The exam name should be longer than 5 characters.');
-  });
-
-  it('Should be reverted when adding Exam with description shorter than 10 characters', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const tooShortDescription = 'test';
-
-    await expect(
-      examController.addExam(EXAM_NAME, tooShortDescription, MOCK_QUESTIONS)
-    ).to.be.revertedWith(
-      'The exam description should be longer than 10 characters.'
-    );
-  });
-
-  it('Should be reverted when adding an Exam with an empty questions array.', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    await expect(
-      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, [])
-    ).to.be.revertedWith('The minimum number of question you can add is one.');
-  });
-
-  it('Should be reverted when adding Exam with more than 30 questions', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const firstQuestion = MOCK_QUESTIONS.at(0);
-    const tooManyQuestions = Array(31).fill(firstQuestion);
-
-    await expect(
-      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
-    ).to.be.revertedWith('The maximum number of questions you can add is 30.');
-  });
-});
-
 describe('Features', () => {
   it('Should return empty Exams array.', async () => {
     const { examController } = await loadFixture(deployExamControllerFixture);
