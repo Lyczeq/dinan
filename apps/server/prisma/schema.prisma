@@ -11,23 +11,26 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  address            String              @id
+  examParticipations ExamParticipation[]
+}
+
+model ExamParticipation {
+  id          String  @id @default(uuid())
+  User        User    @relation(fields: [userAddress], references: [address])
+  userAddress String
+  Exam        Exam    @relation(fields: [examAddress], references: [address])
+  examAddress String
+  isFinished  Boolean
+  score       Decimal
 }
 
 model Exam {
-  address     String     @id
-  name        String
-  description String
-  questions   Question[]
-}
-
-model Answer {
-  id         String   @id @default(uuid())
-  text       String
-  isCorrect  Boolean
-  Question   Question @relation(fields: [questionId], references: [id])
-  questionId String
+  address            String              @id
+  name               String
+  description        String
+  questions          Question[]
+  examParticipations ExamParticipation[]
 }
 
 model Question {
@@ -36,4 +39,12 @@ model Question {
   text        String
   Exam        Exam     @relation(fields: [examAddress], references: [address])
   examAddress String
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  text       String
+  isCorrect  Boolean
+  Question   Question @relation(fields: [questionId], references: [id])
+  questionId String
 }
