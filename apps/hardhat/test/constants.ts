@@ -1,2 +1,2 @@
-export const EXAM_NAME = 'examName';
-export const EXAM_DESCRIPTION = 'examDescription';
+export const EXAM_NAME = 'EXAM_NAME';
+export const EXAM_SYMBOL = 'EXS';

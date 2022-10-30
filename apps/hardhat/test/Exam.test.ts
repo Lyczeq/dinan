@@ -1,8 +1,6 @@
-import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
-import { EXAM_DESCRIPTION, EXAM_NAME } from './constants';
+import { EXAM_NAME, EXAM_SYMBOL } from './constants';
 import { getTimestampFixture } from './utils';
 
 async function deployExamFixture() {
@@ -16,7 +14,7 @@ async function deployExamFixture() {
   const exam = await Exam.deploy(
     timestamp,
     EXAM_NAME,
-    EXAM_DESCRIPTION,
+    EXAM_SYMBOL,
     owner.address,
     mockExamControllerAddress
   );
