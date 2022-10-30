@@ -16,27 +16,23 @@ contract ExamController {
 
     struct ExamHelper {
         string name;
-        string description;
         address examAddress;
-        uint256 timestamp;
     }
 
-    function addExam(string calldata _name, string calldata _description)
+    function addExam(string calldata _name, string calldata _shorthand)
         external
     {
-        uint256 timestamp = block.timestamp;
         address creatorAddress = msg.sender;
 
         Exam newExam = new Exam(
-            timestamp,
             _name,
-            _description,
+            _shorthand,
             creatorAddress,
             address(this)
         );
 
         address examAddress = address(newExam);
 
-        exams.push(ExamHelper(_name, _description, examAddress, timestamp));
+        exams.push(ExamHelper(_name, examAddress));
     }
 }

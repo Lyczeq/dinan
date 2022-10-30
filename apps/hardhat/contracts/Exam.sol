@@ -5,8 +5,7 @@ import "hardhat/console.sol";
 
 contract Exam {
     string name;
-    string description;
-    uint256 timestamp;
+    string shorthand;
     address creatorAddress;
     address examControllerAddress;
 
@@ -19,15 +18,13 @@ contract Exam {
     }
 
     constructor(
-        uint256 _timestamp,
         string memory _name,
-        string memory _description,
+        string memory _shorthand,
         address _creatorAddress,
         address _examControllerAddress
     ) {
-        timestamp = _timestamp;
         name = _name;
-        description = _description;
+        shorthand = _shorthand;
         creatorAddress = _creatorAddress;
         examControllerAddress = _examControllerAddress;
     }
