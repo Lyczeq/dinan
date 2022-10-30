@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllExams } from 'controllers/exams';
+import { getAllExams } from '../controllers/exams';
 
 export const router = express.Router();
 
