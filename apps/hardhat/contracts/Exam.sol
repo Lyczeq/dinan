@@ -1,13 +1,26 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Exam {
+contract Exam is ERC721 {
     string name;
-    string shorthand;
+    string symbol;
     address creatorAddress;
     address examControllerAddress;
+
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        address _creatorAddress,
+        address _examControllerAddress
+    ) ERC721(_name, _symbol) {
+        name = _name;
+        symbol = _symbol;
+        creatorAddress = _creatorAddress;
+        examControllerAddress = _examControllerAddress;
+    }
 
     modifier isExamControllerAddress() {
         require(
@@ -15,17 +28,5 @@ contract Exam {
             "Your address isn't the ExamController Contract address."
         );
         _; // modifier information
-    }
-
-    constructor(
-        string memory _name,
-        string memory _shorthand,
-        address _creatorAddress,
-        address _examControllerAddress
-    ) {
-        name = _name;
-        shorthand = _shorthand;
-        creatorAddress = _creatorAddress;
-        examControllerAddress = _examControllerAddress;
     }
 }

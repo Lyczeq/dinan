@@ -19,20 +19,9 @@ contract ExamController {
         address examAddress;
     }
 
-    function addExam(string calldata _name, string calldata _shorthand)
-        external
-    {
-        address creatorAddress = msg.sender;
+    function addExam(string calldata _name, string calldata _symbol) external {
+        Exam newExam = new Exam(_name, _symbol, msg.sender, address(this));
 
-        Exam newExam = new Exam(
-            _name,
-            _shorthand,
-            creatorAddress,
-            address(this)
-        );
-
-        address examAddress = address(newExam);
-
-        exams.push(ExamHelper(_name, examAddress));
+        exams.push(ExamHelper(_name, address(newExam)));
     }
 }
