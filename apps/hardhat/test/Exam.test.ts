@@ -2,7 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
-import { EXAM_DESCRIPTION, EXAM_NAME, MOCK_QUESTIONS } from './constants';
+import { EXAM_DESCRIPTION, EXAM_NAME } from './constants';
 import { getTimestampFixture } from './utils';
 
 async function deployExamFixture() {

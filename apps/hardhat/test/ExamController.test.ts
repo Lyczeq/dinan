@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
 
-import { EXAM_DESCRIPTION, EXAM_NAME, MOCK_QUESTIONS } from './constants';
+import { EXAM_DESCRIPTION, EXAM_NAME } from './constants';
 import { getTimestampFixture } from './utils';
 
 async function deployExamControllerFixture() {
