@@ -1,12 +1,14 @@
+import { PrismaClient } from '@prisma/client';
 import express, { Express, Request, Response } from 'express';
 
-const app: Express = express();
-const port = 8000;
+const prisma = new PrismaClient();
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
+async function main() {
+  const user = await prisma.user.create({ data: { name: 'michael' } });
+  console.log('usr', user);
+  const ursrs = await prisma.user.findMany();
+  console.log(ursrs);
+}
+main()
+  .catch(e => console.log(e))
+  .finally(async () => await prisma.$disconnect());
