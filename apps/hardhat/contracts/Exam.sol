@@ -31,8 +31,4 @@ contract Exam {
         creatorAddress = _creatorAddress;
         examControllerAddress = _examControllerAddress;
     }
-
-    function getAddress() external view returns (address) {
-        return address(this);
-    }
 }

@@ -28,12 +28,8 @@ contract ExamController {
             address(this)
         );
 
-        exams.push(
-            ExamHelper(_name, _description, newExam.getAddress(), timestamp)
-        );
-    }
+        address examAddress = address(newExam);
 
-    function getExams() public view returns (ExamHelper[] memory) {
-        return exams;
+        exams.push(ExamHelper(_name, _description, examAddress, timestamp));
     }
 }
