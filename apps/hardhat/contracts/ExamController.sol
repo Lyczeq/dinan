@@ -6,6 +6,8 @@ import "./Exam.sol";
 contract ExamController {
     ExamHelper[] exams;
 
+    event NewExamCreation(address _newExamAddress, address _creatorAddress);
+
     function calculateStringLength(string calldata _str)
         internal
         pure
@@ -23,5 +25,6 @@ contract ExamController {
         Exam newExam = new Exam(_name, _symbol, msg.sender, address(this));
 
         exams.push(ExamHelper(_name, address(newExam)));
+        emit NewExamCreation(address(newExam), msg.sender);
     }
 }
