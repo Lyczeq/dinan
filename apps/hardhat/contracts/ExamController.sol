@@ -2,10 +2,17 @@
 pragma solidity ^0.8.9;
 
 import "./Exam.sol";
-import "./utils.sol";
 
 contract ExamController {
     ExamHelper[] exams;
+
+    function calculateStringLength(string calldata _str)
+        internal
+        pure
+        returns (uint256)
+    {
+        return bytes(_str).length;
+    }
 
     struct ExamHelper {
         string name;
