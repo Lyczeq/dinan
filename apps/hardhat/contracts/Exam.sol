@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Exam is ERC721 {
-    string name;
-    string symbol;
+    string examName;
+    string examSymbol;
     address creatorAddress;
     address examControllerAddress;
 
@@ -16,8 +16,8 @@ contract Exam is ERC721 {
         address _creatorAddress,
         address _examControllerAddress
     ) ERC721(_name, _symbol) {
-        name = _name;
-        symbol = _symbol;
+        examName = _name;
+        examSymbol = _symbol;
         creatorAddress = _creatorAddress;
         examControllerAddress = _examControllerAddress;
     }
