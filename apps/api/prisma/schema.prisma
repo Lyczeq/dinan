@@ -27,10 +27,11 @@ model ExamParticipation {
 
 model Exam {
   address            String              @id
-  name               String
-  description        String
+  name               String?
+  description        String?
   questions          Question[]
   examParticipations ExamParticipation[]
+  creatorAddress     String
 }
 
 model Question {
