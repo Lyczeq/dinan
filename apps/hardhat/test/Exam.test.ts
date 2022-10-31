@@ -1,6 +1,7 @@
 import { ethers } from 'hardhat';
-
+import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { EXAM_NAME, EXAM_SYMBOL } from './constants';
+import { expect } from 'chai';
 
 async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
@@ -19,4 +20,13 @@ async function deployExamFixture() {
   return { exam, owner, otherAccount };
 }
 
-describe('Exam tests', () => {});
+describe('Exam tests', () => {
+  it('Checks name and symbol of the created Exam', async () => {
+    const { exam } = await loadFixture(deployExamFixture);
+    const examName = await exam.name();
+    const examSymbol = await exam.symbol();
+
+    expect(examName).equals(EXAM_NAME);
+    expect(examSymbol).equals(examSymbol);
+  });
+});

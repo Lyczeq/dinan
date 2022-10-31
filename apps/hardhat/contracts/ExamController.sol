@@ -27,4 +27,8 @@ contract ExamController {
         exams.push(ExamHelper(_name, address(newExam)));
         emit NewExamCreation(address(newExam), msg.sender);
     }
+
+    function getExams() external view returns (ExamHelper[] memory) {
+        return exams;
+    }
 }
