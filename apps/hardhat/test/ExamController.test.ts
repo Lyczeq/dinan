@@ -1,10 +1,8 @@
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { expect } from 'chai';
-import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
-
-import { EXAM_DESCRIPTION, EXAM_NAME, MOCK_QUESTIONS } from './constants';
-import { getTimestampFixture } from './utils';
+import { expect } from 'chai';
+import { isAddress } from 'ethers/lib/utils';
+import { EXAM_NAME, EXAM_SYMBOL } from './constants';
 
 async function deployExamControllerFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
@@ -15,95 +13,23 @@ async function deployExamControllerFixture() {
   return { examController, owner, otherAccount };
 }
 
-describe('Validation', () => {
-  it('Should be reverted when adding Exam with name shorter than 5 characters', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const tooShortName = 'test';
-
-    await expect(
-      examController.addExam(tooShortName, EXAM_DESCRIPTION, MOCK_QUESTIONS)
-    ).to.be.revertedWith('The exam name should be longer than 5 characters.');
-  });
-
-  it('Should be reverted when adding Exam with description shorter than 10 characters', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const tooShortDescription = 'test';
-
-    await expect(
-      examController.addExam(EXAM_NAME, tooShortDescription, MOCK_QUESTIONS)
-    ).to.be.revertedWith(
-      'The exam description should be longer than 10 characters.'
-    );
-  });
-
-  it('Should be reverted when adding an Exam with an empty questions array.', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    await expect(
-      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, [])
-    ).to.be.revertedWith('The minimum number of question you can add is one.');
-  });
-
-  it('Should be reverted when adding Exam with more than 30 questions', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const firstQuestion = MOCK_QUESTIONS.at(0);
-    const tooManyQuestions = Array(31).fill(firstQuestion);
-
-    await expect(
-      examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, tooManyQuestions)
-    ).to.be.revertedWith('The maximum number of questions you can add is 30.');
-  });
-});
-
-describe('Features', () => {
-  it('Should return empty Exams array.', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-    const exams = await examController.getExams();
-    expect(exams).to.be.an('array').that.is.empty;
-  });
-
-  it("Should add a new Exam to the Exams array and check whether the Exams' data is the same.", async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-
-    await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
-    const exams = await examController.getExams();
-
-    const firstExam = exams.at(0)!;
-
-    expect(firstExam.examAddress).be.properAddress;
-    expect(firstExam).to.haveOwnProperty('name', EXAM_NAME);
-    expect(firstExam).to.haveOwnProperty('description', EXAM_DESCRIPTION);
-
-    const timestamp = await getTimestampFixture();
-    const examTimestamp: BigNumber = exams.at(0)?.timestamp!;
-
-    expect(examTimestamp).to.be.closeTo(BigNumber.from(timestamp), 10);
-  });
-
-  it("Should't include users' addreses in the given Exam array.", async () => {
-    const { examController, otherAccount, owner } = await loadFixture(
+describe('ExamController tests', () => {
+  it("Creates simple Exam and checks it's data", async () => {
+    const { examController, owner } = await loadFixture(
       deployExamControllerFixture
     );
-
-    await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
-    await examController
-      .connect(otherAccount)
-      .addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
+    await examController.addExam(EXAM_NAME, EXAM_SYMBOL);
 
     const exams = await examController.getExams();
-    const examAddresses = exams.map(e => e.examAddress);
-
-    expect(examAddresses).to.not.include(owner.address);
-    expect(examAddresses).to.not.include(otherAccount.address);
+    const firstExamInArray = exams.at(0);
+    expect(firstExamInArray?.name).equal(EXAM_NAME);
   });
-
-  it('Should test that created Exams by the same creator and of the same data have different addreses.', async () => {
-    const { examController } = await loadFixture(deployExamControllerFixture);
-
-    await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
-    await examController.addExam(EXAM_NAME, EXAM_DESCRIPTION, MOCK_QUESTIONS);
-
-    const exams = await examController.getExams();
-    const examAddresses = exams.map(e => e.examAddress);
-    expect(examAddresses[0]).to.not.be.equal(examAddresses[1]);
+  it('Expects event to be emited', async () => {
+    const { examController, owner } = await loadFixture(
+      deployExamControllerFixture
+    );
+    await expect(examController.addExam(EXAM_NAME, EXAM_SYMBOL))
+      .to.emit(examController, 'NewExamCreation')
+      .withArgs(isAddress, owner.address);
   });
 });
