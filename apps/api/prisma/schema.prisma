@@ -28,6 +28,7 @@ model ExamParticipation {
 model Exam {
   address            String              @id
   name               String?
+  symbol             String?
   description        String?
   questions          Question[]
   examParticipations ExamParticipation[]

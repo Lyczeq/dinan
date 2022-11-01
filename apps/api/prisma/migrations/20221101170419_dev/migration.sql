@@ -19,8 +19,10 @@ CREATE TABLE "ExamParticipation" (
 -- CreateTable
 CREATE TABLE "Exam" (
     "address" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "name" TEXT,
+    "symbol" TEXT,
+    "description" TEXT,
+    "creatorAddress" TEXT NOT NULL,
 
     CONSTRAINT "Exam_pkey" PRIMARY KEY ("address")
 );
