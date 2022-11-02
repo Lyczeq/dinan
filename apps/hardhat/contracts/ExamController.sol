@@ -4,28 +4,39 @@ pragma solidity ^0.8.9;
 import "./Exam.sol";
 
 contract ExamController {
-    ExamHelper[] exams;
-
-    event NewExamCreation(address newExamAddress, address creatorAddress);
-    event NewExamParticipation(address examAddress, address userAddress);
-
     struct ExamHelper {
         string name;
         address examAddress;
     }
 
+    ExamHelper[] exams;
+    event NewExamCreation(address newExamAddress, address creatorAddress);
+    event NewExamParticipation(address examAddress, address userAddress);
+
     function addExam(string calldata _name, string calldata _symbol) external {
         Exam newExam = new Exam(_name, _symbol, msg.sender, address(this));
-
         exams.push(ExamHelper(_name, address(newExam)));
+
         emit NewExamCreation(address(newExam), msg.sender);
     }
 
     function manageExamParticipation(address _examAddressToParticipate)
         external
     {
-        Exam(_examAddressToParticipate).participateInExam(msg.sender);
+        bool doesExamWithThisAddressExist = false;
 
+        for (uint256 i = 0; i < exams.length; i++) {
+            if (exams[i].examAddress == _examAddressToParticipate) {
+                doesExamWithThisAddressExist = true;
+            }
+        }
+
+        require(
+            doesExamWithThisAddressExist,
+            "Exam with the provided address doesn't exist."
+        );
+
+        Exam(_examAddressToParticipate).participateInExam(msg.sender);
         emit NewExamParticipation(_examAddressToParticipate, msg.sender);
     }
 
