@@ -6,7 +6,7 @@ import "./Exam.sol";
 contract ExamController {
     ExamHelper[] exams;
 
-    event NewExamCreation(address _newExamAddress, address _creatorAddress);
+    event NewExamCreation(address newExamAddress, address creatorAddress);
 
     function calculateStringLength(string calldata _str)
         internal

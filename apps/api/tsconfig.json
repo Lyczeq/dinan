@@ -1,9 +1,13 @@
 {
+  "include": ["src"],
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "dist",
     "esModuleInterop": true,
     "lib": ["ESNext"],
-    "strict": true
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "rootDir": "src"
   }
 }
