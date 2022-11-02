@@ -8,8 +8,15 @@ contract Exam is ERC721 {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
 
+    struct ExamParticipation {
+        bool isFinished;
+        uint8 score;
+    }
+
     address creatorAddress;
     address examControllerAddress;
+    address backendAddress;
+    mapping(address => ExamParticipation) userScores;
 
     constructor(
         string memory _name,
@@ -26,6 +33,28 @@ contract Exam is ERC721 {
             msg.sender == examControllerAddress,
             "Your address isn't the ExamController Contract address."
         );
-        _; // modifier information
+        _; // function code
+    }
+
+    modifier isBackendAddress() {
+        require(
+            msg.sender == backendAddress,
+            "Your address isn't the backend address."
+        );
+        _; // function code
+    }
+
+    function participateInExam(address participantAddress)
+        external
+        isExamControllerAddress
+    {
+        userScores[participantAddress] = ExamParticipation(false, 0);
+    }
+
+    function saveParticipantScore(uint8 score, address participantAddress)
+        external
+        isBackendAddress
+    {
+        userScores[participantAddress] = ExamParticipation(false, score);
     }
 }

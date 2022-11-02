@@ -7,14 +7,7 @@ contract ExamController {
     ExamHelper[] exams;
 
     event NewExamCreation(address newExamAddress, address creatorAddress);
-
-    function calculateStringLength(string calldata _str)
-        internal
-        pure
-        returns (uint256)
-    {
-        return bytes(_str).length;
-    }
+    event NewExamParticipation(address examAddress, address userAddress);
 
     struct ExamHelper {
         string name;
@@ -26,6 +19,14 @@ contract ExamController {
 
         exams.push(ExamHelper(_name, address(newExam)));
         emit NewExamCreation(address(newExam), msg.sender);
+    }
+
+    function manageExamParticipation(address _examAddressToParticipate)
+        external
+    {
+        Exam(_examAddressToParticipate).participateInExam(msg.sender);
+
+        emit NewExamParticipation(_examAddressToParticipate, msg.sender);
     }
 
     function getExams() external view returns (ExamHelper[] memory) {
