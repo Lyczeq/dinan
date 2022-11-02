@@ -20,9 +20,9 @@ type SentQuestion = Question & {
   answers: Answer[];
 };
 
-export const updateExam = async (req: Request, res: Response) => {
+export const addExam = async (req: Request, res: Response) => {
   try {
-    const { exam }: { exam: SentExam } = req.body;
+    const { exam } = req.body as { exam: SentExam };
 
     if (!exam) {
       res.sendStatus(400);
@@ -30,7 +30,7 @@ export const updateExam = async (req: Request, res: Response) => {
     }
 
     const { address, creatorAddress } = exam;
-    console.log(address, creatorAddress);
+
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
         address,
