@@ -10,19 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Participant {
   address            String              @id
   examParticipations ExamParticipation[]
 }
 
 model ExamParticipation {
-  id          String  @id @default(uuid())
-  User        User    @relation(fields: [userAddress], references: [address])
-  userAddress String
-  Exam        Exam    @relation(fields: [examAddress], references: [address])
-  examAddress String
-  isFinished  Boolean
-  score       Decimal
+  id                 String      @id @default(uuid())
+  Participant        Participant @relation(fields: [participantAddress], references: [address])
+  participantAddress String
+  Exam               Exam        @relation(fields: [examAddress], references: [address])
+  examAddress        String
+  isFinished         Boolean
+  score              Decimal?
 }
 
 model Exam {
