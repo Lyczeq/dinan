@@ -11,7 +11,7 @@ contract ExamController {
 
     ExamHelper[] exams;
     event NewExamCreation(address newExamAddress, address creatorAddress);
-    event NewExamParticipation(address examAddress, address userAddress);
+    event NewExamParticipation(address exam, address participant);
 
     function addExam(string calldata _name, string calldata _symbol) external {
         Exam newExam = new Exam(_name, _symbol, msg.sender, address(this));
