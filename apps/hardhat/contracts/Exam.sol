@@ -72,9 +72,10 @@ contract Exam is ERC721 {
         view
         returns (ExamParticipation memory)
     {
-        ExamParticipation memory test = partcipantsScores[_userAddress];
-
-        require(test.hasStarted, "There is no participant with this address.");
+        require(
+            partcipantsScores[_userAddress].hasStarted,
+            "There is no participant with this address."
+        );
         return partcipantsScores[_userAddress];
     }
 }
