@@ -28,6 +28,7 @@ contract ExamController {
         for (uint256 i = 0; i < exams.length; i++) {
             if (exams[i].examAddress == _examAddressToParticipate) {
                 doesExamWithThisAddressExist = true;
+                break;
             }
         }
 

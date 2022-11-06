@@ -11,12 +11,13 @@ contract Exam is ERC721 {
     struct ExamParticipation {
         bool isFinished;
         uint8 score;
+        bool hasStarted;
     }
 
     address private creatorAddress;
     address private examControllerAddress;
     address private backendAddress;
-    mapping(address => ExamParticipation) private userScores;
+    mapping(address => ExamParticipation) private partcipantsScores;
 
     constructor(
         string memory _name,
@@ -48,13 +49,32 @@ contract Exam is ERC721 {
         external
         isExamControllerAddress
     {
-        userScores[participantAddress] = ExamParticipation(false, 0);
+        partcipantsScores[participantAddress] = ExamParticipation(
+            false,
+            0,
+            true
+        );
     }
 
     function saveParticipantScore(uint8 score, address participantAddress)
         external
         isBackendAddress
     {
-        userScores[participantAddress] = ExamParticipation(false, score);
+        partcipantsScores[participantAddress] = ExamParticipation(
+            true,
+            score,
+            true
+        );
+    }
+
+    function getParticipantResult(address _userAddress)
+        external
+        view
+        returns (ExamParticipation memory)
+    {
+        ExamParticipation memory test = partcipantsScores[_userAddress];
+
+        require(test.hasStarted, "There is no participant with this address.");
+        return partcipantsScores[_userAddress];
     }
 }
