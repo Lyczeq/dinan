@@ -22,7 +22,7 @@ async function deployExamControllerWithExam() {
   const exams = await examController.getExams();
   const firstExamInArray = exams.at(0);
 
-  return { examController, owner, examAddress: firstExamInArray?.examAddress };
+  return { examController, owner, examAddress: firstExamInArray!.examAddress };
 }
 
 describe('ExamController tests', () => {
@@ -61,7 +61,7 @@ describe('ExamController tests', () => {
       );
       const participantAddress = owner.address;
 
-      await expect(examController.manageExamParticipation(examAddress!))
+      await expect(examController.manageExamParticipation(examAddress))
         .to.emit(examController, 'NewExamParticipation')
         .withArgs(examAddress, participantAddress);
     });
