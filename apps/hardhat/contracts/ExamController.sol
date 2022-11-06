@@ -9,7 +9,7 @@ contract ExamController {
         address examAddress;
     }
 
-    ExamHelper[] exams;
+    ExamHelper[] private exams;
     event NewExamCreation(address newExamAddress, address creatorAddress);
     event NewExamParticipation(address examAddress, address participantAddress);
 
