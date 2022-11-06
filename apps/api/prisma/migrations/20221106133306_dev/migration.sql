@@ -1,17 +1,17 @@
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Participant" (
     "address" TEXT NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("address")
+    CONSTRAINT "Participant_pkey" PRIMARY KEY ("address")
 );
 
 -- CreateTable
 CREATE TABLE "ExamParticipation" (
     "id" TEXT NOT NULL,
-    "userAddress" TEXT NOT NULL,
+    "participantAddress" TEXT NOT NULL,
     "examAddress" TEXT NOT NULL,
     "isFinished" BOOLEAN NOT NULL,
-    "score" DECIMAL(65,30) NOT NULL,
+    "score" INTEGER,
 
     CONSTRAINT "ExamParticipation_pkey" PRIMARY KEY ("id")
 );
@@ -47,7 +47,7 @@ CREATE TABLE "Answer" (
 );
 
 -- AddForeignKey
-ALTER TABLE "ExamParticipation" ADD CONSTRAINT "ExamParticipation_userAddress_fkey" FOREIGN KEY ("userAddress") REFERENCES "User"("address") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ExamParticipation" ADD CONSTRAINT "ExamParticipation_participantAddress_fkey" FOREIGN KEY ("participantAddress") REFERENCES "Participant"("address") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ExamParticipation" ADD CONSTRAINT "ExamParticipation_examAddress_fkey" FOREIGN KEY ("examAddress") REFERENCES "Exam"("address") ON DELETE RESTRICT ON UPDATE CASCADE;

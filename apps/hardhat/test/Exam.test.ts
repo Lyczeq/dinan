@@ -1,7 +1,7 @@
-import { ethers } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { EXAM_NAME, EXAM_SYMBOL } from './constants';
 import { expect } from 'chai';
+import { ethers } from 'hardhat';
+import { EXAM_NAME, EXAM_SYMBOL } from './constants';
 
 async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
@@ -17,16 +17,58 @@ async function deployExamFixture() {
     mockExamControllerAddress
   );
 
-  return { exam, owner, otherAccount };
+  return {
+    exam,
+    participantAddress: owner.address,
+    otherAccount,
+  };
 }
 
 describe('Exam tests', () => {
-  it('Checks name and symbol of the created Exam', async () => {
-    const { exam } = await loadFixture(deployExamFixture);
-    const examName = await exam.name();
-    const examSymbol = await exam.symbol();
+  describe('Exam Creation', () => {
+    it('Checks name and symbol of the created Exam', async () => {
+      const { exam } = await loadFixture(deployExamFixture);
+      const examName = await exam.name();
+      const examSymbol = await exam.symbol();
 
-    expect(examName).equals(EXAM_NAME);
-    expect(examSymbol).equals(examSymbol);
+      expect(examName).equals(EXAM_NAME);
+      expect(examSymbol).equals(examSymbol);
+    });
+  });
+
+  describe('Exam Participation', () => {
+    it('Adds a participant', async () => {
+      const { exam, participantAddress } = await loadFixture(deployExamFixture);
+      await exam.participateInExam(participantAddress);
+
+      const { isFinished, score, hasStarted } = await exam.getParticipantResult(
+        participantAddress
+      );
+
+      expect(isFinished).equals(false);
+      expect(score).equals(0);
+      expect(hasStarted).equals(true);
+    });
+
+    it('Expects revert when adding a participant because of incorrect sender address', async () => {
+      const { exam, participantAddress, otherAccount } = await loadFixture(
+        deployExamFixture
+      );
+      await expect(
+        exam.connect(otherAccount).participateInExam(participantAddress)
+      ).to.be.revertedWith(
+        "Your address isn't the ExamController Contract address."
+      );
+    });
+
+    it('test', async () => {
+      const { exam, participantAddress, otherAccount } = await loadFixture(
+        deployExamFixture
+      );
+      await exam.participateInExam(participantAddress);
+      await expect(
+        exam.getParticipantResult(otherAccount.address)
+      ).to.be.revertedWith('There is no participant with this address.');
+    });
   });
 });
