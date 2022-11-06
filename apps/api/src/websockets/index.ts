@@ -1,8 +1,7 @@
-import { ethers, Contract } from 'ethers';
-import { env } from './config';
+import { Contract, ethers } from 'ethers';
 import prisma from '../prisma';
+import { env } from './config';
 
-import EXAM from './abis/Exam.json';
 import EXAM_CONTROLLER from './abis/ExamController.json';
 
 type address = string;
@@ -46,13 +45,31 @@ async function listenOnNewExamParticipation() {
 
   examControllerContract.on(
     'NewExamParticipation',
-    async (exam: address, participant: address) => {
+    async (examAddress: address, participantAddress: address) => {
       try {
-        await prisma.examParticipation.create({
-          data: {
-            examAddress: exam,
-            participantAddress: participant,
-            isFinished: false,
+        const upsertParticipant = await prisma.participant.upsert({
+          include: {
+            examParticipations: true,
+          },
+          where: {
+            address: participantAddress,
+          },
+          update: {
+            examParticipations: {
+              create: {
+                isFinished: false,
+                examAddress,
+              },
+            },
+          },
+          create: {
+            address: participantAddress,
+            examParticipations: {
+              create: {
+                isFinished: false,
+                examAddress,
+              },
+            },
           },
         });
       } catch (error) {}

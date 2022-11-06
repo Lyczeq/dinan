@@ -22,7 +22,7 @@ model ExamParticipation {
   Exam               Exam        @relation(fields: [examAddress], references: [address])
   examAddress        String
   isFinished         Boolean
-  score              Decimal?
+  score              Int?
 }
 
 model Exam {
