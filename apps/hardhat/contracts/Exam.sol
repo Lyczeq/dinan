@@ -13,10 +13,10 @@ contract Exam is ERC721 {
         uint8 score;
     }
 
-    address creatorAddress;
-    address examControllerAddress;
-    address backendAddress;
-    mapping(address => ExamParticipation) userScores;
+    address private creatorAddress;
+    address private examControllerAddress;
+    address private backendAddress;
+    mapping(address => ExamParticipation) private userScores;
 
     constructor(
         string memory _name,
