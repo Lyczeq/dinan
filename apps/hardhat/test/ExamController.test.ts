@@ -5,12 +5,24 @@ import { isAddress } from 'ethers/lib/utils';
 import { EXAM_NAME, EXAM_SYMBOL, EXAM_ADDRESS } from './constants';
 
 async function deployExamControllerFixture() {
-  const [owner, otherAccount] = await ethers.getSigners();
+  const [owner] = await ethers.getSigners();
 
   const ExamController = await ethers.getContractFactory('ExamController');
   const examController = await ExamController.deploy();
 
-  return { examController, owner, otherAccount };
+  return { examController, owner };
+}
+
+async function deployExamControllerWithExam() {
+  const [owner] = await ethers.getSigners();
+  const ExamController = await ethers.getContractFactory('ExamController');
+  const examController = await ExamController.deploy();
+
+  await examController.addExam(EXAM_NAME, EXAM_SYMBOL);
+  const exams = await examController.getExams();
+  const firstExamInArray = exams.at(0);
+
+  return { examController, owner, examAddress: firstExamInArray?.examAddress };
 }
 
 describe('ExamController tests', () => {
@@ -43,6 +55,15 @@ describe('ExamController tests', () => {
       ).to.be.revertedWith("Exam with the provided address doesn't exist.");
     });
 
+    it('Expects NewExamParticipation event to be emitted', async () => {
+      const { examController, examAddress, owner } = await loadFixture(
+        deployExamControllerWithExam
+      );
+      const participantAddress = owner.address;
 
+      await expect(examController.manageExamParticipation(examAddress!))
+        .to.emit(examController, 'NewExamParticipation')
+        .withArgs(examAddress, participantAddress);
+    });
   });
 });
