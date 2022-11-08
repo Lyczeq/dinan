@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "hardhat/console.sol";
+
+//TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
 
-contract Exam is ERC721 {
+contract Exam is ERC721URIStorage {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
 
@@ -30,6 +34,62 @@ contract Exam is ERC721 {
     ) ERC721(_name, _symbol) {
         creatorAddress = _creatorAddress;
         examControllerAddress = _examControllerAddress;
+    }
+
+    string BASE_SVG =
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='black' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+
+    function makeNFT(address _participantAddress, uint8 _score) internal {
+        uint256 newItemId = _tokenIds.current();
+
+        string memory finalSvg = string(
+            abi.encodePacked(
+                BASE_SVG,
+                _participantAddress,
+                "\n",
+                Strings.toString(_score),
+                " ",
+                "</text></svg>"
+            )
+        );
+
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "',
+                        // We set the title of our NFT as the generated word.
+                        name(),
+                        '", "description": "DESCRIPTION_PLACEHOLDER", "image": "data:image/svg+xml;base64,',
+                        // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
+                        Base64.encode(bytes(finalSvg)),
+                        '"}'
+                    )
+                )
+            )
+        );
+
+        string memory finalTokenUri = string(
+            abi.encodePacked("data:application/json;base64,", json)
+        );
+
+        console.log("\n--------------------");
+        console.log(
+            string(
+                abi.encodePacked(
+                    "https://nftpreview.0xdev.codes/?code=",
+                    finalTokenUri
+                )
+            )
+        );
+        console.log("--------------------\n");
+
+        _safeMint(msg.sender, newItemId);
+
+        // Update your URI!!!
+        _setTokenURI(newItemId, finalTokenUri);
+
+        _tokenIds.increment();
     }
 
     function participateInExam(address participantAddress)
