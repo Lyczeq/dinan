@@ -7,7 +7,6 @@ dotenv.config();
 
 const env = cleanEnv(process.env, {
   PRIVATE_KEY: str(),
-  ALCHEMY_URL: str(),
 });
 
 const config: HardhatUserConfig = {
