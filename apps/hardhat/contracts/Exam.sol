@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "hardhat/console.sol";
 
 //TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
@@ -37,18 +36,28 @@ contract Exam is ERC721URIStorage {
     }
 
     string BASE_SVG =
-        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='black' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
 
-    function makeNFT(address _participantAddress, uint8 _score) internal {
+    function makeNFT(address _participantAddress, uint8 _score) external {
         uint256 newItemId = _tokenIds.current();
+
+        string memory stringifiedAddress = Strings.toHexString(
+            uint160(_participantAddress),
+            20
+        );
 
         string memory finalSvg = string(
             abi.encodePacked(
                 BASE_SVG,
-                _participantAddress,
-                "\n",
+                "<tspan x='50%' y='25%' font-size='20px'>",
+                name(),
+                "</tspan>",
+                "<tspan x='50%' y='50%' font-size='14px'>",
+                stringifiedAddress,
+                "</tspan>",
+                "<tspan x='50%' y='75%' font-size='40px'>",
                 Strings.toString(_score),
-                " ",
+                "%</tspan>"
                 "</text></svg>"
             )
         );
@@ -72,17 +81,6 @@ contract Exam is ERC721URIStorage {
         string memory finalTokenUri = string(
             abi.encodePacked("data:application/json;base64,", json)
         );
-
-        console.log("\n--------------------");
-        console.log(
-            string(
-                abi.encodePacked(
-                    "https://nftpreview.0xdev.codes/?code=",
-                    finalTokenUri
-                )
-            )
-        );
-        console.log("--------------------\n");
 
         _safeMint(msg.sender, newItemId);
 
