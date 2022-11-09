@@ -11,6 +11,8 @@ import {Base64} from "../libraries/Base64.sol";
 contract Exam is ERC721URIStorage {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
+    // tokenURI() returns tokenURI based on the tokenId
+    // ownerOf() returns tokenId owner's address
 
     using Counters for Counters.Counter;
     struct ExamParticipation {
@@ -67,10 +69,8 @@ contract Exam is ERC721URIStorage {
                 string(
                     abi.encodePacked(
                         '{"name": "',
-                        // We set the title of our NFT as the generated word.
                         name(),
                         '", "description": "DESCRIPTION_PLACEHOLDER", "image": "data:image/svg+xml;base64,',
-                        // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
                         Base64.encode(bytes(finalSvg)),
                         '"}'
                     )
@@ -84,7 +84,6 @@ contract Exam is ERC721URIStorage {
 
         _safeMint(msg.sender, newItemId);
 
-        // Update your URI!!!
         _setTokenURI(newItemId, finalTokenUri);
 
         _tokenIds.increment();
