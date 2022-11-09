@@ -17,9 +17,9 @@ model Participant {
 
 model ExamParticipation {
   id                 String      @id @default(uuid())
-  Participant        Participant @relation(fields: [participantAddress], references: [address])
+  participant        Participant @relation(fields: [participantAddress], references: [address])
   participantAddress String
-  Exam               Exam        @relation(fields: [examAddress], references: [address])
+  exam               Exam        @relation(fields: [examAddress], references: [address])
   examAddress        String
   isFinished         Boolean
   score              Int?
@@ -39,7 +39,7 @@ model Question {
   id          String   @id @default(uuid())
   answers     Answer[]
   text        String
-  Exam        Exam     @relation(fields: [examAddress], references: [address])
+  exam        Exam     @relation(fields: [examAddress], references: [address])
   examAddress String
 }
 
@@ -47,6 +47,6 @@ model Answer {
   id         String   @id @default(uuid())
   text       String
   isCorrect  Boolean
-  Question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id])
   questionId String
 }
