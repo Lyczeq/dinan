@@ -44,7 +44,7 @@ export const calculateScore = (
       currentQuestion,
       participantAnswers
     )
-      ? previousScore++
+      ? (previousScore += 1)
       : previousScore;
   }, 0);
 
