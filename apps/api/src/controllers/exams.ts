@@ -1,7 +1,7 @@
-import { Exam, Question, Answer } from '@prisma/client';
 import { Request, Response } from 'express';
 import prisma from '../prisma';
-import { exclude } from './helpers';
+import { ParticipantAnswer, FullExam } from './types';
+import { calculateScore, exclude, getPercentageScore } from './helpers';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -13,24 +13,19 @@ export const getAllExams = async (req: Request, res: Response) => {
   }
 };
 
-type SentExam = Exam & {
-  questions: SentQuestion[];
-};
-
-type SentQuestion = Question & {
-  answers: Answer[];
-};
-
 export const addExam = async (req: Request, res: Response) => {
   try {
-    const { exam } = req.body as { exam: SentExam };
+    const { exam } = req.body as { exam: FullExam };
 
     if (!exam) {
       res.sendStatus(400);
       return;
     }
+    const participantAddress = req.headers.authorization?.split(' ').at(1);
 
     const { address, creatorAddress } = exam;
+
+    if (participantAddress !== creatorAddress) return res.sendStatus(401);
 
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
@@ -97,7 +92,9 @@ export const getExamsQuestionsAndAnswers = async (
   req: Request,
   res: Response
 ) => {
-  const participantAddress = req.headers.authorization?.split(' ').at(1);
+  const participantAddress: string = req.headers.authorization
+    ?.split(' ')
+    .at(1)!;
   const examAddress = req.params.address;
 
   try {
@@ -107,8 +104,16 @@ export const getExamsQuestionsAndAnswers = async (
         participantAddress,
       },
     });
-
     if (!examParticipation) return res.sendStatus(404);
+
+    await prisma.examParticipation.update({
+      where: {
+        id: examParticipation.id,
+      },
+      data: {
+        hasParticipantStarted: true,
+      },
+    });
 
     const examToParticipateWithIsCorrectProperties =
       await prisma.exam.findUnique({
@@ -140,11 +145,57 @@ export const getExamsQuestionsAndAnswers = async (
 
     res.statusCode = 200;
     return res.json({
-      examAddress,
-      participantAddress,
       exam: examToParicipate,
     });
   } catch (error) {
     res.sendStatus(500);
   }
+};
+
+export const compareParticipantAnswers = async (
+  req: Request,
+  res: Response
+) => {
+  const participantAddress = req.headers.authorization?.split(' ').at(1);
+  const examAddress = req.params.address;
+  const participantAnswers: ParticipantAnswer[] = req.body.answers;
+
+  try {
+    const examParticipation = await prisma.examParticipation.findFirst({
+      where: {
+        examAddress,
+        participantAddress,
+        hasParticipantStarted: true,
+      },
+    });
+
+    if (!examParticipation) return res.sendStatus(404);
+
+    const examQuestions = await prisma.question.findMany({
+      include: {
+        answers: true,
+      },
+      where: {
+        examAddress,
+      },
+    });
+
+    const score = calculateScore(examQuestions, participantAnswers);
+    const percentageScore = getPercentageScore(examQuestions.length, score);
+
+    const updatedExamParticipation = await prisma.examParticipation.update({
+      where: {
+        id: examParticipation.id,
+      },
+      data: {
+        score: percentageScore,
+        isFinished: true,
+      },
+    });
+
+    res.statusCode = 201;
+    res.send({
+      result: updatedExamParticipation,
+    });
+  } catch (error) {}
 };

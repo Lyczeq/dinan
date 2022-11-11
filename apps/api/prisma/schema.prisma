@@ -16,13 +16,14 @@ model Participant {
 }
 
 model ExamParticipation {
-  id                 String      @id @default(uuid())
-  participant        Participant @relation(fields: [participantAddress], references: [address])
-  participantAddress String
-  exam               Exam        @relation(fields: [examAddress], references: [address])
-  examAddress        String
-  isFinished         Boolean
-  score              Int?
+  id                    String      @id @default(uuid())
+  participant           Participant @relation(fields: [participantAddress], references: [address])
+  participantAddress    String
+  exam                  Exam        @relation(fields: [examAddress], references: [address])
+  examAddress           String
+  isFinished            Boolean
+  hasParticipantStarted Boolean
+  score                 Int?
 }
 
 model Exam {

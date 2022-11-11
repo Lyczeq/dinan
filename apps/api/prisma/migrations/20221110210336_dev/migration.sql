@@ -11,6 +11,7 @@ CREATE TABLE "ExamParticipation" (
     "participantAddress" TEXT NOT NULL,
     "examAddress" TEXT NOT NULL,
     "isFinished" BOOLEAN NOT NULL,
+    "hasParticipantStarted" BOOLEAN NOT NULL,
     "score" INTEGER,
 
     CONSTRAINT "ExamParticipation_pkey" PRIMARY KEY ("id")

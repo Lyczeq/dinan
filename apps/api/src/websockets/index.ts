@@ -57,6 +57,7 @@ async function listenOnNewExamParticipation() {
           update: {
             examParticipations: {
               create: {
+                hasParticipantStarted: false,
                 isFinished: false,
                 examAddress,
               },
@@ -66,6 +67,7 @@ async function listenOnNewExamParticipation() {
             address: participantAddress,
             examParticipations: {
               create: {
+                hasParticipantStarted: false,
                 isFinished: false,
                 examAddress,
               },
