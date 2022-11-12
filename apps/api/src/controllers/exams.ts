@@ -25,13 +25,20 @@ export const addExam = async (req: Request, res: Response) => {
     const participantAddress = req.headers.authorization?.split(' ').at(1);
 
     const { address, creatorAddress } = exam;
-
-    if (participantAddress !== creatorAddress) return res.sendStatus(401);
+    console.log(address, creatorAddress);
+    if (participantAddress?.toLowerCase() !== creatorAddress.toLowerCase())
+      return res.sendStatus(401);
 
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
-        address,
-        creatorAddress,
+        address: {
+          equals: address,
+          mode: 'insensitive',
+        },
+        creatorAddress: {
+          equals: creatorAddress,
+          mode: 'insensitive',
+        },
       },
     });
 

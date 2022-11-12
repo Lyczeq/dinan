@@ -1,6 +1,6 @@
 import { Contract, ethers } from 'ethers';
 import prisma from '../prisma';
-import { env } from './config';
+import { env } from '../config';
 
 import EXAM_CONTROLLER from './abis/ExamController.json';
 import EXAM from './abis/Exam.json';
