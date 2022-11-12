@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import prisma from '../prisma';
 import { ParticipantAnswer, FullExam } from './types';
 import { calculateScore, exclude, getPercentageScore } from './helpers';
+import { sendScoreTransaction } from '../websockets';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -24,13 +25,20 @@ export const addExam = async (req: Request, res: Response) => {
     const participantAddress = req.headers.authorization?.split(' ').at(1);
 
     const { address, creatorAddress } = exam;
-
-    if (participantAddress !== creatorAddress) return res.sendStatus(401);
+    console.log(address, creatorAddress);
+    if (participantAddress?.toLowerCase() !== creatorAddress.toLowerCase())
+      return res.sendStatus(401);
 
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
-        address,
-        creatorAddress,
+        address: {
+          equals: address,
+          mode: 'insensitive',
+        },
+        creatorAddress: {
+          equals: creatorAddress,
+          mode: 'insensitive',
+        },
       },
     });
 
@@ -156,7 +164,9 @@ export const compareParticipantAnswers = async (
   req: Request,
   res: Response
 ) => {
-  const participantAddress = req.headers.authorization?.split(' ').at(1);
+  const participantAddress = req.headers.authorization
+    ?.split(' ')
+    .at(1) as string;
   const examAddress = req.params.address;
   const participantAnswers: ParticipantAnswer[] = req.body.answers;
 
@@ -193,9 +203,16 @@ export const compareParticipantAnswers = async (
       },
     });
 
+    const txHash = await sendScoreTransaction(
+      examAddress,
+      participantAddress,
+      percentageScore
+    );
+
     res.statusCode = 201;
     res.send({
       result: updatedExamParticipation,
+      txHash,
     });
   } catch (error) {}
 };

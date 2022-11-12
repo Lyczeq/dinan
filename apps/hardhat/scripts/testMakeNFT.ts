@@ -13,6 +13,7 @@ async function main() {
   );
 
   await exam.deployed();
+  console.log(exam.address);
   await exam.makeNFT('0x86a74f972a4e5f7ba795f80fd97e62151616406e', 88);
 }
 
