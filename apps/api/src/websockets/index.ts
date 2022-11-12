@@ -3,11 +3,12 @@ import prisma from '../prisma';
 import { env } from './config';
 
 import EXAM_CONTROLLER from './abis/ExamController.json';
+import EXAM from './abis/Exam.json';
 
 type address = string;
 
 function listenOnNewExamCreation() {
-  const provider = new ethers.providers.WebSocketProvider(
+  const provider = new ethers.providers.AlchemyWebSocketProvider(
     env.ALCHEMY_WEBSOCKET_LINK
   );
 
@@ -33,7 +34,7 @@ function listenOnNewExamCreation() {
 }
 
 async function listenOnNewExamParticipation() {
-  const provider = new ethers.providers.WebSocketProvider(
+  const provider = new ethers.providers.AlchemyWebSocketProvider(
     env.ALCHEMY_WEBSOCKET_LINK
   );
 
@@ -78,3 +79,28 @@ async function listenOnNewExamParticipation() {
     }
   );
 }
+
+export const sendScoreTransaction = async (
+  examAddress: string,
+  participantAddress: string,
+  score: string
+) => {
+  const provider = new ethers.providers.AlchemyProvider(
+    'maticmum',
+    env.ALCHEMY_API_KEY
+  );
+
+  const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
+
+  const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
+  const gasPrice = await provider.getGasPrice();
+  const tx = await examContract.saveParticipantScore(
+    score,
+    participantAddress,
+    {
+      gasPrice: gasPrice.toNumber(),
+    }
+  );
+
+  await tx.wait();
+};

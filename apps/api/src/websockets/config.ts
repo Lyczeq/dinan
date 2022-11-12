@@ -5,4 +5,6 @@ dotenv.config();
 
 export const env = cleanEnv(process.env, {
   ALCHEMY_WEBSOCKET_LINK: str(),
+  PRIVATE_KEY: str(),
+  ALCHEMY_API_KEY: str(),
 });
