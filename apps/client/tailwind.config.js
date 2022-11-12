@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         lobster: ['lobster', 'arial', 'sans-serif'],
       },
+      gridTemplateColumns: {
+        '3/4': '3fr 1fr',
+      },
     },
   },
   plugins: [],
