@@ -24,7 +24,8 @@ contract Exam is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     address private creatorAddress;
     address private examControllerAddress;
-    address private backendAddress;
+    address private constant backendAddress =
+        0x86a74F972A4e5f7ba795F80fD97E62151616406E;
     mapping(address => ExamParticipation) private partcipantsScores;
 
     constructor(
