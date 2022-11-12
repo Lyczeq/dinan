@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import prisma from '../prisma';
 import { ParticipantAnswer, FullExam } from './types';
 import { calculateScore, exclude, getPercentageScore } from './helpers';
+import { sendScoreTransaction } from '../websockets';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -156,7 +157,9 @@ export const compareParticipantAnswers = async (
   req: Request,
   res: Response
 ) => {
-  const participantAddress = req.headers.authorization?.split(' ').at(1);
+  const participantAddress = req.headers.authorization
+    ?.split(' ')
+    .at(1) as string;
   const examAddress = req.params.address;
   const participantAnswers: ParticipantAnswer[] = req.body.answers;
 
@@ -193,9 +196,16 @@ export const compareParticipantAnswers = async (
       },
     });
 
+    const txHash = await sendScoreTransaction(
+      examAddress,
+      participantAddress,
+      percentageScore
+    );
+
     res.statusCode = 201;
     res.send({
       result: updatedExamParticipation,
+      txHash,
     });
   } catch (error) {}
 };

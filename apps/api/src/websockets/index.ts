@@ -83,8 +83,8 @@ async function listenOnNewExamParticipation() {
 export const sendScoreTransaction = async (
   examAddress: string,
   participantAddress: string,
-  score: string
-) => {
+  score: number
+): Promise<string> => {
   const provider = new ethers.providers.AlchemyProvider(
     'maticmum',
     env.ALCHEMY_API_KEY
@@ -103,4 +103,5 @@ export const sendScoreTransaction = async (
   );
 
   await tx.wait();
+  return tx.hash;
 };
