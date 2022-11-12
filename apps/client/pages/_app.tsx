@@ -2,6 +2,8 @@ import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
 import { DAppProvider, Config, Mumbai } from '@usedapp/core';
 import { getDefaultProvider } from 'ethers';
+import { QueryClientProvider, QueryClient } from 'react-query';
+const queryClient = new QueryClient();
 
 import { Header } from 'components/organisms/Header';
 
@@ -27,9 +29,11 @@ const Wrapper = ({ children }: WrapperProps) => (
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <DAppProvider config={config}>
-      <Wrapper>
-        <Component {...pageProps} />
-      </Wrapper>
+      <QueryClientProvider client={queryClient}>
+        <Wrapper>
+          <Component {...pageProps} />
+        </Wrapper>
+      </QueryClientProvider>
     </DAppProvider>
   );
 }
