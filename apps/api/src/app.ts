@@ -1,3 +1,4 @@
+import { ContractHandler } from './websockets/index';
 import express from 'express';
 
 import { router as exams } from './routes/exams';
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use('/api/v1/exams', exams);
 
 const main = async () => {
+  ContractHandler.setupWebsockets();
   app.listen(env.PORT, () =>
     console.log(`🚀 Server ready at http://localhost:${env.PORT}`)
   );

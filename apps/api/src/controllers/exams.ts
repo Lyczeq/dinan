@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import prisma from '../prisma';
 import { ParticipantAnswer, FullExam } from './types';
 import { calculateScore, exclude, getPercentageScore } from './helpers';
-import { sendScoreTransaction } from '../websockets';
+import { ContractHandler } from '../websockets';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -23,11 +23,7 @@ export const updateExamWithQuestions = async (req: Request, res: Response) => {
       res.sendStatus(400);
       return;
     }
-    const participantAddress = req.headers.authorization?.split(' ').at(1);
-
-    const { creatorAddress } = exam;
-    if (participantAddress?.toLowerCase() !== creatorAddress.toLowerCase())
-      return res.sendStatus(401);
+    const creatorAddress = req.headers.authorization?.split(' ').at(1);
 
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
@@ -203,7 +199,7 @@ export const compareParticipantAnswers = async (
       },
     });
 
-    const txHash = await sendScoreTransaction(
+    const txHash = await ContractHandler.sendScoreTransaction(
       examAddress,
       participantAddress,
       percentageScore
