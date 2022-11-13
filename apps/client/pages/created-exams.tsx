@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Button } from 'components/atoms/Button';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { SearchInput } from 'components/atoms/SearchInput';
 import { Table } from 'components/organisms/Table/Table';
@@ -15,10 +14,11 @@ const CreatedExams: NextPage = () => {
       <Table>
         <Table.Header>
           <SearchInput />
-          <Link href="add-exam">
-            <Button className="bg-yellow-400 border-2 border-yellow-400">
-              Add new Exam
-            </Button>
+          <Link
+            href="add-exam"
+            className="text-yellow-400 hover:text-orange-400 bold font-bold border-b-2 border-yellow-400 hover:border-orange-400"
+          >
+            Add new Exam
           </Link>
         </Table.Header>
         <Table.Content>
