@@ -14,9 +14,10 @@ export const getAllExams = async (req: Request, res: Response) => {
   }
 };
 
-export const addExam = async (req: Request, res: Response) => {
+export const updateExamWithQuestions = async (req: Request, res: Response) => {
   try {
     const { exam } = req.body as { exam: FullExam };
+    const examAddress = req.params.address;
 
     if (!exam) {
       res.sendStatus(400);
@@ -24,15 +25,14 @@ export const addExam = async (req: Request, res: Response) => {
     }
     const participantAddress = req.headers.authorization?.split(' ').at(1);
 
-    const { address, creatorAddress } = exam;
-    console.log(address, creatorAddress);
+    const { creatorAddress } = exam;
     if (participantAddress?.toLowerCase() !== creatorAddress.toLowerCase())
       return res.sendStatus(401);
 
     const examCreatedByEvent = await prisma.exam.findFirst({
       where: {
         address: {
-          equals: address,
+          equals: examAddress,
           mode: 'insensitive',
         },
         creatorAddress: {
@@ -49,7 +49,7 @@ export const addExam = async (req: Request, res: Response) => {
 
     const updatedExam = await prisma.exam.update({
       where: {
-        address,
+        address: examAddress,
       },
       include: {
         questions: {

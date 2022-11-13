@@ -1,8 +1,19 @@
 import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
+import { DAppProvider, Config, Mumbai } from '@usedapp/core';
+import { getDefaultProvider } from 'ethers';
+import { QueryClientProvider, QueryClient } from 'react-query';
+const queryClient = new QueryClient();
+
 import { Header } from 'components/organisms/Header';
 
 import '../styles/globals.css';
+
+const config: Config = {
+  readOnlyUrls: {
+    [Mumbai.chainId]: getDefaultProvider('https://rpc-mumbai.maticvigil.com'),
+  },
+};
 
 type WrapperProps = {
   children: ReactNode;
@@ -17,9 +28,13 @@ const Wrapper = ({ children }: WrapperProps) => (
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Wrapper>
-      <Component {...pageProps} />
-    </Wrapper>
+    <DAppProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <Wrapper>
+          <Component {...pageProps} />
+        </Wrapper>
+      </QueryClientProvider>
+    </DAppProvider>
   );
 }
 
