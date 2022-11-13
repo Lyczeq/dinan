@@ -9,10 +9,9 @@ import {
 
 export const router = express.Router();
 
-const xd = async (req: Request, res: Response) => {
+const test = async (req: Request, res: Response) => {
   const examAddress = req.headers.authorization?.split(' ').at(1);
   const body = req.body;
-  console.log('XDDD');
   res.statusCode = 201;
   return res.send({ examAddress, body });
 };
