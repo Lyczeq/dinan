@@ -7,101 +7,116 @@ import EXAM from './abis/Exam.json';
 
 type address = string;
 
-function listenOnNewExamCreation() {
-  const provider = new ethers.providers.AlchemyWebSocketProvider(
-    env.ALCHEMY_WEBSOCKET_LINK
-  );
+export class ContractHandler {
+  static providerNetwork: string = 'maticmum';
+  static websocketProviderNetwork = {
+    name: 'maticmum',
+    chainId: 80001,
+  };
 
-  const examControllerContract = new Contract(
-    'address',
-    EXAM_CONTROLLER.abi,
-    provider
-  );
+  static listenOnNewExamCreation() {
+    const provider = new ethers.providers.AlchemyWebSocketProvider(
+      this.websocketProviderNetwork,
+      env.ALCHEMY_API_KEY
+    );
 
-  examControllerContract.on(
-    'NewExamCreation',
-    async (newExamAddress: address, creatorAddress: address) => {
-      try {
-        await prisma.exam.create({
-          data: {
-            address: newExamAddress,
-            creatorAddress: creatorAddress,
-          },
-        });
-      } catch (error) {}
-    }
-  );
-}
+    const examControllerContract = new Contract(
+      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      EXAM_CONTROLLER.abi,
+      provider
+    );
 
-async function listenOnNewExamParticipation() {
-  const provider = new ethers.providers.AlchemyWebSocketProvider(
-    env.ALCHEMY_WEBSOCKET_LINK
-  );
+    examControllerContract.on(
+      'NewExamCreation',
+      async (newExamAddress: address, creatorAddress: address) => {
+        try {
+          await prisma.exam.create({
+            data: {
+              address: newExamAddress,
+              creatorAddress: creatorAddress,
+            },
+          });
+        } catch (error) {}
+      }
+    );
+  }
 
-  const examControllerContract = new Contract(
-    'address',
-    EXAM_CONTROLLER.abi,
-    provider
-  );
+  static async listenOnNewExamParticipation() {
+    const provider = new ethers.providers.AlchemyWebSocketProvider(
+      this.websocketProviderNetwork,
+      env.ALCHEMY_API_KEY
+    );
 
-  examControllerContract.on(
-    'NewExamParticipation',
-    async (examAddress: address, participantAddress: address) => {
-      try {
-        const upsertParticipant = await prisma.participant.upsert({
-          include: {
-            examParticipations: true,
-          },
-          where: {
-            address: participantAddress,
-          },
-          update: {
-            examParticipations: {
-              create: {
-                hasParticipantStarted: false,
-                isFinished: false,
-                examAddress,
+    const examControllerContract = new Contract(
+      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      EXAM_CONTROLLER.abi,
+      provider
+    );
+
+    examControllerContract.on(
+      'NewExamParticipation',
+      async (examAddress: address, participantAddress: address) => {
+        try {
+          const upsertParticipant = await prisma.participant.upsert({
+            include: {
+              examParticipations: true,
+            },
+            where: {
+              address: participantAddress,
+            },
+            update: {
+              examParticipations: {
+                create: {
+                  hasParticipantStarted: false,
+                  isFinished: false,
+                  examAddress,
+                },
               },
             },
-          },
-          create: {
-            address: participantAddress,
-            examParticipations: {
-              create: {
-                hasParticipantStarted: false,
-                isFinished: false,
-                examAddress,
+            create: {
+              address: participantAddress,
+              examParticipations: {
+                create: {
+                  hasParticipantStarted: false,
+                  isFinished: false,
+                  examAddress,
+                },
               },
             },
-          },
-        });
-      } catch (error) {}
-    }
-  );
+          });
+        } catch (error) {}
+      }
+    );
+  }
+
+  static setupWebsockets() {
+    this.listenOnNewExamCreation();
+    this.listenOnNewExamParticipation();
+  }
+
+  static async sendScoreTransaction(
+    examAddress: string,
+    participantAddress: string,
+    score: number
+  ): Promise<string> {
+    const provider = new ethers.providers.AlchemyProvider(
+      this.providerNetwork,
+      env.ALCHEMY_API_KEY
+    );
+
+    const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
+
+    const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
+    const gasPrice = await provider.getGasPrice();
+    const tx = await examContract.saveParticipantScore(
+      score,
+      participantAddress,
+      {
+        gasPrice: gasPrice.toNumber(),
+      }
+    );
+
+    await tx.wait();
+    return tx.hash;
+  }
 }
-
-export const sendScoreTransaction = async (
-  examAddress: string,
-  participantAddress: string,
-  score: number
-): Promise<string> => {
-  const provider = new ethers.providers.AlchemyProvider(
-    'maticmum',
-    env.ALCHEMY_API_KEY
-  );
-
-  const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
-
-  const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
-  const gasPrice = await provider.getGasPrice();
-  const tx = await examContract.saveParticipantScore(
-    score,
-    participantAddress,
-    {
-      gasPrice: gasPrice.toNumber(),
-    }
-  );
-
-  await tx.wait();
-  return tx.hash;
-};

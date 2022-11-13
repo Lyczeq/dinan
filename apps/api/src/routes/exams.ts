@@ -21,4 +21,4 @@ router.route('/:address').put(updateExamWithQuestions);
 router.route('/:address').get(getSingleExam);
 router.route('/:address/participate').get(getExamsQuestionsAndAnswers);
 router.route('/:address/compare').post(compareParticipantAnswers);
-router.route('/test/:address').put(test);
+// router.route('/test/:address').put(test);
