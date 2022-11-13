@@ -2,8 +2,10 @@ import { Button } from 'components/atoms/Button';
 import { useAddExam } from 'hooks/useAddExam';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { useMutation } from 'react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useEthers } from '@usedapp/core';
 
 type Answer = {
   text: string;
@@ -15,15 +17,30 @@ type Question = {
   answers: Answer[];
 };
 
-const postExam = async (userAddress: string) => {
-  const response = await fetch('localhost:8000/api/v1/exams', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${userAddress}`,
-    },
-  });
-  return await response.json();
+type Exam = {
+  name: string;
+  symbol: string;
+  description: string;
+  questions: Question[];
+};
+
+const updateExamWithQustions = (
+  userAddress: string,
+  examAddress: string,
+  exam: Exam
+) => {
+  const response = fetch(
+    `http://localhost:8000/api/v1/exams/test/${examAddress}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userAddress}`,
+      },
+      body: JSON.stringify({ exam }),
+    }
+  );
+  return response;
 };
 
 const AddExam: NextPage = () => {
@@ -46,26 +63,58 @@ const AddExam: NextPage = () => {
   };
 
   const [questions, setQuestions] = useState<Question[]>([initialQuestion]);
-
   const { addExam, events, state } = useAddExam();
+  const [exam, setExam] = useState<Exam | null>(null);
+  const { account } = useEthers();
+  const mutation = useMutation(
+    ({
+      userAddress,
+      examAddress,
+      exam,
+    }: {
+      userAddress: string;
+      examAddress: string;
+      exam: Exam;
+    }) => updateExamWithQustions(userAddress, examAddress, exam)
+  );
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Question[]>();
 
-  const onSubmit = (values: any) => {
-    console.log(values);
-    addExam(values.name, values.symbol);
+  const onSubmit = (newExam: Exam) => {
+    console.log({ exam });
+    console.log({ newExam });
+    setExam(newExam);
+    addExam(newExam.name, newExam.symbol);
   };
 
   useEffect(() => {
-    console.log(state.status);
-    const newExamCreation = events?.find((e) => e.name === 'NewExamCreation');
-    if (newExamCreation) console.log(newExamCreation, 'ok');
-  }, [events, state.status]);
+    const test = async () => {
+      const newExamCreation = events?.find((e) => e.name === 'NewExamCreation');
+      if (!newExamCreation) return;
+
+      const userAddress = newExamCreation.args[1];
+      if (userAddress.toLowerCase() !== account?.toLowerCase()) return;
+
+      const examAddress = newExamCreation.args[0];
+      console.log('EXAM', exam);
+      mutation.mutate({
+        userAddress: account as string,
+        examAddress,
+        exam: exam as Exam,
+      });
+
+      if (mutation.isSuccess) {
+        const x = await mutation.data.json();
+        console.log(x);
+      }
+    };
+    
+    void test();
+  }, [events, account, exam]);
 
   const addQuestion = () => {
     setQuestions([...questions, initialQuestion]);
@@ -87,6 +136,11 @@ const AddExam: NextPage = () => {
             >
               <input type="text" placeholder="name" {...register('name')} />
               <input type="text" placeholder="symbol" {...register('symbol')} />
+              <input
+                type="text"
+                placeholder="description"
+                {...register('description')}
+              />
               {questions.map((question, qIdx) => (
                 <div key={`question${qIdx}`}>
                   <input
@@ -128,6 +182,17 @@ const AddExam: NextPage = () => {
             <Button onClick={addQuestion} className="bg-orange-400">
               Add question
             </Button>
+            <button
+              onClick={() => {
+                mutation.mutate({
+                  userAddress: account as string,
+                  examAddress: 'xd',
+                  exam: exam as Exam,
+                });
+              }}
+            >
+              PUT
+            </button>
           </section>
           <aside className="bg-slate-400 h-full flex flex-col">
             <p>Questions: </p>
