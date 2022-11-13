@@ -30,7 +30,7 @@ const updateExamWithQustions = (
   exam: Exam
 ) => {
   const response = fetch(
-    `http://localhost:8000/api/v1/exams/test/${examAddress}`,
+    `http://localhost:8000/api/v1/exams/${examAddress}`,
     {
       method: 'PUT',
       headers: {
@@ -146,7 +146,7 @@ const AddExam: NextPage = () => {
                   <input
                     type="text"
                     placeholder={`Question ${qIdx + 1}`}
-                    {...register(`question[${qIdx}].text`)}
+                    {...register(`questions[${qIdx}].text`)}
                   />
                   <>
                     {question.answers.map((answer, aIdx) => {
@@ -160,13 +160,13 @@ const AddExam: NextPage = () => {
                             type="text"
                             placeholder={`Answer ${aIdx + 1}`}
                             {...register(
-                              `question[${qIdx}].answers[${aIdx}.text]`
+                              `questions[${qIdx}].answers[${aIdx}.text]`
                             )}
                           />
                           <input
                             type="checkbox"
                             {...register(
-                              `question[${qIdx}].answers[${aIdx}.isCorrect]`
+                              `questions[${qIdx}].answers[${aIdx}.isCorrect]`
                             )}
                           />
                         </div>
