@@ -61,7 +61,7 @@ const ExamForm = ({ examAddress, questions }: ExamFormProps) => {
   );
   const onExamSubmit = () => {
     const firstQuestionId = questions[0].id;
-    const correctAnswer = questions[0].answers.find((a) => a.text === 'aa2');
+    const correctAnswer = questions[0].answers.find((a) => a.text === 'a1');
 
     const examAnswers = [
       {
@@ -85,10 +85,8 @@ const ExamForm = ({ examAddress, questions }: ExamFormProps) => {
     <div>
       <p>{JSON.stringify(questions)}</p>
       <button onClick={onExamSubmit}>Submit exam</button>
-      {isSuccess && (
-        <p className="w-60">Result: {JSON.stringify(data.result)}</p>
-      )}
-      {isSuccess && <p className="text-red-500">txHash: {data.txHash}</p>}
+      {isSuccess && <p className="w-60">Result: {JSON.stringify(data)}</p>}
+
       {status === 'loading' && <p>Loading...</p>}
       {status === 'error' && <p>{JSON.stringify(error)}</p>}
     </div>

@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 
 const fetchExams = async () => {
   const res = await fetch('http://localhost:8000/api/v1/exams');
-  return res.json();
+  return await res.json();
 };
 
 const Exams: NextPage = () => {
