@@ -21,7 +21,7 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      '0xcf63a7f7242aa3D8db508cbD7C44a40c395Fa1cD',
       EXAM_CONTROLLER.abi,
       provider
     );
@@ -48,7 +48,7 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      '0xcf63a7f7242aa3D8db508cbD7C44a40c395Fa1cD',
       EXAM_CONTROLLER.abi,
       provider
     );
@@ -94,7 +94,7 @@ export class ContractHandler {
     this.listenOnNewExamParticipation();
   }
 
-  static async sendScoreTransaction(
+  static async sendScoreAndMakeNFT(
     examAddress: string,
     participantAddress: string,
     score: number
@@ -108,7 +108,7 @@ export class ContractHandler {
 
     const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
     const gasPrice = await provider.getGasPrice();
-    const tx = await examContract.saveParticipantScore(
+    const result = await examContract.saveParticipantScore(
       score,
       participantAddress,
       {
@@ -116,7 +116,6 @@ export class ContractHandler {
       }
     );
 
-    await tx.wait();
-    return tx.hash;
+    return result;
   }
 }
