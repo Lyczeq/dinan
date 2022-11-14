@@ -1,9 +1,9 @@
 import { useContractFunction } from '@usedapp/core';
 import { Contract } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
-import ExamController from '../utils/ExamController.json';
+import ExamController from './ExamController.json';
 
-const examControllerAddress = '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e';
+const examControllerAddress = '0xe87C44226B84C662619F848F0b325E4850A8770f';
 
 export const useExamControllerMethod = (methodName: string) => {
   const { send, state, events } = useContractFunction(
