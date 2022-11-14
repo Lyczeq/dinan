@@ -14,14 +14,12 @@ const Home: NextPage = () => {
           <span>and managing certificates!</span>
         </h2>
         <h3 className="text-4xl text-orange-400 font-bold transition-all duration-200 hover:text-yellow-400">
-          <Link href="/created-exams">
-            <a>Create your first exam</a>
-          </Link>
+          <Link href="/created-exams">Create your first exam</Link>
         </h3>
         <p className="text-2xl text-gray-600">or</p>
         <h3 className="text-4xl text-orange-400 font-bold transition-all duration-200 hover:text-yellow-400">
           <Link href="/exams">
-            <a>take part in the exams created by other users!</a>
+            take part in the exams created by other users!
           </Link>
         </h3>
       </section>

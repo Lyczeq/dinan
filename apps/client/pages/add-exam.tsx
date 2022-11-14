@@ -1,5 +1,5 @@
 import { Button } from 'components/atoms/Button';
-import { useAddExam } from 'hooks/useAddExam';
+import { useExamControllerMethod } from 'hooks/useExamControllerMethod';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useMutation } from 'react-query';
@@ -29,17 +29,14 @@ const updateExamWithQustions = (
   examAddress: string,
   exam: Exam
 ) => {
-  const response = fetch(
-    `http://localhost:8000/api/v1/exams/${examAddress}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userAddress}`,
-      },
-      body: JSON.stringify({ exam }),
-    }
-  );
+  const response = fetch(`http://localhost:8000/api/v1/exams/${examAddress}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userAddress}`,
+    },
+    body: JSON.stringify({ exam }),
+  });
   return response;
 };
 
@@ -63,10 +60,14 @@ const AddExam: NextPage = () => {
   };
 
   const [questions, setQuestions] = useState<Question[]>([initialQuestion]);
-  const { addExam, events, state } = useAddExam();
+  const { send: addExam, events, state } = useExamControllerMethod('addExam');
   const [exam, setExam] = useState<Exam | null>(null);
   const { account } = useEthers();
-  const mutation = useMutation(
+  const {
+    mutate,
+    isSuccess,
+    data: createdExam,
+  } = useMutation(
     ({
       userAddress,
       examAddress,
@@ -92,28 +93,22 @@ const AddExam: NextPage = () => {
   };
 
   useEffect(() => {
-    const test = async () => {
-      const newExamCreation = events?.find((e) => e.name === 'NewExamCreation');
-      if (!newExamCreation) return;
+    const newExamCreation = events?.find((e) => e.name === 'NewExamCreation');
+    if (!newExamCreation) return;
 
-      const userAddress = newExamCreation.args[1];
-      if (userAddress.toLowerCase() !== account?.toLowerCase()) return;
+    const userAddress = newExamCreation.args[1];
+    if (userAddress.toLowerCase() !== account?.toLowerCase()) return;
 
-      const examAddress = newExamCreation.args[0];
-      console.log('EXAM', exam);
-      mutation.mutate({
-        userAddress: account as string,
-        examAddress,
-        exam: exam as Exam,
-      });
+    const examAddress = newExamCreation.args[0];
+    mutate({
+      userAddress: account as string,
+      examAddress,
+      exam: exam as Exam,
+    });
 
-      if (mutation.isSuccess) {
-        const x = await mutation.data.json();
-        console.log(x);
-      }
-    };
-    
-    void test();
+    if (isSuccess) {
+      console.log(createdExam);
+    }
   }, [events, account, exam]);
 
   const addQuestion = () => {
