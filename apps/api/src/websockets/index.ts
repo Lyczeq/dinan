@@ -5,14 +5,20 @@ import { env } from '../config';
 import EXAM_CONTROLLER from './abis/ExamController.json';
 import EXAM from './abis/Exam.json';
 
-type address = string;
+type ScoreTransactionData = {
+  txHash: string;
+  nftAddress: string;
+};
 
 export class ContractHandler {
-  static providerNetwork: string = 'maticmum';
-  static websocketProviderNetwork = {
-    name: 'maticmum',
+  static readonly providerNetwork: string = 'maticmum';
+  static readonly websocketProviderNetwork = {
+    name: this.providerNetwork,
     chainId: 80001,
   };
+
+  static readonly examControllerAddress: string =
+    '0xe87C44226B84C662619F848F0b325E4850A8770f';
 
   static listenOnNewExamCreation() {
     const provider = new ethers.providers.AlchemyWebSocketProvider(
@@ -21,14 +27,16 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xcf63a7f7242aa3D8db508cbD7C44a40c395Fa1cD',
+      this.examControllerAddress,
       EXAM_CONTROLLER.abi,
       provider
     );
 
+    const newExamCreationEventName = 'NewExamCreation';
+
     examControllerContract.on(
-      'NewExamCreation',
-      async (newExamAddress: address, creatorAddress: address) => {
+      newExamCreationEventName,
+      async (newExamAddress: string, creatorAddress: string) => {
         try {
           await prisma.exam.create({
             data: {
@@ -48,14 +56,16 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xcf63a7f7242aa3D8db508cbD7C44a40c395Fa1cD',
+      this.examControllerAddress,
       EXAM_CONTROLLER.abi,
       provider
     );
 
+    const newExamParticipationEventName = 'NewExamParticipation';
+
     examControllerContract.on(
-      'NewExamParticipation',
-      async (examAddress: address, participantAddress: address) => {
+      newExamParticipationEventName,
+      async (examAddress: string, participantAddress: string) => {
         try {
           const upsertParticipant = await prisma.participant.upsert({
             include: {
@@ -94,10 +104,9 @@ export class ContractHandler {
     this.listenOnNewExamParticipation();
   }
 
-  static async sendScoreAndMakeNFT(
+  static async getNFTAddress(
     examAddress: string,
-    participantAddress: string,
-    score: number
+    participantAddress: string
   ): Promise<string> {
     const provider = new ethers.providers.AlchemyProvider(
       this.providerNetwork,
@@ -107,8 +116,25 @@ export class ContractHandler {
     const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
 
     const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
+    const tokenId = await examContract.balanceOf(participantAddress);
+    return `${examAddress}/${tokenId}`;
+  }
+
+  static async sendScoreAndMakeNFT(
+    examAddress: string,
+    participantAddress: string,
+    score: number
+  ): Promise<ScoreTransactionData> {
+    const provider = new ethers.providers.AlchemyProvider(
+      this.providerNetwork,
+      env.ALCHEMY_API_KEY
+    );
+
+    const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
+
+    const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
     const gasPrice = await provider.getGasPrice();
-    const result = await examContract.saveParticipantScore(
+    const tx = await examContract.saveParticipantScore(
       score,
       participantAddress,
       {
@@ -116,6 +142,14 @@ export class ContractHandler {
       }
     );
 
-    return result;
+    const nftAddress = await this.getNFTAddress(
+      examAddress,
+      participantAddress
+    );
+
+    return {
+      txHash: tx.hash,
+      nftAddress,
+    };
   }
 }

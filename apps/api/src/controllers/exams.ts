@@ -207,7 +207,7 @@ export const compareParticipantAnswers = async (
 
     res.statusCode = 201;
     res.send({
-      result: updatedExamParticipation,
+      score: percentageScore,
       txResult,
     });
   } catch (error) {}
