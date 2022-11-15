@@ -5,11 +5,6 @@ import { env } from '../config';
 import EXAM_CONTROLLER from './abis/ExamController.json';
 import EXAM from './abis/Exam.json';
 
-type ScoreTransactionData = {
-  txHash: string;
-  nftAddress: string;
-};
-
 export class ContractHandler {
   static readonly providerNetwork: string = 'maticmum';
   static readonly websocketProviderNetwork = {
@@ -104,27 +99,11 @@ export class ContractHandler {
     this.listenOnNewExamParticipation();
   }
 
-  static async getNFTAddress(
-    examAddress: string,
-    participantAddress: string
-  ): Promise<string> {
-    const provider = new ethers.providers.AlchemyProvider(
-      this.providerNetwork,
-      env.ALCHEMY_API_KEY
-    );
-
-    const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
-
-    const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
-    const tokenId = await examContract.balanceOf(participantAddress);
-    return `${examAddress}/${tokenId}`;
-  }
-
   static async sendScoreAndMakeNFT(
     examAddress: string,
     participantAddress: string,
     score: number
-  ): Promise<ScoreTransactionData> {
+  ): Promise<string> {
     const provider = new ethers.providers.AlchemyProvider(
       this.providerNetwork,
       env.ALCHEMY_API_KEY
@@ -142,14 +121,6 @@ export class ContractHandler {
       }
     );
 
-    const nftAddress = await this.getNFTAddress(
-      examAddress,
-      participantAddress
-    );
-
-    return {
-      txHash: tx.hash,
-      nftAddress,
-    };
+    return tx.hash;
   }
 }
