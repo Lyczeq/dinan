@@ -1,16 +1,18 @@
-import { Interface } from 'ethers/lib/utils';
 import { Provider } from '@ethersproject/providers';
-import { Signer, Contract } from 'ethers';
+import { Interface } from 'ethers/lib/utils';
+import { Contract, Signer } from 'ethers';
 import ExamJSON from './Exam.json';
 
 const ABI = new Interface(ExamJSON.abi);
 
-export const methods = {
+export const examMethods = {
   saveParticipantScore: 'addExam',
   manageExamParticipation: 'manageExamParticipation',
 };
 
-export const getNewExamContract = (
+export function getNewExamContract(
   address: string,
   signerOrProvider?: Signer | Provider
-) => new Contract(address, ABI, signerOrProvider);
+) {
+  return new Contract(address, ABI, signerOrProvider);
+}

@@ -1,5 +1,5 @@
-import { Provider } from '@ethersproject/providers';
 import { Signer, Contract } from 'ethers';
+import { Provider } from '@ethersproject/providers';
 import { Interface } from 'ethers/lib/utils';
 import ExamControllerJSON from './ExamController.json';
 
@@ -16,6 +16,8 @@ export const events = {
   newExamCreation: 'NewExamCreation',
 };
 
-export const getNewExamControllerContract = (
+export function getNewExamControllerContract(
   signerOrProvider?: Signer | Provider
-) => new Contract(address, ABI, signerOrProvider);
+) {
+  return new Contract(address, ABI, signerOrProvider);
+}
