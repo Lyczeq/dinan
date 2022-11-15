@@ -1,5 +1,5 @@
+// import { Provider } from '@ethersproject/providers';
 import { Signer, Contract } from 'ethers';
-import { Provider } from '@ethersproject/providers';
 import { Interface } from 'ethers/lib/utils';
 import ExamControllerJSON from './ExamController.json';
 
@@ -16,8 +16,8 @@ export const events = {
   newExamCreation: 'NewExamCreation',
 };
 
-export function getNewExamControllerContract(
-  signerOrProvider?: Signer | Provider
-) {
+// signerOrProvider is of type Signer | Provider
+// there's webpack error when importing Provider from line 1
+export function getNewExamControllerContract(signerOrProvider?: Signer | any) {
   return new Contract(address, ABI, signerOrProvider);
 }

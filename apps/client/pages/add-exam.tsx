@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useEthers } from '@usedapp/core';
+import { methods } from '@dinan/contracts/examController/index';
 
 type Answer = {
   text: string;
@@ -60,7 +61,7 @@ const AddExam: NextPage = () => {
   };
 
   const [questions, setQuestions] = useState<Question[]>([initialQuestion]);
-  const { send: addExam, events, state } = useExamControllerMethod('addExam');
+  const { send: addExam, events } = useExamControllerMethod(methods.addExam);
   const [exam, setExam] = useState<Exam | null>(null);
   const { account } = useEthers();
   const {
