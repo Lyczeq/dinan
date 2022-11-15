@@ -1,4 +1,4 @@
-// import { Provider } from '@ethersproject/providers';
+import { Provider } from '@ethersproject/providers';
 import { Signer } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
 import { Contract } from 'ethers';
@@ -11,11 +11,9 @@ export const examMethods = {
   manageExamParticipation: 'manageExamParticipation',
 };
 
-// signerOrProvider is of type Signer | Provider
-// there's webpack error when importing Provider from line 1
 export function getNewExamContract(
   address: string,
-  signerOrProvider?: Signer | any
+  signerOrProvider?: Signer | Provider
 ) {
   return new Contract(address, ABI, signerOrProvider);
 }
