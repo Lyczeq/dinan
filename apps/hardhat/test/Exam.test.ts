@@ -1,7 +1,15 @@
-import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
+import {
+  loadFixture,
+  setBalance,
+} from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { EXAM_NAME, EXAM_SCORE, EXAM_SYMBOL } from './constants';
+import {
+  EXAM_NAME,
+  EXAM_SCORE,
+  EXAM_SYMBOL,
+  BACKEND_ADDRESS,
+} from './constants';
 import { TokenUriData } from './../types/TokenUri';
 
 async function deployExamFixture() {
@@ -18,10 +26,15 @@ async function deployExamFixture() {
     mockExamControllerAddress
   );
 
+  const backendSigner = await ethers.getImpersonatedSigner(BACKEND_ADDRESS);
+  const twoEth = ethers.utils.parseUnits('2', 'ether');
+  setBalance(backendSigner.address, twoEth);
+
   return {
     exam,
     participantAddress: owner.address,
     otherAccount,
+    backendSigner,
   };
 }
 
@@ -75,18 +88,27 @@ describe('Exam tests', () => {
 
   describe('Exam NFTs', () => {
     it('Should make an NFT and confirm the owner', async () => {
-      const { exam, participantAddress } = await loadFixture(deployExamFixture);
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
 
-      await exam.makeNFT(participantAddress, EXAM_SCORE);
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
+
       const firstTokenId = 0;
       const ownerAddress = await exam.ownerOf(firstTokenId);
       expect(ownerAddress).equals(participantAddress);
     });
 
     it("Expects revert when getting the owner of the tokenId that doesn't exist", async () => {
-      const { exam, participantAddress } = await loadFixture(deployExamFixture);
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
 
-      await exam.makeNFT(participantAddress, EXAM_SCORE);
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
       const secondTokenId = 1;
       await expect(exam.ownerOf(secondTokenId)).to.be.revertedWith(
         'ERC721: invalid token ID'
@@ -94,8 +116,13 @@ describe('Exam tests', () => {
     });
 
     it('Validates the tokenURI data', async () => {
-      const { exam, participantAddress } = await loadFixture(deployExamFixture);
-      await exam.makeNFT(participantAddress, EXAM_SCORE);
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
+
       const examName = await exam.name();
 
       const tokenUriBase64Encoded = await exam.tokenURI(0);

@@ -5,14 +5,15 @@ import { env } from '../config';
 import EXAM_CONTROLLER from './abis/ExamController.json';
 import EXAM from './abis/Exam.json';
 
-type address = string;
-
 export class ContractHandler {
-  static providerNetwork: string = 'maticmum';
-  static websocketProviderNetwork = {
-    name: 'maticmum',
+  static readonly providerNetwork: string = 'maticmum';
+  static readonly websocketProviderNetwork = {
+    name: this.providerNetwork,
     chainId: 80001,
   };
+
+  static readonly examControllerAddress: string =
+    '0xe87C44226B84C662619F848F0b325E4850A8770f';
 
   static listenOnNewExamCreation() {
     const provider = new ethers.providers.AlchemyWebSocketProvider(
@@ -21,14 +22,16 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      this.examControllerAddress,
       EXAM_CONTROLLER.abi,
       provider
     );
 
+    const newExamCreationEventName = 'NewExamCreation';
+
     examControllerContract.on(
-      'NewExamCreation',
-      async (newExamAddress: address, creatorAddress: address) => {
+      newExamCreationEventName,
+      async (newExamAddress: string, creatorAddress: string) => {
         try {
           await prisma.exam.create({
             data: {
@@ -48,14 +51,16 @@ export class ContractHandler {
     );
 
     const examControllerContract = new Contract(
-      '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e',
+      this.examControllerAddress,
       EXAM_CONTROLLER.abi,
       provider
     );
 
+    const newExamParticipationEventName = 'NewExamParticipation';
+
     examControllerContract.on(
-      'NewExamParticipation',
-      async (examAddress: address, participantAddress: address) => {
+      newExamParticipationEventName,
+      async (examAddress: string, participantAddress: string) => {
         try {
           const upsertParticipant = await prisma.participant.upsert({
             include: {
@@ -94,7 +99,7 @@ export class ContractHandler {
     this.listenOnNewExamParticipation();
   }
 
-  static async sendScoreTransaction(
+  static async sendScoreAndMakeNFT(
     examAddress: string,
     participantAddress: string,
     score: number
@@ -116,7 +121,6 @@ export class ContractHandler {
       }
     );
 
-    await tx.wait();
     return tx.hash;
   }
 }

@@ -38,10 +38,10 @@ contract Exam is ERC721URIStorage {
         examControllerAddress = _examControllerAddress;
     }
 
-    string BASE_SVG =
-        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+    function mintNFT(address _participantAddress, uint8 _score) private {
+        string
+            memory BASE_SVG = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
 
-    function makeNFT(address _participantAddress, uint8 _score) external {
         uint256 newItemId = _tokenIds.current();
 
         string memory stringifiedAddress = Strings.toHexString(
@@ -83,7 +83,7 @@ contract Exam is ERC721URIStorage {
             abi.encodePacked("data:application/json;base64,", json)
         );
 
-        _safeMint(msg.sender, newItemId);
+        _safeMint(_participantAddress, newItemId);
 
         _setTokenURI(newItemId, finalTokenUri);
 
@@ -101,15 +101,16 @@ contract Exam is ERC721URIStorage {
         );
     }
 
-    function saveParticipantScore(uint8 score, address participantAddress)
+    function saveParticipantScore(uint8 _score, address _participantAddress)
         external
         isBackendAddress
     {
-        partcipantsScores[participantAddress] = ExamParticipation(
+        partcipantsScores[_participantAddress] = ExamParticipation(
             true,
-            score,
+            _score,
             true
         );
+        mintNFT(_participantAddress, _score);
     }
 
     modifier isExamControllerAddress() {

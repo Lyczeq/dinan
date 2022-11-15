@@ -199,7 +199,7 @@ export const compareParticipantAnswers = async (
       },
     });
 
-    const txHash = await ContractHandler.sendScoreTransaction(
+    const txHash = await ContractHandler.sendScoreAndMakeNFT(
       examAddress,
       participantAddress,
       percentageScore
@@ -207,7 +207,7 @@ export const compareParticipantAnswers = async (
 
     res.statusCode = 201;
     res.send({
-      result: updatedExamParticipation,
+      score: percentageScore,
       txHash,
     });
   } catch (error) {}
