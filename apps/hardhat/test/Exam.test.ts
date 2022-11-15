@@ -1,7 +1,16 @@
-import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
+import {
+  loadFixture,
+  setBalance,
+} from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { EXAM_NAME, EXAM_SCORE, EXAM_SYMBOL } from './constants';
+import {
+  EXAM_NAME,
+  EXAM_SCORE,
+  EXAM_SYMBOL,
+  BACKEND_ADDRESS,
+} from './constants';
+import { TokenUriData } from './../types/TokenUri';
 
 async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
@@ -17,10 +26,15 @@ async function deployExamFixture() {
     mockExamControllerAddress
   );
 
+  const backendSigner = await ethers.getImpersonatedSigner(BACKEND_ADDRESS);
+  const twoEth = ethers.utils.parseUnits('2', 'ether');
+  setBalance(backendSigner.address, twoEth);
+
   return {
     exam,
     participantAddress: owner.address,
     otherAccount,
+    backendSigner,
   };
 }
 
@@ -72,52 +86,66 @@ describe('Exam tests', () => {
     });
   });
 
-  // describe('Exam NFTs', () => {
-  //   it('Should make an NFT and confirm the owner', async () => {
-  //     const { exam, participantAddress } = await loadFixture(deployExamFixture);
+  describe('Exam NFTs', () => {
+    it('Should make an NFT and confirm the owner', async () => {
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
 
-  //     await exam.makeNFT(participantAddress, EXAM_SCORE);
-  //     const firstTokenId = 0;
-  //     const ownerAddress = await exam.ownerOf(firstTokenId);
-  //     expect(ownerAddress).equals(participantAddress);
-  //   });
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
 
-  //   it("Expects revert when getting the owner of the tokenId that doesn't exist", async () => {
-  //     const { exam, participantAddress } = await loadFixture(deployExamFixture);
+      const firstTokenId = 0;
+      const ownerAddress = await exam.ownerOf(firstTokenId);
+      expect(ownerAddress).equals(participantAddress);
+    });
 
-  //     await exam.makeNFT(participantAddress, EXAM_SCORE);
-  //     const secondTokenId = 1;
-  //     await expect(exam.ownerOf(secondTokenId)).to.be.revertedWith(
-  //       'ERC721: invalid token ID'
-  //     );
-  //   });
+    it("Expects revert when getting the owner of the tokenId that doesn't exist", async () => {
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
 
-  //   it('Validates the tokenURI data', async () => {
-  //     const { exam, participantAddress } = await loadFixture(deployExamFixture);
-  //     await exam.makeNFT(participantAddress, EXAM_SCORE);
-  //     const examName = await exam.name();
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
+      const secondTokenId = 1;
+      await expect(exam.ownerOf(secondTokenId)).to.be.revertedWith(
+        'ERC721: invalid token ID'
+      );
+    });
 
-  //     const tokenUriBase64Encoded = await exam.tokenURI(0);
+    it('Validates the tokenURI data', async () => {
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, participantAddress);
 
-  //     // 29 = length of "data:application/json;base64,"
-  //     const tokenUriInJson = Buffer.from(
-  //       tokenUriBase64Encoded.substring(29),
-  //       'base64'
-  //     ).toString();
+      const examName = await exam.name();
 
-  //     const tokenUriData: TokenUriData = JSON.parse(tokenUriInJson);
+      const tokenUriBase64Encoded = await exam.tokenURI(0);
 
-  //     // 26 = length of "data:image/svg+xml;base64,"
-  //     const svg = Buffer.from(
-  //       tokenUriData.image.substring(26),
-  //       'base64'
-  //     ).toString();
+      // 29 = length of "data:application/json;base64,"
+      const tokenUriInJson = Buffer.from(
+        tokenUriBase64Encoded.substring(29),
+        'base64'
+      ).toString();
 
-  //     expect(tokenUriData.name).equals(examName);
-  //     expect(svg).includes(EXAM_SCORE);
+      const tokenUriData: TokenUriData = JSON.parse(tokenUriInJson);
 
-  //     // case doesn't matter in addresses
-  //     expect(svg).includes(participantAddress.toLocaleLowerCase());
-  //   });
-  // });
+      // 26 = length of "data:image/svg+xml;base64,"
+      const svg = Buffer.from(
+        tokenUriData.image.substring(26),
+        'base64'
+      ).toString();
+
+      expect(tokenUriData.name).equals(examName);
+      expect(svg).includes(EXAM_SCORE);
+
+      // case doesn't matter in addresses
+      expect(svg).includes(participantAddress.toLocaleLowerCase());
+    });
+  });
 });
