@@ -104,7 +104,7 @@ export class ContractHandler {
       score,
       participantAddress,
       {
-        gasPrice: gasPrice.toNumber(),
+        gasPrice: gasPrice.toNumber() * 2,
       }
     );
 

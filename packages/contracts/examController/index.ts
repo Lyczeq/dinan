@@ -3,7 +3,7 @@ import { Signer, Contract } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
 import ExamControllerJSON from './ExamController.json';
 
-const address = '0xa86f4c00F1CFe4E3446bD0DE788A81BeBF567F9e';
+const address = '0xE7f3D8E66C85A235d3BFA643f393043b87F21186';
 const ABI = new Interface(ExamControllerJSON.abi);
 
 export const methods = {

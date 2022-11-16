@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma';
-import { ParticipantAnswer, FullExam } from './types';
-import { calculateScore, exclude, getPercentageScore } from './helpers';
 import { ContractHandler } from '../websockets';
+import { calculateScore, exclude, getPercentageScore } from './helpers';
+import { FullExam, ParticipantAnswer } from './types';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -104,8 +104,14 @@ export const getExamsQuestionsAndAnswers = async (
   try {
     const examParticipation = await prisma.examParticipation.findFirst({
       where: {
-        examAddress,
-        participantAddress,
+        examAddress: {
+          mode: 'insensitive',
+          equals: examAddress,
+        },
+        participantAddress: {
+          mode: 'insensitive',
+          equals: participantAddress,
+        },
       },
     });
     if (!examParticipation) return res.sendStatus(404);
@@ -163,14 +169,21 @@ export const compareParticipantAnswers = async (
   const participantAddress = req.headers.authorization
     ?.split(' ')
     .at(1) as string;
+
   const examAddress = req.params.address;
   const participantAnswers: ParticipantAnswer[] = req.body.answers;
 
   try {
     const examParticipation = await prisma.examParticipation.findFirst({
       where: {
-        examAddress,
-        participantAddress,
+        examAddress: {
+          mode: 'insensitive',
+          equals: examAddress,
+        },
+        participantAddress: {
+          mode: 'insensitive',
+          equals: participantAddress,
+        },
         hasParticipantStarted: true,
       },
     });
