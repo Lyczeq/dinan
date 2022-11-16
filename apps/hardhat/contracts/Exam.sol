@@ -38,10 +38,10 @@ contract Exam is ERC721URIStorage {
         examControllerAddress = _examControllerAddress;
     }
 
-    function mintNFT(address _participantAddress, uint8 _score) private {
-        string
-            memory BASE_SVG = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+    string BASE_SVG =
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
 
+    function mintNFT(address _participantAddress, uint8 _score) private {
         uint256 newItemId = _tokenIds.current();
 
         string memory stringifiedAddress = Strings.toHexString(
