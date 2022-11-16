@@ -12,7 +12,6 @@ const fetchExams = async () => {
 
 const Exams: NextPage = () => {
   const { data, status } = useQuery('exams', fetchExams);
-  console.log(data);
   return (
     <>
       <Head>

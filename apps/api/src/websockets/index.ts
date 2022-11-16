@@ -1,9 +1,11 @@
-import { Contract, ethers } from 'ethers';
+import { ethers } from 'ethers';
+import {
+  events,
+  getNewExamControllerContract,
+} from '@dinan/contracts/examController';
+import { getNewExamContract } from '@dinan/contracts/exam';
 import prisma from '../prisma';
 import { env } from '../config';
-
-import EXAM_CONTROLLER from './abis/ExamController.json';
-import EXAM from './abis/Exam.json';
 
 export class ContractHandler {
   static readonly providerNetwork: string = 'maticmum';
@@ -12,25 +14,16 @@ export class ContractHandler {
     chainId: 80001,
   };
 
-  static readonly examControllerAddress: string =
-    '0xe87C44226B84C662619F848F0b325E4850A8770f';
-
   static listenOnNewExamCreation() {
     const provider = new ethers.providers.AlchemyWebSocketProvider(
       this.websocketProviderNetwork,
       env.ALCHEMY_API_KEY
     );
 
-    const examControllerContract = new Contract(
-      this.examControllerAddress,
-      EXAM_CONTROLLER.abi,
-      provider
-    );
-
-    const newExamCreationEventName = 'NewExamCreation';
+    const examControllerContract = getNewExamControllerContract(provider);
 
     examControllerContract.on(
-      newExamCreationEventName,
+      events.newExamCreation,
       async (newExamAddress: string, creatorAddress: string) => {
         try {
           await prisma.exam.create({
@@ -50,16 +43,10 @@ export class ContractHandler {
       env.ALCHEMY_API_KEY
     );
 
-    const examControllerContract = new Contract(
-      this.examControllerAddress,
-      EXAM_CONTROLLER.abi,
-      provider
-    );
-
-    const newExamParticipationEventName = 'NewExamParticipation';
+    const examControllerContract = getNewExamControllerContract(provider);
 
     examControllerContract.on(
-      newExamParticipationEventName,
+      events.newExamParticipation,
       async (examAddress: string, participantAddress: string) => {
         try {
           const upsertParticipant = await prisma.participant.upsert({
@@ -111,7 +98,7 @@ export class ContractHandler {
 
     const signer = new ethers.Wallet(env.PRIVATE_KEY, provider);
 
-    const examContract = new ethers.Contract(examAddress, EXAM.abi, signer);
+    const examContract = getNewExamContract(examAddress, signer);
     const gasPrice = await provider.getGasPrice();
     const tx = await examContract.saveParticipantScore(
       score,

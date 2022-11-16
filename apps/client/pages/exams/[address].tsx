@@ -7,6 +7,10 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
+import {
+  methods,
+  events as examControllerEvents,
+} from '@dinan/contracts/examController';
 
 type Answer = {
   text: string;
@@ -145,11 +149,9 @@ const Exams: NextPage = () => {
     enabled: false,
   });
 
-  const {
-    send: participateInExam,
-    events,
-    state,
-  } = useExamControllerMethod('manageExamParticipation');
+  const { send: participateInExam, events } = useExamControllerMethod(
+    methods.manageExamParticipation
+  );
 
   const handleParticipateInExam = () => {
     participateInExam(data?.exam.address);
@@ -157,7 +159,7 @@ const Exams: NextPage = () => {
 
   useEffect(() => {
     const newExamParticipatiom = events?.find(
-      (e) => e.name === 'NewExamParticipation'
+      (e) => e.name === examControllerEvents.newExamParticipation
     );
     console.log(events);
 
