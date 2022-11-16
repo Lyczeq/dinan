@@ -6,7 +6,7 @@ import ExamJSON from './Exam.json';
 
 const ABI = new Interface(ExamJSON.abi);
 
-export const examMethods = {
+export const methods = {
   saveParticipantScore: 'addExam',
   manageExamParticipation: 'manageExamParticipation',
 };
