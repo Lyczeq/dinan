@@ -39,7 +39,7 @@ const submitExam = async (
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userAddress}`,
+        authorization: `Bearer ${userAddress}`,
       },
       body: JSON.stringify({ answers }),
     }
@@ -65,7 +65,7 @@ const ExamForm = ({ examAddress, questions }: ExamFormProps) => {
   );
   const onExamSubmit = () => {
     const firstQuestionId = questions[0].id;
-    const correctAnswer = questions[0].answers.find((a) => a.text === 'a1');
+    const correctAnswer = questions[0].answers.find((a) => a.text === 'a11');
 
     const examAnswers = [
       {
@@ -124,9 +124,16 @@ const fetchExam = async (address: string) => {
   return res.json();
 };
 
-const getExamQuestions = async (address: string) => {
+const getExamQuestions = async (address: string, userAddress: string) => {
   const res = await fetch(
-    `http://localhost:8000/api/v1/exams/${address}/participate`
+    `http://localhost:8000/api/v1/exams/${address}/participate`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${userAddress}`,
+      },
+    }
   );
   return res.json();
 };
@@ -145,7 +152,7 @@ const Exams: NextPage = () => {
     refetch,
   } = useQuery({
     queryKey: ['questions', address],
-    queryFn: () => getExamQuestions(address as string),
+    queryFn: () => getExamQuestions(address as string, account as string),
     enabled: false,
   });
 
