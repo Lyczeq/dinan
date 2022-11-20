@@ -19,7 +19,8 @@ const Exams: NextPage = () => {
 
   const filterExams = (exam: any) => {
     return (
-      exam.address.includes(searchInput) || exam.name.includes(searchInput)
+      exam.address.toLowerCase().includes(searchInput.toLowerCase()) ||
+      exam.name.toLowerCase().includes(searchInput.toLowerCase())
     );
   };
 
