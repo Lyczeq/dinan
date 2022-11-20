@@ -12,7 +12,7 @@ export const ErrorMessage = ({ isError, message }: ErrorMessageProps) => {
   return (
     <div className="flex justify-center items-center h-full">
       <p className="text-center text-lg text-red-400 font-bold drop-shadow-md">
-        {defaultMessage ?? message}
+        {message ?? defaultMessage}
       </p>
     </div>
   );
