@@ -10,9 +10,14 @@ import type { Exam } from '@dinan/types/Exam';
 type ExamsViewProps = {
   exams: Exam[] | undefined;
   status: QueryStatus;
+  headerActions?: React.ReactNode;
 };
 
-export const ExamsView = ({ exams, status }: ExamsViewProps) => {
+export const ExamsView = ({
+  exams,
+  status,
+  headerActions = [],
+}: ExamsViewProps) => {
   const [searchInput, setSearchInput] = useState('');
 
   const handleSearchExam = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +40,7 @@ export const ExamsView = ({ exams, status }: ExamsViewProps) => {
           onChange={handleSearchExam}
           disabled={status === 'loading' || status === 'error'}
         />
+        <div>{headerActions}</div>
       </Table.Header>
       <ErrorMessage isError={status === 'error'} />
       <Loader isLoading={status === 'loading'} />
