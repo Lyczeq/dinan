@@ -1,6 +1,6 @@
 import { ExamTile } from 'components/atoms/ExamTile';
 import { SearchInput } from 'components/atoms/SearchInput';
-import { Table } from 'components/molecules/Table/Table';
+import { Table } from 'components/organisms/Table/Table';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
