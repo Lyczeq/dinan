@@ -2,13 +2,12 @@ import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { Loader } from 'components/atoms/Loader';
 import { SearchInput } from 'components/atoms/SearchInput';
-import { Table } from 'components/organisms/Table/Table';
+import { Table } from 'components/molecules/Table/Table';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Exam } from '@dinan/types/Exam';
-
 const fetchExams = async () => {
   const res = await fetch('http://localhost:8000/api/v1/exams');
   const data = await res.json();
