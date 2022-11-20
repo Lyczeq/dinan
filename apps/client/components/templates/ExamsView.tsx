@@ -3,16 +3,21 @@ import { QueryStatus } from 'react-query';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { Loader } from 'components/atoms/Loader';
-import { SearchInput } from 'components/atoms/SearchInput';
+import { Input } from 'components/atoms/Input';
 import { Table } from 'components/organisms/Table/Table';
 import type { Exam } from '@dinan/types/Exam';
 
 type ExamsViewProps = {
   exams: Exam[] | undefined;
   status: QueryStatus;
+  headerActions?: React.ReactNode;
 };
 
-export const ExamsView = ({ exams, status }: ExamsViewProps) => {
+export const ExamsView = ({
+  exams,
+  status,
+  headerActions = [],
+}: ExamsViewProps) => {
   const [searchInput, setSearchInput] = useState('');
 
   const handleSearchExam = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +36,11 @@ export const ExamsView = ({ exams, status }: ExamsViewProps) => {
   return (
     <Table>
       <Table.Header>
-        <SearchInput onChange={handleSearchExam} />
+        <Input
+          onChange={handleSearchExam}
+          disabled={status === 'loading' || status === 'error'}
+        />
+        <div>{headerActions}</div>
       </Table.Header>
       <ErrorMessage isError={status === 'error'} />
       <Loader isLoading={status === 'loading'} />

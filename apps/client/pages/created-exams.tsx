@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import { useQuery } from 'react-query';
+import Link from 'next/link';
 import type { NextPage } from 'next';
+import { useQuery } from 'react-query';
 import { useEthers } from '@usedapp/core';
 import { ExamsView } from 'components/templates/ExamsView';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
@@ -23,6 +24,16 @@ const CreatedExams: NextPage = () => {
     enabled: !!account,
   });
 
+  const headerActions = [
+    <Link
+      href="/add-exam"
+      key="add-exam-link"
+      className="text-yellow-400 font-bold border px-2 py-1 text-xl border-white hover:text-orange-400 hover:border-b-orange-400 transition-all"
+    >
+      Add exam
+    </Link>,
+  ];
+
   return (
     <>
       <Head>
@@ -30,7 +41,11 @@ const CreatedExams: NextPage = () => {
       </Head>
 
       {!!account ? (
-        <ExamsView exams={createdExams} status={status} />
+        <ExamsView
+          exams={createdExams}
+          status={status}
+          headerActions={headerActions}
+        />
       ) : (
         <ErrorMessage
           isError={!account}
