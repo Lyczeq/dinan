@@ -23,8 +23,6 @@ const CreatedExams: NextPage = () => {
     enabled: !!account,
   });
 
-  console.log(account);
-
   return (
     <>
       <Head>
