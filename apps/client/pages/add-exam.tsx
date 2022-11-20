@@ -7,23 +7,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useEthers } from '@usedapp/core';
 import { methods } from '@dinan/contracts/examController/index';
-
-type Answer = {
-  text: string;
-  isCorrect: boolean;
-};
-
-type Question = {
-  text: string;
-  answers: Answer[];
-};
-
-type Exam = {
-  name: string;
-  symbol: string;
-  description: string;
-  questions: Question[];
-};
+import type { Exam, Question, Answer } from '@dinan/types';
 
 const updateExamWithQustions = (
   userAddress: string,

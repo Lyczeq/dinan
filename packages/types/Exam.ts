@@ -1,4 +1,4 @@
-import { Question } from './Questions';
+import { Question } from './Question';
 
 export type Exam = {
   address: string;
