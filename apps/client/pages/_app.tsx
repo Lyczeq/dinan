@@ -1,11 +1,11 @@
+import { Config, DAppProvider, Mumbai } from '@usedapp/core';
+import { getDefaultProvider } from 'ethers';
 import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
-import { DAppProvider, Config, Mumbai } from '@usedapp/core';
-import { getDefaultProvider } from 'ethers';
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 const queryClient = new QueryClient();
 
-import { Header } from 'components/organisms/Header';
+import { Header } from 'components/molecules/Header';
 
 import '../styles/globals.css';
 

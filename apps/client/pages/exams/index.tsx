@@ -1,12 +1,12 @@
+import { ErrorMessage } from 'components/atoms/ErrorMessage';
+import { ExamTile } from 'components/atoms/ExamTile';
+import { Loader } from 'components/atoms/Loader';
+import { SearchInput } from 'components/atoms/SearchInput';
+import { Table } from 'components/molecules/Table/Table';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useQuery } from 'react-query';
 import { useState } from 'react';
-import { ExamTile } from 'components/atoms/ExamTile';
-import { SearchInput } from 'components/atoms/SearchInput';
-import { Table } from 'components/organisms/Table/Table';
-import { ErrorMessage } from 'components/atoms/ErrorMessage';
-import { Loader } from 'components/atoms/Loader';
+import { useQuery } from 'react-query';
 
 const fetchExams = async () => {
   const res = await fetch('http://localhost:8000/api/v1/exams');
