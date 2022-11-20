@@ -7,17 +7,19 @@ import { SearchInput } from 'components/atoms/SearchInput';
 import { Table } from 'components/organisms/Table/Table';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { Loader } from 'components/atoms/Loader';
+import { Exam } from '@dinan/types/Exam';
 
 const fetchExams = async () => {
   const res = await fetch('http://localhost:8000/api/v1/exams');
-  return await res.json();
+  const data = await res.json();
+  return data.exams;
 };
 
 const Exams: NextPage = () => {
-  const { data, status } = useQuery('exams', fetchExams);
+  const { data, status } = useQuery<Exam[]>('exams', fetchExams);
   const [searchInput, setSearchInput] = useState('');
 
-  const filterExams = (exam: any) => {
+  const filterExams = (exam: Exam) => {
     return (
       exam.address.includes(searchInput) || exam.name.includes(searchInput)
     );
@@ -27,7 +29,7 @@ const Exams: NextPage = () => {
     setSearchInput(e.target.value);
   };
 
-  const filteredExams = (data?.exams ?? []).filter(filterExams);
+  const filteredExams = (data ?? []).filter(filterExams);
 
   return (
     <>
