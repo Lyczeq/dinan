@@ -6,7 +6,7 @@ dotenv.config();
 export const env = cleanEnv(process.env, {
   PORT: port(),
   DATABASE_URL: str(),
-  ALCHEMY_WEBSOCKET_LINK: str(),
   PRIVATE_KEY: str(),
+  ALCHEMY_HTTPS_LINK: str(),
   ALCHEMY_API_KEY: str(),
 });
