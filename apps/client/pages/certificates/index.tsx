@@ -1,14 +1,13 @@
-import type { Nft } from '@dinan/types/nft';
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import Head from 'next/head';
 import { useEthers } from '@usedapp/core';
+import { CertificateTile } from 'components/atoms/CertificateTile';
 import { Input } from 'components/atoms/Input';
 import { Table } from 'components/organisms/Table/Table';
 import { TableContent } from 'components/organisms/Table/TableContent';
 import { TableHeader } from 'components/organisms/Table/TableHeader';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import type { Nft } from '@dinan/types/nft';
 
 const fetchUserCertificates = async (userAddress: string) => {
   const response = await fetch(
@@ -88,36 +87,6 @@ const certificates: Nft[] = [
     },
   },
 ];
-
-type CertificateTileProps = {
-  cert: Nft;
-};
-
-const CertificateTile = ({ cert }: CertificateTileProps) => {
-  const router = useRouter();
-
-  const navigateToCertificateDetails = () => {
-    router.push(`/certificates/${cert.contract.address}-${cert.id.tokenId}`);
-  };
-
-  return (
-    <div
-      className="bg-slate-200 rounded-md hover:scale-105 transition-transform hover:cursor-pointer"
-      onClick={navigateToCertificateDetails}
-    >
-      <Image
-        className="rounded-t-md"
-        src={cert.metadata.image}
-        alt={`${cert.metadata.name} NFT certificate`}
-        width={400}
-        height={400}
-      />
-      <p className="py-2 text-center font-bold text-orange-400">
-        {cert.metadata.name}
-      </p>
-    </div>
-  );
-};
 
 const Certificates: NextPage = () => {
   const { account } = useEthers();
