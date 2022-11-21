@@ -1,15 +1,14 @@
+import type { Nft } from '@dinan/types/nft';
+import { useEthers } from '@usedapp/core';
+import { Input } from 'components/atoms/Input';
+import { Table } from 'components/organisms/Table/Table';
+import { TableContent } from 'components/organisms/Table/TableContent';
+import { TableHeader } from 'components/organisms/Table/TableHeader';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useQuery } from 'react-query';
-import { useEthers } from '@usedapp/core';
-import type { Nft } from '@dinan/types/nft';
-import { Table } from 'components/organisms/Table/Table';
-import { TableHeader } from 'components/organisms/Table/TableHeader';
-import { Input } from 'components/atoms/Input';
-import { TableContent } from 'components/organisms/Table/TableContent';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useState } from 'react';
 
 const fetchUserCertificates = async (userAddress: string) => {
   const response = await fetch(
@@ -19,7 +18,7 @@ const fetchUserCertificates = async (userAddress: string) => {
   const data = await response.json();
   return data.certificates;
 };
-const certificates = [
+const certificates: Nft[] = [
   {
     contract: {
       address: '0xe5633c82e54a50360b3b7fa2fea93c887b4507ea',
@@ -103,7 +102,7 @@ const CertificateTile = ({ cert }: CertificateTileProps) => {
 
   return (
     <div
-      className="bg-slate-300 rounded-b-md"
+      className="bg-slate-200 rounded-md hover:scale-105 transition-transform hover:cursor-pointer"
       onClick={navigateToCertificateDetails}
     >
       <Image
@@ -113,8 +112,8 @@ const CertificateTile = ({ cert }: CertificateTileProps) => {
         width={400}
         height={400}
       />
-      <p className="py-2 text-center">
-        {cert.metadata.name} <span>{cert.contractMetadata.symbol}</span>
+      <p className="py-2 text-center font-bold text-orange-400">
+        {cert.metadata.name}
       </p>
     </div>
   );
@@ -122,10 +121,26 @@ const CertificateTile = ({ cert }: CertificateTileProps) => {
 
 const Certificates: NextPage = () => {
   const { account } = useEthers();
+  const [searchInput, setSearchInput] = useState('');
+
   // const { data: certificates, status } = useQuery<Nft[]>('certificates', {
   //   queryFn: () => fetchUserCertificates(account as string),
   //   enabled: !!account,
   // });
+
+  const handleSearchCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  const filterCertificate = (cert: Nft) => {
+    const loweredCasedInputValue = searchInput.toLowerCase();
+    return (
+      cert.contract.address.toLowerCase().includes(loweredCasedInputValue) ||
+      cert.metadata.name.toLowerCase().includes(loweredCasedInputValue)
+    );
+  };
+
+  const filteredCertificates = certificates.filter(filterCertificate);
 
   return (
     <>
@@ -134,10 +149,14 @@ const Certificates: NextPage = () => {
       </Head>
       <Table>
         <TableHeader>
-          <div>hi</div>
+          <Input
+            onChange={handleSearchCertificate}
+            disabled={!account}
+            placeholder="Type certificate name or it's address"
+          />
         </TableHeader>
         <TableContent>
-          {certificates?.map((cert) => (
+          {filteredCertificates?.map((cert) => (
             <CertificateTile key={cert.contract.address} cert={cert} />
           ))}
         </TableContent>
