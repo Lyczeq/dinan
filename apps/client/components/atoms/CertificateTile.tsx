@@ -10,7 +10,7 @@ export const CertificateTile = ({ cert }: CertificateTileProps) => {
   const router = useRouter();
 
   const navigateToCertificateDetails = () => {
-    router.push(`/certificates/${cert.contract.address}-${cert.id.tokenId}`);
+    router.push(`/my-certificates/${cert.contract.address}-${cert.id.tokenId}`);
   };
 
   return (

@@ -9,6 +9,8 @@ import { Table } from 'components/organisms/Table/Table';
 import { TableContent } from 'components/organisms/Table/TableContent';
 import { TableHeader } from 'components/organisms/Table/TableHeader';
 import type { Nft } from '@dinan/types/nft';
+import { ErrorMessage } from 'components/atoms/ErrorMessage';
+import { Loader } from 'components/atoms/Loader';
 
 const fetchUserCertificates = async (userAddress: string) => {
   const response = await fetch(
@@ -45,7 +47,7 @@ const Certificates: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Dinan | Certificates</title>
+        <title>Dinan | My Certificates</title>
       </Head>
       <Table>
         <TableHeader>
@@ -55,11 +57,15 @@ const Certificates: NextPage = () => {
             placeholder="Type certificate name or it's address"
           />
         </TableHeader>
-        <TableContent>
-          {filteredCertificates?.map((cert) => (
-            <CertificateTile key={cert.contract.address} cert={cert} />
-          ))}
-        </TableContent>
+        <ErrorMessage isError={status === 'error'} />
+        <Loader isLoading={status === 'loading'} />
+        {status === 'success' && (
+          <TableContent>
+            {filteredCertificates?.map((cert) => (
+              <CertificateTile key={cert.contract.address} cert={cert} />
+            ))}
+          </TableContent>
+        )}
       </Table>
     </>
   );
