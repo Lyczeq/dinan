@@ -18,7 +18,7 @@ export const ExamTile = ({ exam }: ExamTileProps) => {
   };
 
   return (
-    <div className="h-72 border-2 px-2 pb-2 border-yellow-400 rounded-md flex flex-col items-center gap-4 justify-between">
+    <div className="h-72 border-2 px-2 pb-2 border-yellow-400 rounded-md flex flex-col items-center justify-between md:w-full w-3/4">
       <div className="flex items-center flex-col overflow-hidden w-full h-full">
         <Button
           className="bg-yellow-400 px-1 py-1 text-sm self-end mt-1 hover:bg-orange-400 hover:scale-105 transition-all"

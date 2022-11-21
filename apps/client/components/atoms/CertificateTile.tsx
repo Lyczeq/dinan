@@ -22,8 +22,8 @@ export const CertificateTile = ({ cert }: CertificateTileProps) => {
         className="rounded-t-md"
         src={cert.metadata.image}
         alt={`${cert.metadata.name} NFT certificate`}
-        width={400}
-        height={400}
+        width={350}
+        height={350}
       />
       <p className="py-2 text-center text-orange-400">{cert.metadata.name}</p>
     </div>
