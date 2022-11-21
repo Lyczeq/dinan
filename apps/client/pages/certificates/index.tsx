@@ -102,15 +102,18 @@ const CertificateTile = ({ cert }: CertificateTileProps) => {
   };
 
   return (
-    <div className="bg-slate-300 " onClick={navigateToCertificateDetails}>
+    <div
+      className="bg-slate-300 rounded-b-md"
+      onClick={navigateToCertificateDetails}
+    >
       <Image
-        // className="w-full h-3/4"
+        className="rounded-t-md"
         src={cert.metadata.image}
         alt={`${cert.metadata.name} NFT certificate`}
         width={400}
         height={400}
       />
-      <p>
+      <p className="py-2 text-center">
         {cert.metadata.name} <span>{cert.contractMetadata.symbol}</span>
       </p>
     </div>
