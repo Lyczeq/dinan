@@ -2,7 +2,12 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { isAddress } from 'ethers/lib/utils';
-import { EXAM_NAME, EXAM_SYMBOL, EXAM_ADDRESS } from './constants';
+import {
+  EXAM_NAME,
+  EXAM_SYMBOL,
+  EXAM_ADDRESS,
+  EXAM_DESCRIPTION,
+} from './constants';
 
 async function deployExamControllerFixture() {
   const [owner] = await ethers.getSigners();
@@ -18,7 +23,7 @@ async function deployExamControllerWithExam() {
   const ExamController = await ethers.getContractFactory('ExamController');
   const examController = await ExamController.deploy();
 
-  await examController.addExam(EXAM_NAME, EXAM_SYMBOL);
+  await examController.addExam(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION);
   const exams = await examController.getExams();
   const firstExamInArray = exams.at(0);
 
@@ -29,7 +34,7 @@ describe('ExamController tests', () => {
   describe('Exam creation', () => {
     it("Creates simple Exam and checks it's data", async () => {
       const { examController } = await loadFixture(deployExamControllerFixture);
-      await examController.addExam(EXAM_NAME, EXAM_SYMBOL);
+      await examController.addExam(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION);
 
       const exams = await examController.getExams();
       const firstExamInArray = exams.at(0);
@@ -41,7 +46,9 @@ describe('ExamController tests', () => {
         deployExamControllerFixture
       );
 
-      await expect(examController.addExam(EXAM_NAME, EXAM_SYMBOL))
+      await expect(
+        examController.addExam(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION)
+      )
         .to.emit(examController, 'NewExamCreation')
         .withArgs(isAddress, owner.address);
     });
