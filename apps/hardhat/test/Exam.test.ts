@@ -4,14 +4,14 @@ import {
 } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
+import { TokenUriData } from './../types/TokenUri';
 import {
+  BACKEND_ADDRESS,
+  EXAM_DESCRIPTION,
   EXAM_NAME,
   EXAM_SCORE,
   EXAM_SYMBOL,
-  EXAM_DESCRIPTION,
-  BACKEND_ADDRESS,
 } from './constants';
-import { TokenUriData } from './../types/TokenUri';
 
 async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
@@ -107,6 +107,25 @@ describe('Exam tests', () => {
       await expect(exam.ownerOf(secondTokenId)).to.be.revertedWith(
         'ERC721: invalid token ID'
       );
+    });
+
+    it('Expects revert when trying to transfer the token', async () => {
+      const {
+        exam,
+        participantAddress: otherAddress,
+        backendSigner,
+        otherAccount,
+      } = await loadFixture(deployExamFixture);
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(EXAM_SCORE, otherAccount.address);
+
+      const firstTokenId = 0;
+      await expect(
+        exam
+          .connect(otherAccount)
+          .transferFrom(otherAccount.address, otherAddress, firstTokenId)
+      ).to.be.revertedWith('You cannot transfer Exam tokens');
     });
 
     it('Validates the tokenURI data', async () => {
