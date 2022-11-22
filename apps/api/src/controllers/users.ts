@@ -61,7 +61,7 @@ export const getUserCertificates = async (req: Request, res: Response) => {
         tokenId: hexToDecimal(nft.id.tokenId),
       },
       contractMetadata: {
-        symbol: nft.contractMetadata.symbol,
+        symbol: nft.contractMetadata?.symbol,
       },
     };
   };

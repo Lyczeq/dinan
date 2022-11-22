@@ -74,7 +74,7 @@ const AddExam: NextPage = () => {
     console.log({ exam });
     console.log({ newExam });
     setExam(newExam);
-    addExam(newExam.name, newExam.symbol);
+    addExam(newExam.name, newExam.symbol, newExam.description);
   };
 
   useEffect(() => {
