@@ -130,4 +130,12 @@ contract Exam is ERC721URIStorage, Ownable {
         );
         return partcipantsScores[_userAddress];
     }
+
+    function _transfer(
+        address,
+        address,
+        uint256
+    ) internal virtual override {
+        revert("You cannot transfer Exam tokens");
+    }
 }
