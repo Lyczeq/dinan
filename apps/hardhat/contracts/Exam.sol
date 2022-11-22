@@ -4,11 +4,12 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 //TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
 
-contract Exam is ERC721URIStorage {
+contract Exam is ERC721URIStorage, Ownable {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
     // tokenURI() returns tokenURI based on the tokenId
@@ -22,24 +23,22 @@ contract Exam is ERC721URIStorage {
     }
 
     Counters.Counter private _tokenIds;
-    address private creatorAddress;
-    address private examControllerAddress;
     address private constant backendAddress =
         0x86a74F972A4e5f7ba795F80fD97E62151616406E;
+    string private description;
+
     mapping(address => ExamParticipation) private partcipantsScores;
 
     constructor(
         string memory _name,
         string memory _symbol,
-        address _creatorAddress,
-        address _examControllerAddress
+        string memory _description
     ) ERC721(_name, _symbol) {
-        creatorAddress = _creatorAddress;
-        examControllerAddress = _examControllerAddress;
+        description = _description;
     }
 
     string BASE_SVG =
-        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='green' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='#FB923C' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
 
     function mintNFT(address _participantAddress, uint8 _score) private {
         uint256 newItemId = _tokenIds.current();
@@ -71,7 +70,9 @@ contract Exam is ERC721URIStorage {
                     abi.encodePacked(
                         '{"name": "',
                         name(),
-                        '", "description": "DESCRIPTION_PLACEHOLDER", "image": "data:image/svg+xml;base64,',
+                        '", "description": "',
+                        description,
+                        '", "image": "data:image/svg+xml;base64,',
                         Base64.encode(bytes(finalSvg)),
                         '"}'
                     )
@@ -90,10 +91,7 @@ contract Exam is ERC721URIStorage {
         _tokenIds.increment();
     }
 
-    function participateInExam(address participantAddress)
-        external
-        isExamControllerAddress
-    {
+    function participateInExam(address participantAddress) external onlyOwner {
         partcipantsScores[participantAddress] = ExamParticipation(
             false,
             0,
@@ -111,14 +109,6 @@ contract Exam is ERC721URIStorage {
             true
         );
         mintNFT(_participantAddress, _score);
-    }
-
-    modifier isExamControllerAddress() {
-        require(
-            msg.sender == examControllerAddress,
-            "Your address isn't the ExamController Contract address."
-        );
-        _; // function code
     }
 
     modifier isBackendAddress() {
