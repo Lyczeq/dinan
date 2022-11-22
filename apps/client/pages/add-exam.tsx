@@ -7,7 +7,16 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useEthers } from '@usedapp/core';
 import { methods } from '@dinan/contracts/examController/index';
-import type { Exam, Question, Answer } from '@dinan/types';
+import type { Answer, Exam, Question } from '@dinan/types';
+
+type NewExamAnswer = Omit<Answer, 'id' | 'questionId'>;
+type NewExamQuestion = Omit<Question, 'id' | 'examAddress' | 'answers'> & {
+  answers: NewExamAnswer[];
+};
+
+type NewExam = Omit<Exam, 'address' | 'creatorAddress' | 'questions'> & {
+  questions: NewExamQuestion[];
+};
 
 const updateExamWithQustions = (
   userAddress: string,
@@ -24,29 +33,43 @@ const updateExamWithQustions = (
   });
   return response;
 };
+const initialAnswer: NewExamAnswer = {
+  text: '',
+  isCorrect: false,
+};
+const initialQuestion: NewExamQuestion = {
+  text: '',
+  answers: [initialAnswer, initialAnswer],
+};
 
-const AddExam: NextPage = () => {
-  const initialQuestion = {
-    text: '',
-    answers: [
-      {
-        text: '',
-        isCorrect: false,
-      },
-      {
-        text: '',
-        isCorrect: false,
-      },
-      {
-        text: '',
-        isCorrect: false,
-      },
-    ],
+const initialExam: NewExam = {
+  name: '',
+  description: '',
+  symbol: '',
+  questions: [initialQuestion],
+};
+
+type BlockchainExam = Omit<NewExam, 'questions'>;
+
+const useAddBlockchainExam = () => {
+  const { send, events } = useExamControllerMethod(methods.addExam);
+
+  const addNewBlockchainExam = (newExam: NewExam) => {
+    const blockchainExam: BlockchainExam = {
+      name: newExam.name,
+      symbol: newExam.symbol,
+      description: newExam.description,
+    };
+
+    send(blockchainExam.name, blockchainExam.symbol);
   };
 
-  const [questions, setQuestions] = useState<Question[]>([initialQuestion]);
-  const { send: addExam, events } = useExamControllerMethod(methods.addExam);
-  const [exam, setExam] = useState<Exam | null>(null);
+  return { addNewBlockchainExam, events };
+};
+
+const AddExam: NextPage = () => {
+  const { addNewBlockchainExam, events } = useAddBlockchainExam();
+  const [exam, setExam] = useState<NewExam>(initialExam);
   const { account } = useEthers();
   const {
     mutate,
@@ -68,13 +91,10 @@ const AddExam: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Question[]>();
+  } = useForm<NewExam>();
 
-  const onSubmit = (newExam: Exam) => {
-    console.log({ exam });
-    console.log({ newExam });
-    setExam(newExam);
-    addExam(newExam.name, newExam.symbol, newExam.description);
+  const onSubmit = (newExam: NewExam) => {
+    addNewBlockchainExam(newExam);
   };
 
   useEffect(() => {
@@ -97,7 +117,10 @@ const AddExam: NextPage = () => {
   }, [events, account, exam]);
 
   const addQuestion = () => {
-    setQuestions([...questions, initialQuestion]);
+    setExam((prevExam) => ({
+      ...prevExam,
+      questions: [...prevExam.questions, initialQuestion],
+    }));
   };
 
   return (
@@ -121,7 +144,7 @@ const AddExam: NextPage = () => {
                 placeholder="description"
                 {...register('description')}
               />
-              {questions.map((question, qIdx) => (
+              {exam.questions.map((question, qIdx) => (
                 <div key={`question${qIdx}`}>
                   <input
                     type="text"
@@ -164,7 +187,7 @@ const AddExam: NextPage = () => {
             </Button>
             <button
               onClick={() => {
-                mutation.mutate({
+                mutate({
                   userAddress: account as string,
                   examAddress: 'xd',
                   exam: exam as Exam,
