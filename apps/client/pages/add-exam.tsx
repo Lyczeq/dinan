@@ -1,22 +1,18 @@
 import { Button } from 'components/atoms/Button';
-import { useExamControllerMethod } from 'hooks/useExamControllerMethod';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useMutation } from 'react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useEthers } from '@usedapp/core';
-import { methods } from '@dinan/contracts/examController/index';
 import type { Answer, Exam, Question } from '@dinan/types';
-
-type NewExamAnswer = Omit<Answer, 'id' | 'questionId'>;
-type NewExamQuestion = Omit<Question, 'id' | 'examAddress' | 'answers'> & {
-  answers: NewExamAnswer[];
-};
-
-type NewExam = Omit<Exam, 'address' | 'creatorAddress' | 'questions'> & {
-  questions: NewExamQuestion[];
-};
+import { NewExam, NewExamAnswer, NewExamQuestion } from 'types/newExam';
+import { useAddBlockchainExam } from 'hooks/useAddBlockchainExam';
+import {
+  initialExam,
+  initialQuestion,
+} from 'components/organisms/NewExamForm/helpers';
+import { AddQuestion } from 'components/molecules/Question';
 
 const updateExamWithQustions = (
   userAddress: string,
@@ -32,39 +28,6 @@ const updateExamWithQustions = (
     body: JSON.stringify({ exam }),
   });
   return response;
-};
-const initialAnswer: NewExamAnswer = {
-  text: '',
-  isCorrect: false,
-};
-const initialQuestion: NewExamQuestion = {
-  text: '',
-  answers: [initialAnswer, initialAnswer],
-};
-
-const initialExam: NewExam = {
-  name: '',
-  description: '',
-  symbol: '',
-  questions: [initialQuestion],
-};
-
-type BlockchainExam = Omit<NewExam, 'questions'>;
-
-const useAddBlockchainExam = () => {
-  const { send, events } = useExamControllerMethod(methods.addExam);
-
-  const addNewBlockchainExam = (newExam: NewExam) => {
-    const blockchainExam: BlockchainExam = {
-      name: newExam.name,
-      symbol: newExam.symbol,
-      description: newExam.description,
-    };
-
-    send(blockchainExam.name, blockchainExam.symbol);
-  };
-
-  return { addNewBlockchainExam, events };
 };
 
 const AddExam: NextPage = () => {
@@ -94,6 +57,7 @@ const AddExam: NextPage = () => {
   } = useForm<NewExam>();
 
   const onSubmit = (newExam: NewExam) => {
+    console.log({ newExam });
     addNewBlockchainExam(newExam);
   };
 
@@ -144,39 +108,13 @@ const AddExam: NextPage = () => {
                 placeholder="description"
                 {...register('description')}
               />
-              {exam.questions.map((question, qIdx) => (
-                <div key={`question${qIdx}`}>
-                  <input
-                    type="text"
-                    placeholder={`Question ${qIdx + 1}`}
-                    {...register(`questions[${qIdx}].text`)}
-                  />
-                  <>
-                    {question.answers.map((answer, aIdx) => {
-                      return (
-                        <div
-                          key={`question${qIdx}answer${aIdx}`}
-                          className="w-10"
-                        >
-                          <input
-                            className="bg-amber-300"
-                            type="text"
-                            placeholder={`Answer ${aIdx + 1}`}
-                            {...register(
-                              `questions[${qIdx}].answers[${aIdx}.text]`
-                            )}
-                          />
-                          <input
-                            type="checkbox"
-                            {...register(
-                              `questions[${qIdx}].answers[${aIdx}.isCorrect]`
-                            )}
-                          />
-                        </div>
-                      );
-                    })}
-                  </>
-                </div>
+              {exam.questions.map((question, questionIndex) => (
+                <AddQuestion
+                  register={register}
+                  key={`question-${questionIndex}`}
+                  question={question}
+                  questionIndex={questionIndex}
+                />
               ))}
               <button type="submit" className="bg-red-300">
                 Submit

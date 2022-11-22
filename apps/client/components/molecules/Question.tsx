@@ -1,5 +1,6 @@
 import { Answer, Question } from '@dinan/types';
 import { UseFormRegister } from 'react-hook-form';
+import { NewExam } from 'types/newExam';
 type NewExamAnswer = Omit<Answer, 'id' | 'questionId'>;
 
 type NewExamQuestion = Omit<Question, 'id' | 'examAddress' | 'answers'> & {
@@ -7,39 +8,42 @@ type NewExamQuestion = Omit<Question, 'id' | 'examAddress' | 'answers'> & {
 };
 
 type AddQuestionType = {
-  register: UseFormRegister<NewExamQuestion[]>;
-  questionId: number;
+  register: UseFormRegister<NewExam>;
+  questionIndex: number;
   question: NewExamQuestion;
 };
 
 export const AddQuestion = ({
   question,
-  questionId,
+  questionIndex,
   register,
 }: AddQuestionType) => {
   return (
-    <div key={`question${questionId}`}>
+    <div>
       <input
         type="text"
-        placeholder={`Question ${questionId + 1}`}
-        {...register(`questions[${questionId}].text`)}
+        placeholder={`Question ${questionIndex + 1}`}
+        {...register(`questions.${questionIndex}.text`)}
       />
       <>
-        {question.answers.map((answer, answerId) => {
+        {question.answers.map((answer, answerIndex) => {
           return (
-            <div key={`question${question}answer${answerId}`} className="w-10">
+            <div
+              key={`question${questionIndex}answer${answerIndex}`}
+              className="w-10"
+            >
               <input
                 className="bg-amber-300"
                 type="text"
-                placeholder={`Answer ${answerId + 1}`}
+                placeholder={`Answer ${answerIndex + 1}`}
                 {...register(
-                  `questions[${questionId}].answers[${answerId}.text]`
+                  `questions.${questionIndex}.answers.${answerIndex}.text`
                 )}
               />
               <input
                 type="checkbox"
                 {...register(
-                  `questions[${questionId}].answers[${answerId}.isCorrect]`
+                  `questions.${questionIndex}.answers.${answerIndex}.isCorrect`
                 )}
               />
             </div>
