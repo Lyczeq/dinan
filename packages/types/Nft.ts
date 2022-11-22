@@ -16,5 +16,5 @@ type Metadata = {
 };
 
 type ContractMetadata = {
-  symbol: string;
+  symbol?: string;
 };

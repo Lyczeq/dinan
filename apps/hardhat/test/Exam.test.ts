@@ -8,6 +8,7 @@ import {
   EXAM_NAME,
   EXAM_SCORE,
   EXAM_SYMBOL,
+  EXAM_DESCRIPTION,
   BACKEND_ADDRESS,
 } from './constants';
 import { TokenUriData } from './../types/TokenUri';
@@ -16,15 +17,10 @@ async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
 
   const Exam = await ethers.getContractFactory('Exam');
-  const creatorAddress = owner.address;
-  const mockExamControllerAddress = owner.address;
+  // const creatorAddress = owner.address;
+  // const mockExamControllerAddress = owner.address;
 
-  const exam = await Exam.deploy(
-    EXAM_NAME,
-    EXAM_SYMBOL,
-    creatorAddress,
-    mockExamControllerAddress
-  );
+  const exam = await Exam.deploy(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION);
 
   const backendSigner = await ethers.getImpersonatedSigner(BACKEND_ADDRESS);
   const twoEth = ethers.utils.parseUnits('2', 'ether');
@@ -70,9 +66,7 @@ describe('Exam tests', () => {
       );
       await expect(
         exam.connect(otherAccount).participateInExam(participantAddress)
-      ).to.be.revertedWith(
-        "Your address isn't the ExamController Contract address."
-      );
+      ).to.be.revertedWith('Ownable: caller is not the owner');
     });
 
     it("Expects revert when getting the result of the partcipant who hasn't taken part in the exam", async () => {
@@ -142,8 +136,8 @@ describe('Exam tests', () => {
       ).toString();
 
       expect(tokenUriData.name).equals(examName);
+      expect(tokenUriData.description).equals(EXAM_DESCRIPTION);
       expect(svg).includes(EXAM_SCORE);
-
       // case doesn't matter in addresses
       expect(svg).includes(participantAddress.toLocaleLowerCase());
     });
