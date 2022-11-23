@@ -1,6 +1,6 @@
 import { Button } from 'components/atoms/Button';
 import { AddQuestion, AddQuestion2 } from 'components/molecules/Question';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { NewExam } from 'types/newExam';
 import { initialAnswer, initialExam, initialQuestion } from './helpers';
