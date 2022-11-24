@@ -12,6 +12,7 @@ export const NewExamForm = () => {
     register,
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm<NewExam>({
     defaultValues: initialExam,
@@ -31,9 +32,10 @@ export const NewExamForm = () => {
   };
 
   const addAnswer = (questionIndex: number) => {
-    const currentQuestion = fields[questionIndex];
+    const currentQuestion = getValues('questions')[0];
+
     update(questionIndex, {
-      ...currentQuestion,
+      text: currentQuestion.text,
       answers: [...currentQuestion.answers, initialAnswer],
     });
   };
@@ -45,6 +47,7 @@ export const NewExamForm = () => {
   };
 
   const onSubmit = (newExam: NewExam) => {
+    console.log({ newExam });
     addNewExam(newExam);
   };
 
