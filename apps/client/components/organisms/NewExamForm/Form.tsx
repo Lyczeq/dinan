@@ -1,23 +1,22 @@
-import { useFieldArray, useForm } from 'react-hook-form';
+import {
+  Control,
+  useFieldArray,
+  UseFormGetValues,
+  UseFormRegister,
+} from 'react-hook-form';
 import { Button } from 'components/atoms/Button';
-import { QuestionForm } from 'components/molecules/Question';
-import { useAddExam } from './useAddExam';
-import { initialAnswer, initialExam, initialQuestion } from './helpers';
+import { QuestionForm } from 'components/organisms/NewExamForm/QuestionForm';
+import { initialAnswer, initialQuestion } from './helpers';
 import { NewExam } from 'types/newExam';
+import { Input } from 'components/atoms/Input';
 
-export const NewExamForm = () => {
-  const { addNewExam, examUpdateStatus, blockchainCallStatus } = useAddExam();
+type ExamFormProps = {
+  register: UseFormRegister<NewExam>;
+  getExamValues: UseFormGetValues<NewExam>;
+  control: Control<NewExam, any>;
+};
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    getValues,
-    formState: { errors },
-  } = useForm<NewExam>({
-    defaultValues: initialExam,
-  });
-
+export const Form = ({ register, getExamValues, control }: ExamFormProps) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'questions',
@@ -32,7 +31,7 @@ export const NewExamForm = () => {
   };
 
   const addAnswer = (questionIndex: number) => {
-    const currentQuestion = getValues('questions')[0];
+    const currentQuestion = getExamValues('questions')[0];
 
     update(questionIndex, {
       text: currentQuestion.text,
@@ -46,35 +45,15 @@ export const NewExamForm = () => {
     update(questionIndex, currentQuestion);
   };
 
-  const onSubmit = (newExam: NewExam) => {
-    console.log({ newExam });
-    addNewExam(newExam);
-  };
-
-  const statusMessage = () => {
-    if (blockchainCallStatus.status === 'None') return;
-    if (blockchainCallStatus.status !== 'Success')
-      return blockchainCallStatus.status;
-
-    if (
-      blockchainCallStatus.status === 'Success' &&
-      examUpdateStatus !== 'success'
-    )
-      return examUpdateStatus;
-
-    if (examUpdateStatus === 'success') return 'Success!';
-  };
-
   return (
     <section className="bg-red-500">
       <form
-        className="flex flex-col w-full items-center h-full justify-around"
+        className="flex flex-col w-full items-start h-full gap-4 mt-4 ml-4"
         style={{ height: '1000px' }}
-        onSubmit={handleSubmit(onSubmit)}
       >
-        <input type="text" placeholder="name" {...register('name')} />
-        <input type="text" placeholder="symbol" {...register('symbol')} />
-        <input
+        <Input type="text" placeholder="name" {...register('name')} />
+        <Input type="text" placeholder="symbol" {...register('symbol')} />
+        <Input
           type="text"
           placeholder="description"
           {...register('description')}
@@ -98,7 +77,6 @@ export const NewExamForm = () => {
       <Button onClick={addQuestion} className="bg-orange-400">
         Add question
       </Button>
-      {statusMessage()}
     </section>
   );
 };

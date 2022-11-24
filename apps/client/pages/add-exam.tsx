@@ -1,7 +1,6 @@
-import { Button } from 'components/atoms/Button';
+import { ExamForm } from 'components/organisms/NewExamForm/ExamForm';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { NewExamForm } from 'components/organisms/NewExamForm/NewExamForm';
 
 const AddExam: NextPage = () => {
   return (
@@ -18,13 +17,7 @@ const AddExam: NextPage = () => {
             Specify the name, symbol and questions with answers
           </p>
         </header>
-        <main className="grid-cols-3/4 grid bg-slate-600 h-96 w-full">
-          <NewExamForm />
-          <aside className="bg-slate-400 h-full flex flex-col">
-            <p>Questions: </p>
-            <Button className="bg-orange-400">Add Exam</Button>
-          </aside>
-        </main>
+        <ExamForm />
       </div>
     </>
   );
