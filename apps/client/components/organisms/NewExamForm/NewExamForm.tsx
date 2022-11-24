@@ -1,17 +1,12 @@
-import { Button } from 'components/atoms/Button';
-import { AddQuestion, AddQuestion2 } from 'components/molecules/Question';
-import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { NewExam } from 'types/newExam';
-import { initialAnswer, initialExam, initialQuestion } from './helpers';
+import { Button } from 'components/atoms/Button';
+import { QuestionForm } from 'components/molecules/Question';
 import { useAddExam } from './useAddExam';
+import { initialAnswer, initialExam, initialQuestion } from './helpers';
+import { NewExam } from 'types/newExam';
 
 export const NewExamForm = () => {
   const { addNewExam, examUpdateStatus, blockchainCallStatus } = useAddExam();
-
-  const onSubmit = (newExam: NewExam) => {
-    addNewExam(newExam);
-  };
 
   const {
     register,
@@ -49,10 +44,28 @@ export const NewExamForm = () => {
     update(questionIndex, currentQuestion);
   };
 
+  const onSubmit = (newExam: NewExam) => {
+    addNewExam(newExam);
+  };
+
+  const statusMessage = () => {
+    if (blockchainCallStatus.status === 'None') return;
+    if (blockchainCallStatus.status !== 'Success')
+      return blockchainCallStatus.status;
+
+    if (
+      blockchainCallStatus.status === 'Success' &&
+      examUpdateStatus !== 'success'
+    )
+      return examUpdateStatus;
+
+    if (examUpdateStatus === 'success') return 'Success!';
+  };
+
   return (
     <section className="bg-red-500">
       <form
-        className="flex flex-col w-1/2 items-center h-full justify-around"
+        className="flex flex-col w-full items-center h-full justify-around"
         style={{ height: '1000px' }}
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -64,7 +77,7 @@ export const NewExamForm = () => {
           {...register('description')}
         />
         {fields.map((question, questionIndex) => (
-          <AddQuestion2
+          <QuestionForm
             key={`${question.id}`}
             register={register}
             question={question}
@@ -82,6 +95,7 @@ export const NewExamForm = () => {
       <Button onClick={addQuestion} className="bg-orange-400">
         Add question
       </Button>
+      {statusMessage()}
     </section>
   );
 };

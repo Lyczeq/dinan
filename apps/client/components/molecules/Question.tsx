@@ -3,7 +3,7 @@ import { NewExam, NewExamQuestion } from 'types/newExam';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { memo } from 'react';
 
-type AddQuestionType = {
+type QuestionFormType = {
   register: UseFormRegister<NewExam>;
   questionId: string;
   question: NewExamQuestion;
@@ -13,7 +13,7 @@ type AddQuestionType = {
   removeAnswer: (questionIndex: number, answerIndex: number) => void;
 };
 
-export const AddQuestion = ({
+const QuestionFormComponent = ({
   question,
   questionId,
   questionIndex,
@@ -21,8 +21,7 @@ export const AddQuestion = ({
   removeQuestion,
   addAnswer,
   removeAnswer,
-}: AddQuestionType) => {
-  console.log('render', questionIndex);
+}: QuestionFormType) => {
   return (
     <div>
       <TrashIcon
@@ -64,4 +63,4 @@ export const AddQuestion = ({
     </div>
   );
 };
-export const AddQuestion2 = memo(AddQuestion);
+export const QuestionForm = memo(QuestionFormComponent);
