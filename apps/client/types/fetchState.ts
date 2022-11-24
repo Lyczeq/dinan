@@ -1,4 +1,4 @@
-export type FetchStateComponent = {
+export type FetchStatusComponentProps = {
   message?: string;
   messageClassName?: string;
 };
