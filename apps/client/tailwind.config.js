@@ -3,6 +3,10 @@ module.exports = {
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      colors: {
+        secondary: '#facc15',
+        primary: '#fb923c',
+      },
       fontFamily: {
         lobster: ['lobster', 'arial', 'sans-serif'],
       },
