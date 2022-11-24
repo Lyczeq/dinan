@@ -38,6 +38,7 @@ export const ExamsView = ({
       <Table.Header>
         <Input
           onChange={handleSearchExam}
+          placeholder="Type exam name or it's address"
           disabled={status === 'loading' || status === 'error'}
         />
         <div>{headerActions}</div>

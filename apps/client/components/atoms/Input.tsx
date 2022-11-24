@@ -9,10 +9,8 @@ export const Input = ({ onChange, ...props }: SearchInput) => {
 
   return (
     <input
-      onChange={onChange}
       type="text"
-      placeholder="Type exam name or it's address"
-      className={`${classnames} w-1/3 border-yellow-400 border-2 p-2 rounded-md focus:outline-orange-400 text-gray-600`}
+      className={`${classnames} w-1/3 border-yellow-400 border-2 p-2 rounded-md focus:outline-orange-400 text-gray-500 `}
       {...props}
     />
   );
