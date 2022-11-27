@@ -3,11 +3,12 @@ import { getDefaultProvider } from 'ethers';
 import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
-
 import { Header } from 'components/molecules/Header';
+import { Footer } from 'components/atoms/Footer';
 
 import '../styles/globals.css';
+
+const queryClient = new QueryClient();
 
 const config: Config = {
   readOnlyUrls: {
@@ -20,9 +21,10 @@ type WrapperProps = {
 };
 
 const Wrapper = ({ children }: WrapperProps) => (
-  <div className="h-screen max-w-screen-2xl m-auto px-4 bg-white flex flex-col items-center">
+  <div className="max-w-screen-2xl mx-auto bg-white flex flex-col items-center">
     <Header />
-    {children}
+    <div className="min-h-screen w-full mb-20">{children}</div>
+    <Footer />
   </div>
 );
 

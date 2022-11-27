@@ -13,5 +13,5 @@ export const initialExam: NewExam = {
   name: '',
   description: '',
   symbol: '',
-  questions: [initialQuestion],
+  questions: [initialQuestion, initialQuestion],
 };

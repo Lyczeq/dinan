@@ -22,7 +22,7 @@ const QuestionTextWatcher = ({ index, watch }: QuestionWatcherProps) => {
   const questionText = watch(`questions.${index}.text`);
   return (
     <p className="mb-2">
-      <span className="font-bold">{index}.</span> {questionText}
+      <span className="font-bold">{index + 1}.</span> {questionText}
     </p>
   );
 };
@@ -33,8 +33,7 @@ export const Summary = ({
   watch,
 }: SummaryProps) => {
   const { addNewExam, blockchainCallStatus, examUpdateStatus } = useAddExam();
-  // const watcher = watch('questions.${number}.text');
-  // console.log(watch('questions.${number}.text'));
+
   const statusMessage = () => {
     if (blockchainCallStatus.status === 'None') return;
     if (blockchainCallStatus.status !== 'Success')
@@ -63,7 +62,7 @@ export const Summary = ({
         Add Exam
       </Button>
       <div>
-        <p>Questions: </p>
+        <p className="text-lg">Questions: </p>
         <ul>
           {getExamValues('questions').map((question, index) => (
             <QuestionTextWatcher key={index} index={index} watch={watch} />

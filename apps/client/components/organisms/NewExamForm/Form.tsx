@@ -1,4 +1,4 @@
-import { PlusSmallIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { Button } from 'components/atoms/Button';
 import { TextInput } from 'components/atoms/TextInput';
 import { FormGroup } from 'components/molecules/FormGroup';
@@ -95,7 +95,7 @@ export const Form = ({ register, getExamValues, control }: FormProps) => {
           className="mt-2 self-start flex gap-1 w-max items-center"
         >
           Add question
-          <PlusSmallIcon className="w-5 h-5" />
+          <PlusIcon className="w-5 h-5" />
         </Button>
       </div>
     </section>
