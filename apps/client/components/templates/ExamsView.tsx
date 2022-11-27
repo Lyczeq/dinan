@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { QueryStatus } from 'react-query';
+import type { Exam } from '@dinan/types/Exam';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { Loader } from 'components/atoms/Loader';
-import { Input } from 'components/atoms/Input';
+import { TextInput } from 'components/atoms/TextInput';
 import { Table } from 'components/organisms/Table/Table';
-import type { Exam } from '@dinan/types/Exam';
+import { useState } from 'react';
+import { QueryStatus } from 'react-query';
 
 type ExamsViewProps = {
   exams: Exam[] | undefined;
@@ -36,7 +36,7 @@ export const ExamsView = ({
   return (
     <Table>
       <Table.Header>
-        <Input
+        <TextInput
           onChange={handleSearchExam}
           placeholder="Type exam name or it's address"
           disabled={status === 'loading' || status === 'error'}

@@ -36,16 +36,15 @@ export const Summary = ({
   };
 
   const onSubmitExam = (newExam: NewExam) => {
+    console.log({ newExam });
     addNewExam(newExam);
   };
 
   return (
-    <aside className="bg-slate-400 h-full flex flex-col">
+    <aside className="h-full flex flex-col bg-orange-200 border-orange-200 border rounded-br-md rounded-tr-md">
       <p>Questions: </p>
       <div>{getExamValues('questions').map((question) => question.text)}</div>
-      <Button type="submit" onSubmit={handleSubmitExam(onSubmitExam)}>
-        Add Exam
-      </Button>
+      <Button onClick={handleSubmitExam(onSubmitExam)}>Add Exam</Button>
       {statusMessage()}
     </aside>
   );

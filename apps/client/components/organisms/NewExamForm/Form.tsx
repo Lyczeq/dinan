@@ -1,22 +1,23 @@
+import { Button } from 'components/atoms/Button';
+import { TextInput } from 'components/atoms/TextInput';
+import { FormGroup } from 'components/molecules/FormGroup';
+import { QuestionForm } from 'components/organisms/NewExamForm/QuestionForm';
 import {
   Control,
   useFieldArray,
   UseFormGetValues,
   UseFormRegister,
 } from 'react-hook-form';
-import { Button } from 'components/atoms/Button';
-import { QuestionForm } from 'components/organisms/NewExamForm/QuestionForm';
-import { initialAnswer, initialQuestion } from './helpers';
 import { NewExam } from 'types/newExam';
-import { Input } from 'components/atoms/Input';
+import { initialAnswer, initialQuestion } from './helpers';
 
-type ExamFormProps = {
+type FormProps = {
   register: UseFormRegister<NewExam>;
   getExamValues: UseFormGetValues<NewExam>;
   control: Control<NewExam, any>;
 };
 
-export const Form = ({ register, getExamValues, control }: ExamFormProps) => {
+export const Form = ({ register, getExamValues, control }: FormProps) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'questions',
@@ -46,35 +47,48 @@ export const Form = ({ register, getExamValues, control }: ExamFormProps) => {
   };
 
   return (
-    <section className="bg-red-500">
-      <form
-        className="flex flex-col w-full items-start h-full gap-4 mt-4 ml-4"
-        style={{ height: '1000px' }}
-      >
-        <Input type="text" placeholder="name" {...register('name')} />
-        <Input type="text" placeholder="symbol" {...register('symbol')} />
-        <Input
-          type="text"
-          placeholder="description"
-          {...register('description')}
-        />
-        {fields.map((question, questionIndex) => (
-          <QuestionForm
-            key={`${question.id}`}
-            register={register}
-            question={question}
-            questionId={question.id}
-            questionIndex={questionIndex}
-            removeQuestion={removeQuestion}
-            addAnswer={addAnswer}
-            removeAnswer={removeAnswer}
+    <section className=" rounded-tl-md rounded-bl-md  overflow-x-auto min-h-full pb-4 mb-16 w-4/5 mx-auto">
+      <form className="flex flex-col w-full items-start gap-4 mt-4">
+        <FormGroup label="Name">
+          <TextInput
+            type="text"
+            placeholder="Name"
+            className="w-2/3"
+            {...register('name')}
           />
-        ))}
-        <button type="submit" className="bg-red-300">
-          Submit
-        </button>
+        </FormGroup>
+        <FormGroup label="Symbol">
+          <TextInput
+            type="text"
+            placeholder="Symbol"
+            {...register('name')}
+            className="w-2/3"
+          />
+        </FormGroup>
+        <FormGroup label="Description">
+          <TextInput
+            type="text"
+            placeholder="Description"
+            className="w-2/3"
+            {...register('name')}
+          />
+        </FormGroup>
+        <div className="w-full self-center">
+          {fields.map((question, questionIndex) => (
+            <QuestionForm
+              key={`${question.id}`}
+              register={register}
+              question={question}
+              questionId={question.id}
+              questionIndex={questionIndex}
+              removeQuestion={removeQuestion}
+              addAnswer={addAnswer}
+              removeAnswer={removeAnswer}
+            />
+          ))}
+        </div>
       </form>
-      <Button onClick={addQuestion} className="bg-orange-400">
+      <Button onClick={addQuestion} className="bg-orange-400 self-center">
         Add question
       </Button>
     </section>

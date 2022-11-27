@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import type { NextPage } from 'next';
-import Head from 'next/head';
+import type { Nft } from '@dinan/types/nft';
 import { useEthers } from '@usedapp/core';
-import { useQuery } from 'react-query';
 import { CertificateTile } from 'components/atoms/CertificateTile';
-import { Input } from 'components/atoms/Input';
+import { ErrorMessage } from 'components/atoms/ErrorMessage';
+import { Loader } from 'components/atoms/Loader';
+import { TextInput } from 'components/atoms/TextInput';
 import { Table } from 'components/organisms/Table/Table';
 import { TableContent } from 'components/organisms/Table/TableContent';
 import { TableHeader } from 'components/organisms/Table/TableHeader';
-import type { Nft } from '@dinan/types/nft';
-import { ErrorMessage } from 'components/atoms/ErrorMessage';
-import { Loader } from 'components/atoms/Loader';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 
 const fetchUserCertificates = async (userAddress: string) => {
   const response = await fetch(
@@ -51,7 +51,7 @@ const Certificates: NextPage = () => {
       </Head>
       <Table>
         <TableHeader>
-          <Input
+          <TextInput
             onChange={handleSearchCertificate}
             disabled={!account}
             placeholder="Type certificate name or it's address"
