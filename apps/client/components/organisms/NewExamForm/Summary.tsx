@@ -18,11 +18,11 @@ type QuestionWatcherProps = {
   watch: UseFormWatch<NewExam>;
 };
 
-const QuestionWatcher = ({ index, watch }: QuestionWatcherProps) => {
+const QuestionTextWatcher = ({ index, watch }: QuestionWatcherProps) => {
   const questionText = watch(`questions.${index}.text`);
   return (
-    <p className="break-all">
-      {index}. {questionText}
+    <p className="mb-2">
+      <span className="font-bold">{index}.</span> {questionText}
     </p>
   );
 };
@@ -66,7 +66,7 @@ export const Summary = ({
         <p>Questions: </p>
         <ul>
           {getExamValues('questions').map((question, index) => (
-            <QuestionWatcher key={index} index={index} watch={watch} />
+            <QuestionTextWatcher key={index} index={index} watch={watch} />
           ))}
         </ul>
         {statusMessage()}
