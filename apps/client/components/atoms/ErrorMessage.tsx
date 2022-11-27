@@ -1,6 +1,6 @@
-import { FetchStateComponent } from 'types/fetchState';
+import { FetchStatusComponentProps } from 'types/fetchState';
 
-type ErrorMessageProps = FetchStateComponent & {
+type ErrorMessageProps = FetchStatusComponentProps & {
   isError: boolean;
 };
 
