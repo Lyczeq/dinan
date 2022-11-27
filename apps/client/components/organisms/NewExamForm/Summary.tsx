@@ -22,7 +22,7 @@ const QuestionTextWatcher = ({ index, watch }: QuestionWatcherProps) => {
   const questionText = watch(`questions.${index}.text`);
   return (
     <p className="mb-2">
-      <span className="font-bold">{index}.</span> {questionText}
+      <span className="font-bold">{index + 1}.</span> {questionText}
     </p>
   );
 };
