@@ -19,10 +19,20 @@ type WrapperProps = {
   children: ReactNode;
 };
 
+const Footer = () => {
+  return (
+    <footer className="w-[calc(100vw-1rem)] overflow-x-hidden bg-primary h-36">
+      hello
+    </footer>
+  );
+};
+
 const Wrapper = ({ children }: WrapperProps) => (
-  <div className="h-screen max-w-screen-2xl m-auto px-4 bg-white flex flex-col items-center">
+  <div className="max-w-screen-2xl mx-auto bg-white flex flex-col items-center">
     <Header />
-    {children}
+    <div className="min-h-screen w-full mb-20">{children}</div>
+
+    <Footer />
   </div>
 );
 

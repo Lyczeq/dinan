@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import { NewExam, NewExamQuestion } from 'types/newExam';
-import { TrashIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
 import { Button } from 'components/atoms/Button';
@@ -72,7 +72,7 @@ const QuestionFormComponent = ({
             onClick={() => addAnswer(questionIndex)}
           >
             Add answer
-            <PlusSmallIcon className="w-5 h-5" />
+            <PlusIcon className="w-5 h-5" />
           </Button>
         </>
       </div>
