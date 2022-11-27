@@ -1,10 +1,9 @@
 import { UseFormRegister } from 'react-hook-form';
 import { NewExam, NewExamQuestion } from 'types/newExam';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { memo } from 'react';
+import React from 'react';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
 import { Button } from 'components/atoms/Button';
-import { TextInput } from 'components/atoms/TextInput';
 
 type QuestionFormType = {
   register: UseFormRegister<NewExam>;
@@ -42,11 +41,8 @@ const QuestionFormComponent = ({
         <>
           {question.answers.map((_, answerIndex) => {
             return (
-              <>
-                <div
-                  className="flex gap-2 flex-row w-full justify-center"
-                  key={`${questionId}-${answerIndex}`}
-                >
+              <React.Fragment key={`${questionId}-${answerIndex}`}>
+                <div className="flex gap-2 flex-row w-full justify-center">
                   <TextAreaInput
                     placeholder={`Answer ${answerIndex + 1}`}
                     {...register(
@@ -68,10 +64,13 @@ const QuestionFormComponent = ({
                     )}
                   />
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
-          <Button className="mt-4 self-start" onClick={() => addAnswer(questionIndex)}>
+          <Button
+            className="mt-4 self-start"
+            onClick={() => addAnswer(questionIndex)}
+          >
             Add answer
           </Button>
         </>
@@ -79,4 +78,4 @@ const QuestionFormComponent = ({
     </div>
   );
 };
-export const QuestionForm = memo(QuestionFormComponent);
+export const QuestionForm = React.memo(QuestionFormComponent);
