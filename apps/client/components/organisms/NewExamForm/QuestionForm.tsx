@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import { NewExam, NewExamQuestion } from 'types/newExam';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
 import { Button } from 'components/atoms/Button';
@@ -68,10 +68,11 @@ const QuestionFormComponent = ({
             );
           })}
           <Button
-            className="mt-4 self-start"
+            className="mt-2 self-start flex gap-1 w-max items-center"
             onClick={() => addAnswer(questionIndex)}
           >
             Add answer
+            <PlusSmallIcon className="w-5 h-5" />
           </Button>
         </>
       </div>

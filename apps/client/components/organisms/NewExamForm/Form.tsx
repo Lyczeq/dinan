@@ -1,3 +1,4 @@
+import { PlusSmallIcon } from '@heroicons/react/24/outline';
 import { Button } from 'components/atoms/Button';
 import { TextInput } from 'components/atoms/TextInput';
 import { FormGroup } from 'components/molecules/FormGroup';
@@ -47,50 +48,56 @@ export const Form = ({ register, getExamValues, control }: FormProps) => {
   };
 
   return (
-    <section className=" rounded-tl-md rounded-bl-md  overflow-x-auto min-h-full pb-4 mb-16 w-4/5 mx-auto">
-      <form className="flex flex-col w-full items-start gap-4 mt-4">
-        <FormGroup label="Name">
-          <TextInput
-            type="text"
-            placeholder="Name"
-            className="w-2/3"
-            {...register('name')}
-          />
-        </FormGroup>
-        <FormGroup label="Symbol">
-          <TextInput
-            type="text"
-            placeholder="Symbol"
-            {...register('name')}
-            className="w-2/3"
-          />
-        </FormGroup>
-        <FormGroup label="Description">
-          <TextInput
-            type="text"
-            placeholder="Description"
-            className="w-2/3"
-            {...register('name')}
-          />
-        </FormGroup>
-        <div className="w-full self-center">
-          {fields.map((question, questionIndex) => (
-            <QuestionForm
-              key={`${question.id}`}
-              register={register}
-              question={question}
-              questionId={question.id}
-              questionIndex={questionIndex}
-              removeQuestion={removeQuestion}
-              addAnswer={addAnswer}
-              removeAnswer={removeAnswer}
+    <section className="rounded-tl-md rounded-bl-md min-h-full pb-4 mb-16 w-full overflow-y-auto">
+      <div className="w-4/5 mx-auto">
+        <form className="flex flex-col items-start gap-4 mt-4 ">
+          <FormGroup label="Name">
+            <TextInput
+              type="text"
+              placeholder="Name"
+              className="w-2/3"
+              {...register('name')}
             />
-          ))}
-        </div>
-      </form>
-      <Button onClick={addQuestion} className="bg-orange-400 self-center">
-        Add question
-      </Button>
+          </FormGroup>
+          <FormGroup label="Symbol">
+            <TextInput
+              type="text"
+              placeholder="Symbol"
+              {...register('name')}
+              className="w-2/3"
+            />
+          </FormGroup>
+          <FormGroup label="Description">
+            <TextInput
+              type="text"
+              placeholder="Description"
+              className="w-2/3"
+              {...register('name')}
+            />
+          </FormGroup>
+          <div className="w-full self-center">
+            {fields.map((question, questionIndex) => (
+              <QuestionForm
+                key={`${question.id}`}
+                register={register}
+                question={question}
+                questionId={question.id}
+                questionIndex={questionIndex}
+                removeQuestion={removeQuestion}
+                addAnswer={addAnswer}
+                removeAnswer={removeAnswer}
+              />
+            ))}
+          </div>
+        </form>
+        <Button
+          onClick={addQuestion}
+          className="mt-2 self-start flex gap-1 w-max items-center"
+        >
+          Add question
+          <PlusSmallIcon className="w-5 h-5" />
+        </Button>
+      </div>
     </section>
   );
 };

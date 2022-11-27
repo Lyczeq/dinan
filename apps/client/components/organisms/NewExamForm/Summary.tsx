@@ -1,4 +1,3 @@
-import { Button } from 'components/atoms/Button';
 import {
   UseFormGetValues,
   UseFormHandleSubmit,
@@ -6,11 +5,26 @@ import {
 } from 'react-hook-form';
 import { NewExam } from 'types/newExam';
 import { useAddExam } from './useAddExam';
+import { Button } from 'components/atoms/Button';
 
 type SummaryProps = {
   handleSubmitExam: UseFormHandleSubmit<NewExam>;
   getExamValues: UseFormGetValues<NewExam>;
   watch: UseFormWatch<NewExam>;
+};
+
+type QuestionWatcherProps = {
+  index: number;
+  watch: UseFormWatch<NewExam>;
+};
+
+const QuestionWatcher = ({ index, watch }: QuestionWatcherProps) => {
+  const questionText = watch(`questions.${index}.text`);
+  return (
+    <p className="break-all">
+      {index}. {questionText}
+    </p>
+  );
 };
 
 export const Summary = ({
@@ -19,8 +33,8 @@ export const Summary = ({
   watch,
 }: SummaryProps) => {
   const { addNewExam, blockchainCallStatus, examUpdateStatus } = useAddExam();
-  const questions = getExamValues('questions');
-
+  // const watcher = watch('questions.${number}.text');
+  // console.log(watch('questions.${number}.text'));
   const statusMessage = () => {
     if (blockchainCallStatus.status === 'None') return;
     if (blockchainCallStatus.status !== 'Success')
@@ -41,16 +55,22 @@ export const Summary = ({
   };
 
   return (
-    <aside className="h-full flex flex-col bg-orange-200 border-orange-200 border rounded-br-md rounded-tr-md">
+    <aside className="h-full flex flex-col bg-orange-200 border-orange-200 border rounded-br-md rounded-tr-md sticky px-4 break-all">
       <Button
         className="self-center px-8 my-4"
         onClick={handleSubmitExam(onSubmitExam)}
       >
         Add Exam
       </Button>
-      <p>Questions: </p>
-      <div>{getExamValues('questions').map((question) => question.text)}</div>
-      {statusMessage()}
+      <div>
+        <p>Questions: </p>
+        <ul>
+          {getExamValues('questions').map((question, index) => (
+            <QuestionWatcher key={index} index={index} watch={watch} />
+          ))}
+        </ul>
+        {statusMessage()}
+      </div>
     </aside>
   );
 };
