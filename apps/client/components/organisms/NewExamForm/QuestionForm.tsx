@@ -57,13 +57,16 @@ export const QuestionForm = React.memo(
                 textError={errors?.answers?.[answerIndex]?.text?.message}
               />
             ))}
-            <Button
-              className="mt-2 self-start flex gap-1 w-max items-center"
-              onClick={() => addAnswer(questionIndex)}
-              icon={<PlusIcon className="w-5 h-5" />}
-            >
-              Add answer
-            </Button>
+            <div className="flex gap-4 items-center">
+              <Button
+                className="flex gap-1 w-max items-center"
+                onClick={() => addAnswer(questionIndex)}
+                icon={<PlusIcon className="w-5 h-5" />}
+              >
+                Add answer
+              </Button>
+              {errors?.answers?.message && <p>{errors?.answers?.message}</p>}
+            </div>
           </>
         </div>
       </div>
