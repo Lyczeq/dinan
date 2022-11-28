@@ -8,11 +8,11 @@ import { initialExam } from './helpers';
 
 const answerSchema = z.object({
   isCorrect: z.boolean().optional(),
-  text: z.string().min(1).max(50),
+  text: z.string().trim().min(1).max(50),
 });
 
 const questionSchema = z.object({
-  text: z.string().min(5).max(150),
+  text: z.string().trim().min(5).max(150),
   answers: z.array(answerSchema).min(2).max(5),
 });
 
