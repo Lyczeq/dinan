@@ -1,26 +1,21 @@
 import { GitHubLogoIcon, LinkedInLogoIcon } from '@radix-ui/react-icons';
+import { ExternalLink } from './ExternalLink';
 
 export const Footer = () => {
   return (
-    <footer className="w-[calc(100vw-1rem)] overflow-x-hidden bg-gradient-to-tr from-orange-400 to-yellow-400 h-36 flex justify-center items-center gap-6 text-white">
-      <a
-        href="https://www.linkedin.com/in/jakublyczko/"
-        className="flex flex-col items-center"
-        target="_blank"
-        rel="noreferrer"
+    <footer className="w-[calc(100vw-1rem)] overflow-x-hidden bg-gradient-to-tr from-primary to-secondary h-36 flex justify-center items-center gap-6 text-white">
+      <ExternalLink
+        url="https://www.linkedin.com/in/jakublyczko/"
+        icon={<LinkedInLogoIcon className="w-6 h-6" />}
       >
-        <LinkedInLogoIcon className=" w-6 h-6" />
-        <span>Linkedin</span>
-      </a>
-      <a
-        href="https://github.com/Lyczeq/dinan"
-        className="flex flex-col items-center"
-        target="_blank"
-        rel="noreferrer"
+        Linkedin
+      </ExternalLink>
+      <ExternalLink
+        url="https://github.com/Lyczeq/dinan"
+        icon={<GitHubLogoIcon className=" w-6 h-6" />}
       >
-        <GitHubLogoIcon className=" w-6 h-6" />
-        <span>Github</span>
-      </a>
+        Github
+      </ExternalLink>
     </footer>
   );
 };
