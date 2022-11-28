@@ -2,7 +2,7 @@ import React from 'react';
 
 type FormGroupProps = {
   label: string;
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 export const FormGroup = ({ label, children }: FormGroupProps) => {
