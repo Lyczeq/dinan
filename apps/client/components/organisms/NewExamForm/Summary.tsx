@@ -68,7 +68,7 @@ export const Summary = ({
             <QuestionTextWatcher key={index} index={index} watch={watch} />
           ))}
         </ul>
-        {statusMessage()}
+        <p>{statusMessage()}</p>
       </div>
     </aside>
   );

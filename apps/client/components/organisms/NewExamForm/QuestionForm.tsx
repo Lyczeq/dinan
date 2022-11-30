@@ -4,17 +4,17 @@ import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
 import { Button } from 'components/atoms/Button';
 import { AnswerForm } from './AnswerForm';
-import type { NewExam, NewExamQuestion } from 'types/newExam';
+import type { NewExam, NewQuestion } from '@dinan/types/newExam';
 
 type QuestionFormProps = {
   register: UseFormRegister<NewExam>;
   questionId: string;
-  question: NewExamQuestion;
+  question: NewQuestion;
   questionIndex: number;
   removeQuestion: (questionIndex: number) => void;
   addAnswer: (questionIndex: number) => void;
   removeAnswer: (questionIndex: number, answerIndex: number) => void;
-  errors?: FieldErrors<NewExamQuestion>;
+  errors?: FieldErrors<NewQuestion>;
 };
 
 export const QuestionForm = React.memo(

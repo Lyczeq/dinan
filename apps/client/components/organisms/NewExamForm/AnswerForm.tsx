@@ -2,7 +2,8 @@ import React from 'react';
 import { TrashIcon } from '@radix-ui/react-icons';
 import type { UseFormRegister } from 'react-hook-form';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
-import type { NewExam } from 'types/newExam';
+import type { NewExam } from '@dinan/types/newExam';
+import { Checkbox } from 'components/atoms/Checkbox';
 
 type AnswerFormProps = {
   questionId: string;
@@ -36,16 +37,12 @@ export const AnswerForm = ({
           onClick={() => removeAnswer(questionIndex, answerIndex)}
         />
       </div>
-      <div className="flex gap-2 mb-4 mt-1 w-full">
-        <label className="text-lightGrey">Correct</label>
-        <input
-          type="checkbox"
-          className="accent-primary text-white "
-          {...register(
-            `questions.${questionIndex}.answers.${answerIndex}.isCorrect`
-          )}
-        />
-      </div>
+      <Checkbox
+        label="Correct"
+        {...register(
+          `questions.${questionIndex}.answers.${answerIndex}.isCorrect`
+        )}
+      />
     </React.Fragment>
   );
 };

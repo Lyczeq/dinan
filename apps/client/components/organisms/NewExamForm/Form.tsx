@@ -10,7 +10,7 @@ import {
   UseFormGetValues,
   UseFormRegister,
 } from 'react-hook-form';
-import type { NewExam } from 'types/newExam';
+import type { NewExam } from '@dinan/types/newExam';
 import { initialAnswer, initialQuestion } from './helpers';
 
 type FormProps = {
@@ -53,8 +53,6 @@ export const Form = ({
     currentQuestion.answers.splice(answerIndex, 1);
     update(questionIndex, currentQuestion);
   };
-
-  console.log(errors.questions);
 
   return (
     <section className="rounded-tl-md rounded-bl-md min-h-full pb-4 mb-16 w-full overflow-y-auto">

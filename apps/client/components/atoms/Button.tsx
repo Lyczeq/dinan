@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -6,11 +7,22 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   icon?: ReactNode;
 };
 
-export const Button = ({ className, children, onClick, icon }: ButtonProps) => {
+export const Button = ({
+  className,
+  children,
+  onClick,
+  icon,
+  ...props
+}: ButtonProps) => {
+  const classnames = classNames(className, {
+    'cursor-not-allowed bg-lightGrey': props.disabled,
+  });
+
   return (
     <button
-      className={`text-white rounded-md py-2 px-2 bg-primary ${className}`}
+      className={`text-white rounded-md py-2 px-2 bg-primary  ${classnames}`}
       onClick={onClick}
+      {...props}
     >
       {children}
       {icon}
