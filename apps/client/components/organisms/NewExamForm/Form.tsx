@@ -10,7 +10,7 @@ import {
   UseFormGetValues,
   UseFormRegister,
 } from 'react-hook-form';
-import type { NewExam } from 'types/newExam';
+import type { NewExam } from '@dinan/types/newExam';
 import { initialAnswer, initialQuestion } from './helpers';
 
 type FormProps = {

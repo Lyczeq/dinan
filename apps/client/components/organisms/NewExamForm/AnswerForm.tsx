@@ -2,7 +2,7 @@ import React from 'react';
 import { TrashIcon } from '@radix-ui/react-icons';
 import type { UseFormRegister } from 'react-hook-form';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
-import type { NewExam } from 'types/newExam';
+import type { NewExam } from '@dinan/types/newExam';
 import { Checkbox } from 'components/atoms/Checkbox';
 
 type AnswerFormProps = {
