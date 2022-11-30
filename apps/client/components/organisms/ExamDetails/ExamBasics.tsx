@@ -1,28 +1,12 @@
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+import copy from 'copy-to-clipboard';
+import { CopyIcon } from '@radix-ui/react-icons';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { Loader } from 'components/atoms/Loader';
-import type { BasicExam } from 'types/basicExam';
-import { CopyIcon } from '@radix-ui/react-icons';
-import copy from 'copy-to-clipboard';
+import { useExamDetails } from './useExamDetails';
 
-const fetchExam = async (address: string): Promise<BasicExam> => {
-  const response = await fetch(`http://localhost:8000/api/v1/exams/${address}`);
-  const exam = await response.json();
-  return exam.exam;
-};
+type TextToCopyProps = { text: string; label: string };
 
-const useExamDetails = () => {
-  const router = useRouter();
-  const { address } = router.query;
-  const { data: exam, status } = useQuery<BasicExam>(['exam', address], () =>
-    fetchExam(address as string)
-  );
-
-  return { exam, status };
-};
-
-const TextToCopy = ({ text, label }: { text: string; label: string }) => {
+const TextToCopy = ({ label, text }: TextToCopyProps) => {
   return (
     <div className="flex gap-2 items-center ">
       <p className="font-bold">
@@ -35,6 +19,7 @@ const TextToCopy = ({ text, label }: { text: string; label: string }) => {
     </div>
   );
 };
+
 export const ExamBasics = () => {
   const { exam, status } = useExamDetails();
 
