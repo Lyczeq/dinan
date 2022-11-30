@@ -1,16 +1,9 @@
 import { useEthers } from '@usedapp/core';
-import { Button } from 'components/atoms/Button';
-import { useExamControllerMethod } from 'hooks/useExamControllerMethod';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery } from 'react-query';
-import {
-  methods,
-  events as examControllerEvents,
-} from '@dinan/contracts/examController';
+import { useMutation } from 'react-query';
+import { ExamDetails } from 'components/organisms/ExamDetails/ExamDetails';
 
 type Answer = {
   text: string;
@@ -95,120 +88,15 @@ const ExamForm = ({ examAddress, questions }: ExamFormProps) => {
       {status === 'error' && <p>{JSON.stringify(error)}</p>}
     </div>
   );
-
-  // return (
-  //   <form onSubmit={handleSubmit(onExamSubmit)}>
-  //     {questions.map((q) => (
-  //       <div key={q.id}>
-  //         <p>{q.text}</p>
-  //         <div>
-  //           {q.answers.map((a) => (
-  //             <div key={a.id}>
-  //               <p>{a.text}</p>
-  //               <input
-  //                 type="checkbox"
-  //                 {...register(`answers[].questionId[${q.id}].answers`)}
-  //               />
-  //             </div>
-  //           ))}
-  //         </div>
-  //       </div>
-  //     ))}
-  //     <button type="submit">Submit</button>
-  //   </form>
-  // );
-};
-
-const fetchExam = async (address: string) => {
-  const res = await fetch(`http://localhost:8000/api/v1/exams/${address}`);
-  return res.json();
-};
-
-const getExamQuestions = async (address: string, userAddress: string) => {
-  const res = await fetch(
-    `http://localhost:8000/api/v1/exams/${address}/participate`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${userAddress}`,
-      },
-    }
-  );
-  return res.json();
 };
 
 const Exams: NextPage = () => {
-  const router = useRouter();
-  const { account } = useEthers();
-  const { address } = router.query;
-  const { data, status } = useQuery(['exam', address], () =>
-    fetchExam(address as string)
-  );
-
-  const {
-    data: questions,
-    isSuccess,
-    refetch,
-  } = useQuery({
-    queryKey: ['questions', address],
-    queryFn: () => getExamQuestions(address as string, account as string),
-    enabled: false,
-  });
-
-  const { send: participateInExam, events } = useExamControllerMethod(
-    methods.manageExamParticipation
-  );
-
-  const handleParticipateInExam = () => {
-    participateInExam(data?.exam.address);
-  };
-
-  useEffect(() => {
-    const newExamParticipatiom = events?.find(
-      (e) => e.name === examControllerEvents.newExamParticipation
-    );
-    console.log(events);
-
-    if (!newExamParticipatiom) return;
-
-    const participantAddress = newExamParticipatiom.args[1];
-    console.log({ participantAddress });
-    console.log({ account });
-    if (participantAddress.toLowerCase() !== account?.toLowerCase()) return;
-    console.log('XDD');
-    refetch();
-    console.log(questions);
-  }, [events, account]);
-
   return (
     <>
       <Head>
         <title>Dinan | Exams</title>
       </Head>
-      {status === 'error' && <p>Something went wrong</p>}
-      {status === 'loading' && <p>Loading...</p>}
-      {status === 'success' && (
-        <section>
-          <p>Exam address: {data.exam.address}</p>
-          <p>Exam name: {data.exam.name}</p>
-          <p>Exam symbol: {data.exam.symbol}</p>
-          <p>Exam description: {data.exam.description}</p>
-        </section>
-      )}
-      {!account ? (
-        <p>You need to connect wallet to participate in exam</p>
-      ) : (
-        <Button className="bg-orange-300" onClick={handleParticipateInExam}>
-          Participate in exam
-        </Button>
-      )}
-      {isSuccess && (
-        <ExamForm
-          examAddress={address as string}
-          questions={questions.exam.questions}
-        />
-      )}
+      <ExamDetails />
     </>
   );
 };
