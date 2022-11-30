@@ -48,6 +48,7 @@ const AnswerParticipationForm = ({
         />
       </div>
       <p>{answer.text}</p>
+      <p>{answer.id}</p>
     </li>
   );
 };
@@ -79,24 +80,48 @@ const QuestionParticipationForm = ({
   );
 };
 
+const getInitialParticipantAnswers = (
+  questions: Question[]
+): ParticipantAnswer[] => {
+  return questions.map((q) => ({ questionId: q.id, answerIds: [] }));
+};
+
 export const ExamParticipationForm = ({
   questions,
   examAddress,
 }: ExamParticipationFormProps) => {
-  const [participantAnswers, setParticipantAnswers] =
-    useState<ParticipantAnswer[]>([]);
+  const [participantAnswers, setParticipantAnswers] = useState<
+    ParticipantAnswer[]
+  >(getInitialParticipantAnswers(questions));
 
-  const toggleAnswer = useCallback(
-    (questionId: string, answerId: string, isChecked: boolean) => {
-      // setParticipantAnswers((prevState) => {
-      //   const currentQuestion = questionsAnswers.find(
-      //     (pa) => pa.questionId === questionId
-      //   );
-      //   currentQuestion;
-      // });
-    },
-    []
-  );
+  const toggleAnswer = (
+    questionId: string,
+    answerId: string,
+    isChecked: boolean
+  ) => {
+    // you need to check whether user mark the answer for the first time or change their mind and it's need to be removed
+
+    if (isChecked) {
+      const newParticipantAnswers = participantAnswers.map((pa) => {
+        if (pa.questionId === questionId)
+          return { ...pa, answerIds: [...pa.answerIds, answerId] };
+        return pa;
+      });
+
+      setParticipantAnswers(newParticipantAnswers);
+      return;
+    }
+
+    const newParticipantAnswers = participantAnswers.map((pa) => {
+      if (pa.questionId === questionId)
+        return {
+          ...pa,
+          answerIds: pa.answerIds.filter((answId) => answId !== answerId),
+        };
+      return pa;
+    });
+    setParticipantAnswers(newParticipantAnswers);
+  };
 
   return (
     <div className="w-full flex flex-col justify-center gap-4">
