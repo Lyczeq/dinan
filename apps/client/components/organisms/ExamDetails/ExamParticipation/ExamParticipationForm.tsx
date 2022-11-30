@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { Button } from 'components/atoms/Button';
+import { Loader } from 'components/atoms/Loader';
+import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { QuestionParticipationForm } from './QuestionParticipationForm';
 import type { Question } from '@dinan/types';
 import type { ParticipantAnswer } from '@dinan/types/ExamParticipation';
+import { useSubmitExam } from './useSubmitExam';
 
 type ExamParticipationFormProps = {
   questions: Question[];
@@ -15,12 +19,11 @@ const getInitialParticipantAnswers = (
   return questions.map((q) => ({ questionId: q.id, answerIds: [] }));
 };
 
-const useSubmitExam = (examAddress: string) => {};
-
 export const ExamParticipationForm = ({
   questions,
   examAddress,
 }: ExamParticipationFormProps) => {
+  const { mutate, status, examResult } = useSubmitExam(examAddress);
   const [participantAnswers, setParticipantAnswers] = useState<
     ParticipantAnswer[]
   >(getInitialParticipantAnswers(questions));
@@ -53,6 +56,10 @@ export const ExamParticipationForm = ({
     setParticipantAnswers(newParticipantAnswers);
   };
 
+  const handleSubmitExam = () => {
+    if (status === 'idle') mutate(participantAnswers);
+  };
+
   return (
     <div className="w-full flex flex-col justify-center gap-4">
       <ul className="rounded-md border-secondary bg-slate-100 mt-4 flex flex-col justify-center items-center py-2">
@@ -65,7 +72,30 @@ export const ExamParticipationForm = ({
           />
         ))}
       </ul>
-      <Button className="self-center">Submit exam</Button>
+      <Button
+        className="self-center"
+        onClick={handleSubmitExam}
+        disabled={status !== 'idle'}
+      >
+        Submit exam
+      </Button>
+      <Loader isLoading={status === 'loading'} />
+      <ErrorMessage isError={status === 'error'} />
+      {true && (
+        <div className="self-center">
+          <p>Congratulations, your score is {examResult?.score}!</p>
+          <p>
+            <span>Go to </span>
+            <Link
+              href="my-certificates"
+              className="text-primary border border-white hover:border-b-primary transition-colors"
+            >
+              My Certificates
+            </Link>
+            , to check your newest NFT!
+          </p>
+        </div>
+      )}
     </div>
   );
 };
