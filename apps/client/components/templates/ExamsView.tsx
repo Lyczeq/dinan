@@ -6,9 +6,10 @@ import { TextInput } from 'components/atoms/TextInput';
 import { Table } from 'components/organisms/Table/Table';
 import { useState } from 'react';
 import { QueryStatus } from 'react-query';
+import type { BasicExam } from 'types/basicExam';
 
 type ExamsViewProps = {
-  exams: Exam[] | undefined;
+  exams: BasicExam[] | undefined;
   status: QueryStatus;
   headerActions?: React.ReactNode;
 };
@@ -24,7 +25,7 @@ export const ExamsView = ({
     setSearchInput(e.target.value);
   };
 
-  const filterExams = (exam: Exam) => {
+  const filterExams = (exam: BasicExam) => {
     return (
       exam.address.toLowerCase().includes(searchInput.toLowerCase()) ||
       exam.name.toLowerCase().includes(searchInput.toLowerCase())
