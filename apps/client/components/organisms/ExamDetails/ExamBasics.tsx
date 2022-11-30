@@ -5,6 +5,7 @@ import { Loader } from 'components/atoms/Loader';
 import type { BasicExam } from 'types/basicExam';
 import { CopyIcon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
+
 const fetchExam = async (address: string): Promise<BasicExam> => {
   const response = await fetch(`http://localhost:8000/api/v1/exams/${address}`);
   const exam = await response.json();
@@ -34,7 +35,6 @@ const TextToCopy = ({ text, label }: { text: string; label: string }) => {
     </div>
   );
 };
-
 export const ExamBasics = () => {
   const { exam, status } = useExamDetails();
 
@@ -43,10 +43,10 @@ export const ExamBasics = () => {
       <ErrorMessage isError={status === 'error'} />
       <Loader isLoading={status === 'loading'} />
       {exam && (
-        <section className="px-2 flex w-full justify-center gap-20">
+        <section className="px-2 flex w-full justify-evenly">
           <div>
             <TextToCopy text={exam.address} label="Address" />
-            <TextToCopy text={exam.address} label="Author" />
+            <TextToCopy text={exam.creatorAddress} label="Author" />
           </div>
           <div className="flex flex-col">
             <div
@@ -62,7 +62,7 @@ export const ExamBasics = () => {
               </p>
             </div>
             <p className="font-bold">
-              Description:{' '}
+              Description:
               <span className="font-normal">{exam.description}</span>
             </p>
           </div>

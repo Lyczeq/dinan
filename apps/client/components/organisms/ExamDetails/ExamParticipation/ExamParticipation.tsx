@@ -11,21 +11,31 @@ export const ExamParticipation = () => {
   const { isUserConnected, participateInExam, questions, status } =
     useParticipateInExam(address as string);
 
+  console.log(status);
+
   if (!isUserConnected)
     return (
-      <div>
+      <div className="flex justify-center items-center mt-4 flex-col gap-2">
         <p>You need to connect the wallet to participate in the exam</p>
         <ConnectWalletButton />
       </div>
     );
 
   const handleParticipateInExam = () => {
-    participateInExam(address);
+    if (status === 'idle') {
+      participateInExam(address);
+    }
   };
 
   return (
-    <div>
-      <Button onClick={handleParticipateInExam}>Participate in exam</Button>
+    <div className="w-full flex justify-center mt-4 flex-col">
+      <Button
+        className="self-center"
+        onClick={handleParticipateInExam}
+        disabled={status !== 'idle'}
+      >
+        Participate in exam
+      </Button>
       <ErrorMessage isError={status === 'error'} />
       <Loader isLoading={status === 'loading'} />
       {status === 'success' && <p>{JSON.stringify(questions)}</p>}
