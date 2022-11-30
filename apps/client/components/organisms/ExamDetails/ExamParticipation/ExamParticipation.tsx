@@ -11,6 +11,8 @@ export const ExamParticipation = () => {
   const { isUserConnected, participateInExam, questions, status } =
     useParticipateInExam(address as string);
 
+  const isTransactionProceeding = status !== 'None';
+
   console.log(status);
 
   if (!isUserConnected)
@@ -22,7 +24,7 @@ export const ExamParticipation = () => {
     );
 
   const handleParticipateInExam = () => {
-    if (status === 'idle') {
+    if (!isTransactionProceeding) {
       participateInExam(address);
     }
   };
@@ -32,13 +34,13 @@ export const ExamParticipation = () => {
       <Button
         className="self-center"
         onClick={handleParticipateInExam}
-        disabled={status !== 'idle'}
+        disabled={isTransactionProceeding}
       >
         Participate in exam
       </Button>
-      <ErrorMessage isError={status === 'error'} />
-      <Loader isLoading={status === 'loading'} />
-      {status === 'success' && <p>{JSON.stringify(questions)}</p>}
+      <ErrorMessage isError={status === 'Exception'} />
+      <Loader isLoading={status === 'Mining'} />
+      {status === 'Success' && <p>{JSON.stringify(questions)}</p>}
     </div>
   );
 };

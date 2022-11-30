@@ -54,8 +54,6 @@ export const Form = ({
     update(questionIndex, currentQuestion);
   };
 
-  console.log(errors.questions);
-
   return (
     <section className="rounded-tl-md rounded-bl-md min-h-full pb-4 mb-16 w-full overflow-y-auto">
       <div className="w-4/5 mx-auto">

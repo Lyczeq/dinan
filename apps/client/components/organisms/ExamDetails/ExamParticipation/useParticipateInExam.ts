@@ -2,11 +2,11 @@ import {
   methods,
   events as examControllerEvents,
 } from '@dinan/contracts/examController';
-import { useEthers } from '@usedapp/core';
+import { TransactionState, TransactionStatus, useEthers } from '@usedapp/core';
 import { LogDescription } from 'ethers/lib/utils';
 import { useExamControllerMethod } from 'hooks/useExamControllerMethod';
 import { useCallback, useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, QueryStatus } from 'react-query';
 
 const getExamQuestions = async (address: string, userAddress: string) => {
   const res = await fetch(
@@ -24,10 +24,20 @@ const getExamQuestions = async (address: string, userAddress: string) => {
   return exam.exam.questions;
 };
 
+const handleStatus = (
+  transactionState: TransactionState,
+  callStatus: QueryStatus
+): TransactionState => {
+  if (transactionState === 'Success' && callStatus === 'success')
+    return 'Success';
+
+  return transactionState;
+};
+
 export const useParticipateInExam = (address: string) => {
   const { account } = useEthers();
 
-  const { send, events } = useExamControllerMethod(
+  const { send, events, state } = useExamControllerMethod(
     methods.manageExamParticipation
   );
 
@@ -65,7 +75,7 @@ export const useParticipateInExam = (address: string) => {
 
   return {
     participateInExam: send,
-    status,
+    status: handleStatus(state.status, status),
     questions,
     isUserConnected: account,
   };
