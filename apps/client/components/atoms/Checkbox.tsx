@@ -1,13 +1,14 @@
 import React from 'react';
 
 type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label?: string;
+  className?: string;
 };
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, ...props }, ref) => {
+  ({ label, className = '', ...props }, ref) => {
     return (
-      <div className="flex gap-2 mb-4 mt-1 w-full">
+      <div className={`flex gap-2 mb-4 mt-1 w-full ${className}`}>
         <label className="text-lightGrey">{label}</label>
         <input
           type="checkbox"
