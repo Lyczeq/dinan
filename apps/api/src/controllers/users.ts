@@ -50,6 +50,7 @@ const simplifyNFTData = (nft: Nft): Nft => {
 const fetchUserNfts = async (userAddress: string): Promise<Nft[]> => {
   const url = `${env.ALCHEMY_HTTPS_LINK}/getNFTs/?owner=${userAddress}`;
   const response = await fetch(url);
+  if (response.status !== 200) throw new Error();
   const data = await response.json();
   return data.ownedNfts;
 };
@@ -57,26 +58,38 @@ const fetchUserNfts = async (userAddress: string): Promise<Nft[]> => {
 export const getUserCertificates = async (req: Request, res: Response) => {
   const userAddress = req.params.address;
 
-  const ownedNfts = await fetchUserNfts(userAddress);
-  console.log(ownedNfts);
-  const examAddresses = (await prisma.exam.findMany()).map(exam =>
-    exam.address.toLowerCase()
-  );
+  if (!userAddress) {
+    res.sendStatus(400);
+    return;
+  }
 
-  const isExamContract = (examAddresses: string[], nft: Nft): boolean => {
-    return examAddresses.includes(nft.contract.address.toLowerCase());
-  };
+  try {
+    const ownedNfts = await fetchUserNfts(userAddress);
 
-  const filteredNfts = ownedNfts.reduce((nftAccumulator: Nft[], currentNft) => {
-    if (isExamContract(examAddresses, currentNft)) {
-      const newNft = simplifyNFTData(currentNft);
-      return [...nftAccumulator, newNft];
-    }
-    return [...nftAccumulator];
-  }, []);
+    const examAddresses = (await prisma.exam.findMany()).map(exam =>
+      exam.address.toLowerCase()
+    );
 
-  res.statusCode = 200;
-  res.send({ certificates: filteredNfts });
+    const isExamContract = (examAddresses: string[], nft: Nft): boolean => {
+      return examAddresses.includes(nft.contract.address.toLowerCase());
+    };
+
+    const filteredNfts = ownedNfts.reduce(
+      (nftAccumulator: Nft[], currentNft) => {
+        if (isExamContract(examAddresses, currentNft)) {
+          const newNft = simplifyNFTData(currentNft);
+          return [...nftAccumulator, newNft];
+        }
+        return [...nftAccumulator];
+      },
+      []
+    );
+
+    res.statusCode = 200;
+    res.send({ certificates: filteredNfts });
+  } catch (error) {
+    res.sendStatus(400);
+  }
 };
 
 const fetchNFTMetadata = async (contractAddress: string, tokenId: string) => {
@@ -104,9 +117,15 @@ type GetNFTMetadataParams = z.infer<typeof getNFTMetadataParams>;
 type GetNFTMetadataQuery = z.infer<typeof getNFTMetadataQuery>;
 
 export const getNFTMetadata = async (req: Request, res: Response) => {
-  if (!getNFTMetadataParams.safeParse(req.params).success) res.sendStatus(400);
+  if (!getNFTMetadataParams.safeParse(req.params).success) {
+    res.sendStatus(400);
+    return;
+  }
 
-  if (!getNFTMetadataQuery.safeParse(req.query).success) res.sendStatus(400);
+  if (!getNFTMetadataQuery.safeParse(req.query).success) {
+    res.sendStatus(400);
+    return;
+  }
 
   try {
     const params = req.params as GetNFTMetadataParams;

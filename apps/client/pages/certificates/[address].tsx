@@ -33,8 +33,6 @@ const examScore = (base64img: string) => {
 
   const svg = Buffer.from(base64img.substring(26), 'base64').toString();
   const a = svg.match(scoreRegex);
-  console.log(svg);
-  console.log(a);
   return a ? a[0] : 'There was a problem when reading score attribute';
 };
 
