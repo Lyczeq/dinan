@@ -30,10 +30,13 @@ type CertificateDetailsProps = {
 
 const examScore = (base64img: string) => {
   const scoreRegex = new RegExp(/Score (\b([0-9]|[1-9][0-9]|100)\b\%)/);
-
   const svg = Buffer.from(base64img.substring(26), 'base64').toString();
-  const a = svg.match(scoreRegex);
-  return a ? a[0] : 'There was a problem when reading score attribute';
+  const matchedRegex = svg.match(scoreRegex);
+
+  // you need to choose at(1) because it returns score number with % symbol
+  return matchedRegex
+    ? matchedRegex.at(1)
+    : 'There was a problem when reading score attribute';
 };
 
 const CertificateDetails = ({ nft }: CertificateDetailsProps) => {
