@@ -87,7 +87,7 @@ export const ExamParticipationForm = ({
           <p>
             <span>Go to </span>
             <Link
-              href="my-certificates"
+              href="certificates"
               className="text-primary border border-white hover:border-b-primary transition-colors"
             >
               My Certificates
