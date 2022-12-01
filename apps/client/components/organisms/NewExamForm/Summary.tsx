@@ -3,7 +3,7 @@ import {
   UseFormHandleSubmit,
   UseFormWatch,
 } from 'react-hook-form';
-import { NewExam } from 'types/newExam';
+import { NewExam } from '@dinan/types/NewExam/index';
 import { useAddExam } from './useAddExam';
 import { Button } from 'components/atoms/Button';
 
@@ -49,8 +49,9 @@ export const Summary = ({
   };
 
   const onSubmitExam = (newExam: NewExam) => {
-    console.log({ newExam });
-    addNewExam(newExam);
+    if (!statusMessage()) {
+      addNewExam(newExam);
+    }
   };
 
   return (
@@ -58,6 +59,7 @@ export const Summary = ({
       <Button
         className="self-center px-8 my-4"
         onClick={handleSubmitExam(onSubmitExam)}
+        disabled={!!statusMessage()}
       >
         Add Exam
       </Button>
