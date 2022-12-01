@@ -1,11 +1,10 @@
-import type { Exam } from '@dinan/types/Exam';
+import { useState } from 'react';
+import { QueryStatus } from 'react-query';
 import { ErrorMessage } from 'components/atoms/ErrorMessage';
 import { ExamTile } from 'components/atoms/ExamTile';
 import { Loader } from 'components/atoms/Loader';
 import { TextInput } from 'components/atoms/TextInput';
 import { Table } from 'components/organisms/Table/Table';
-import { useState } from 'react';
-import { QueryStatus } from 'react-query';
 import type { BasicExam } from 'types/basicExam';
 
 type ExamsViewProps = {
