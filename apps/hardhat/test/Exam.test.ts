@@ -188,7 +188,7 @@ describe('Exam tests', () => {
 
       expect(tokenUriData.name).equals(examName);
       expect(tokenUriData.description).equals(EXAM_DESCRIPTION);
-      expect(svg).includes(EXAM_SCORE);
+      expect(svg).includes(`Score ${EXAM_SCORE}`);
       // case doesn't matter in addresses
       expect(svg).includes(participantAddress.toLocaleLowerCase());
     });

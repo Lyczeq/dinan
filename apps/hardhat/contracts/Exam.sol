@@ -57,7 +57,7 @@ contract Exam is ERC721URIStorage, Ownable {
                 "<tspan x='50%' y='50%' font-size='14px'>",
                 stringifiedAddress,
                 "</tspan>",
-                "<tspan x='50%' y='75%' font-size='40px'>",
+                "<tspan x='50%' y='75%' font-size='40px'> Score ",
                 Strings.toString(_score),
                 "%</tspan>"
                 "</text></svg>"
