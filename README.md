@@ -1,10 +1,24 @@
 # Dinan
 
-## Description
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#1-about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#2-technologies">Technologies</a>
+    </li>
+  </ol>
+</details>
+
+<br/>
+
+## 1. About The Project
 
 **Dinan** is an application for creating your own exams and participating in those created by other users. By participating to the exam, you will get a ⭐**NFT**⭐ no matter what your score is. **NFT** is a proven record in the blockchain, so nobody can fake it or change your score.
 
-## Technologies:
+## 2. Technologies:
 
 - Frontend:
 
