@@ -13,10 +13,13 @@
       <a href="#3-contact">Prerequisites</a>
     </li>
     <li>
-      <a href="#4-contact">How to run</a>
+      <a href="#4-how-to-run">How to run</a>
     </li>
     <li>
-      <a href="#5-contact">Contact</a>
+      <a href="#5-further-development">Further development</a>
+    </li>
+    <li>
+      <a href="#6-contact">Contact</a>
     </li>
   </ol>
 </details>
@@ -78,7 +81,17 @@ Coming soon
 
 Coming soon
 
-## 5. Contact
+## 5. Further development
+
+- Add possibility to set pass threshold
+- Add possibility to set a maximum time for an exam
+- Improve NFT image
+- Add more Unit, Integration and E2E tests
+- Add Github Actions for testing and deploying
+- Deploy the application
+- Move frontend app to Next13
+
+## 6. Contact
 
 If you want to contact me, there's my e-mail:
 jakub.lyczko1@gmail.com
