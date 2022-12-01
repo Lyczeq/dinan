@@ -2,7 +2,12 @@ import { Request, Response } from 'express';
 import prisma from '../prisma';
 import { ContractHandler } from '../websockets';
 import { calculateScore, exclude, getPercentageScore } from './helpers';
-import { FullExam, ParticipantAnswer } from './types';
+import { FullExam } from './types';
+import {
+  ParticipantAnswer,
+  participantAnswerSchema,
+} from '@dinan/types/ExamParticipation';
+import z from 'zod';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -96,10 +101,12 @@ export const getExamsQuestionsAndAnswers = async (
   req: Request,
   res: Response
 ) => {
-  const participantAddress: string = req.headers.authorization
-    ?.split(' ')
-    .at(1)!;
+  const participantAddress = req.headers.authorization?.split(' ').at(1);
   const examAddress = req.params.address;
+  if (!(participantAddress || examAddress)) {
+    res.sendStatus(400);
+    return;
+  }
 
   try {
     const examParticipation = await prisma.examParticipation.findFirst({
@@ -115,6 +122,12 @@ export const getExamsQuestionsAndAnswers = async (
       },
     });
     if (!examParticipation) return res.sendStatus(404);
+
+    if (examParticipation.hasParticipantStarted) {
+      res.sendStatus(401);
+      res.statusMessage = 'You have already started that exam';
+      return;
+    }
 
     await prisma.examParticipation.update({
       where: {
@@ -166,12 +179,30 @@ export const compareParticipantAnswers = async (
   req: Request,
   res: Response
 ) => {
-  const participantAddress = req.headers.authorization
-    ?.split(' ')
-    .at(1) as string;
+  const participantAddress = req.headers.authorization?.split(' ').at(1);
 
   const examAddress = req.params.address;
-  const participantAnswers: ParticipantAnswer[] = req.body.answers;
+
+  if (!(participantAddress || examAddress)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  const participantAnswers = req.body.answers;
+
+  if (!Array.isArray(participantAnswers)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  if (
+    !participantAnswers.every(
+      pa => participantAnswerSchema.safeParse(pa).success
+    )
+  ) {
+    res.sendStatus(400);
+    return;
+  }
 
   try {
     const examParticipation = await prisma.examParticipation.findFirst({
@@ -202,7 +233,7 @@ export const compareParticipantAnswers = async (
     const score = calculateScore(examQuestions, participantAnswers);
     const percentageScore = getPercentageScore(examQuestions.length, score);
 
-    const updatedExamParticipation = await prisma.examParticipation.update({
+    await prisma.examParticipation.update({
       where: {
         id: examParticipation.id,
       },
@@ -214,7 +245,7 @@ export const compareParticipantAnswers = async (
 
     const txHash = await ContractHandler.sendScoreAndMakeNFT(
       examAddress,
-      participantAddress,
+      participantAddress as string,
       percentageScore
     );
 
