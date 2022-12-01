@@ -1,15 +1,16 @@
 import Image from 'next/image';
-import type { Nft } from '@dinan/types/Nft';
 import Link from 'next/link';
-import { useEthers } from '@usedapp/core';
+import type { Nft } from '@dinan/types/Nft';
 
 type CertificateTileProps = {
   cert: Nft;
+  ownerAddress: string | undefined;
 };
 
-export const CertificateTile = ({ cert }: CertificateTileProps) => {
-  const { account } = useEthers();
-
+export const CertificateTile = ({
+  cert,
+  ownerAddress,
+}: CertificateTileProps) => {
   return (
     <div className="bg-slate-200 rounded-md hover:scale-105 transition-transform hover:cursor-pointer">
       <Link
@@ -18,7 +19,7 @@ export const CertificateTile = ({ cert }: CertificateTileProps) => {
           query: {
             address: cert.contract.address,
             tokenId: cert.id.tokenId,
-            ownerAddress: account,
+            ownerAddress,
           },
         }}
       >
