@@ -14,9 +14,9 @@ export const questionSchema = z.object({
 });
 
 export const examSchema = z.object({
-  name: z.string().trim().min(5).max(15),
+  name: z.string().trim().min(5).max(20),
   symbol: z.string().trim().min(3).max(5),
-  description: z.string().trim().min(10).max(30),
+  description: z.string().trim().min(10).max(50),
   questions: z
     .array(questionSchema)
     .min(2, { message: 'You have to specify at least two questions' })

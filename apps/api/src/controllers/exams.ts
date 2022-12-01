@@ -3,11 +3,7 @@ import prisma from '../prisma';
 import { ContractHandler } from '../websockets';
 import { calculateScore, exclude, getPercentageScore } from './helpers';
 import { FullExam } from './types';
-import {
-  ParticipantAnswer,
-  participantAnswerSchema,
-} from '@dinan/types/ExamParticipation';
-import z from 'zod';
+import { participantAnswerSchema } from '@dinan/types/ExamParticipation';
 
 export const getAllExams = async (req: Request, res: Response) => {
   try {
@@ -15,6 +11,7 @@ export const getAllExams = async (req: Request, res: Response) => {
     res.statusCode = 200;
     return res.json({ exams });
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 };

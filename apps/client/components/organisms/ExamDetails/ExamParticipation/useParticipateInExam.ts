@@ -34,6 +34,8 @@ const handleStatus = (
   return transactionState;
 };
 
+// TODO: add an endpoint to check whether user has participated in the exam, if so return a NFT
+
 export const useParticipateInExam = (address: string) => {
   const { account } = useEthers();
 

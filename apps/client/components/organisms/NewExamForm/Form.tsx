@@ -40,7 +40,7 @@ export const Form = ({
   };
 
   const addAnswer = (questionIndex: number) => {
-    const currentQuestion = getExamValues('questions')[0];
+    const currentQuestion = getExamValues('questions')[questionIndex];
 
     update(questionIndex, {
       text: currentQuestion.text,
