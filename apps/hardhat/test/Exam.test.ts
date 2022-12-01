@@ -17,8 +17,6 @@ async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
 
   const Exam = await ethers.getContractFactory('Exam');
-  // const creatorAddress = owner.address;
-  // const mockExamControllerAddress = owner.address;
 
   const exam = await Exam.deploy(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION);
 
@@ -75,8 +73,9 @@ describe('Exam tests', () => {
     });
 
     it('Expects a revert when trying to set the score twice', async () => {
-      const { exam, participantAddress, backendSigner } =
-        await loadFixture(deployExamFixture);
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
 
       await exam.participateInExam(participantAddress);
 
