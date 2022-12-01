@@ -60,6 +60,39 @@ describe('Exam tests', () => {
       expect(hasStarted).equals(true);
     });
 
+    it('Expects a revert when trying to participate to the exam twice', async () => {
+      const { exam, participantAddress, otherAccount } = await loadFixture(
+        deployExamFixture
+      );
+
+      await exam.participateInExam(participantAddress);
+
+      await expect(
+        exam.participateInExam(participantAddress)
+      ).to.be.revertedWith(
+        'The user with this address has already started the exam'
+      );
+    });
+
+    it('Expects a revert when trying to set the score twice', async () => {
+      const { exam, participantAddress, backendSigner } =
+        await loadFixture(deployExamFixture);
+
+      await exam.participateInExam(participantAddress);
+
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(88, participantAddress);
+
+      await expect(
+        exam
+          .connect(backendSigner)
+          .saveParticipantScore(100, participantAddress)
+      ).to.be.revertedWith(
+        'The user with this address has already finished the exam'
+      );
+    });
+
     it('Expects revert when adding a participant because of incorrect sender address', async () => {
       const { exam, participantAddress, otherAccount } = await loadFixture(
         deployExamFixture

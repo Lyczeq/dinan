@@ -91,18 +91,28 @@ contract Exam is ERC721URIStorage, Ownable {
         _tokenIds.increment();
     }
 
-    function participateInExam(address participantAddress) external onlyOwner {
-        partcipantsScores[participantAddress] = ExamParticipation(
+    function participateInExam(address _participantAddress) external onlyOwner {
+        require(
+            partcipantsScores[_participantAddress].hasStarted == false,
+            "The user with this address has already started the exam"
+        );
+
+        partcipantsScores[_participantAddress] = ExamParticipation(
             false,
             0,
             true
         );
     }
 
-    function saveParticipantScore(uint8 _score, address _participantAddress)
-        external
-        isBackendAddress
-    {
+    function saveParticipantScore(
+        uint8 _score,
+        address _participantAddress
+    ) external isBackendAddress {
+        require(
+            partcipantsScores[_participantAddress].isFinished == false,
+            "The user with this address has already finished the exam"
+        );
+
         partcipantsScores[_participantAddress] = ExamParticipation(
             true,
             _score,
@@ -119,11 +129,9 @@ contract Exam is ERC721URIStorage, Ownable {
         _; // function code
     }
 
-    function getParticipantResult(address _userAddress)
-        external
-        view
-        returns (ExamParticipation memory)
-    {
+    function getParticipantResult(
+        address _userAddress
+    ) external view returns (ExamParticipation memory) {
         require(
             partcipantsScores[_userAddress].hasStarted,
             "There is no participant with this address."
@@ -131,11 +139,7 @@ contract Exam is ERC721URIStorage, Ownable {
         return partcipantsScores[_userAddress];
     }
 
-    function _transfer(
-        address,
-        address,
-        uint256
-    ) internal virtual override {
+    function _transfer(address, address, uint256) internal virtual override {
         revert("You cannot transfer Exam tokens");
     }
 }
