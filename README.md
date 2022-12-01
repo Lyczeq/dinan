@@ -90,6 +90,7 @@ Coming soon
 - Add Github Actions for testing and deploying
 - Deploy the application
 - Move frontend app to Next13
+- Setup shared Eslint, Prettier and Husky
 
 ## 6. Contact
 
