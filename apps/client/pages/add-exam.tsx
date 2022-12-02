@@ -14,7 +14,7 @@ const AddExam: NextPage = () => {
             Add a new exam
           </h2>
           <p className="text-primary text-xl font-bold">
-            Specify the name, symbol and questions with answers
+            Specify the name, symbol, description and questions with answers
           </p>
         </header>
         <ExamForm />

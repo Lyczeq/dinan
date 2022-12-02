@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form';
 import type { NewExam } from '@dinan/types/newExam';
 import { initialAnswer, initialQuestion } from './helpers';
+import { ErrorText } from 'components/atoms/ErrorText';
 
 type FormProps = {
   register: UseFormRegister<NewExam>;
@@ -111,7 +112,7 @@ export const Form = ({
           >
             Add question
           </Button>
-          {errors.questions?.message && <p>{errors.questions?.message}</p>}
+          <ErrorText errorMessage={errors.questions?.message} />
         </div>
       </div>
     </section>

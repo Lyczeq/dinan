@@ -31,6 +31,13 @@ export const QuestionForm = React.memo(
   }: QuestionFormProps) => {
     const questionErrorMessage = errors?.text?.message;
 
+    const handleAddNewAnswer = (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (question.answers.length <4) {
+        addAnswer(questionIndex);
+      }
+      event.preventDefault();
+    };
+
     return (
       <div className="w-full border-2 border-inputFocus rounded-md py-4 mb-4">
         <div className="flex justify-center flex-col w-9/10 mx-auto">
@@ -61,7 +68,8 @@ export const QuestionForm = React.memo(
             <div className="flex gap-4 items-center">
               <Button
                 className="flex gap-1 w-max items-center"
-                onClick={() => addAnswer(questionIndex)}
+                disabled={question.answers.length >= 4}
+                onClick={handleAddNewAnswer}
                 icon={<PlusIcon className="w-5 h-5" />}
               >
                 Add answer
