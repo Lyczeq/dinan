@@ -1,9 +1,10 @@
 import { useRouter } from 'next/navigation';
 import copy from 'copy-to-clipboard';
 import { Button } from './Button';
+import { Exam } from '@dinan/types';
 
 type ExamTileProps = {
-  exam?: any;
+  exam: Exam;
 };
 
 export const ExamTile = ({ exam }: ExamTileProps) => {
