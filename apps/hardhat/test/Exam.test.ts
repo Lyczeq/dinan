@@ -17,8 +17,6 @@ async function deployExamFixture() {
   const [owner, otherAccount] = await ethers.getSigners();
 
   const Exam = await ethers.getContractFactory('Exam');
-  // const creatorAddress = owner.address;
-  // const mockExamControllerAddress = owner.address;
 
   const exam = await Exam.deploy(EXAM_NAME, EXAM_SYMBOL, EXAM_DESCRIPTION);
 
@@ -58,6 +56,40 @@ describe('Exam tests', () => {
       expect(isFinished).equals(false);
       expect(score).equals(0);
       expect(hasStarted).equals(true);
+    });
+
+    it('Expects a revert when trying to participate to the exam twice', async () => {
+      const { exam, participantAddress, otherAccount } = await loadFixture(
+        deployExamFixture
+      );
+
+      await exam.participateInExam(participantAddress);
+
+      await expect(
+        exam.participateInExam(participantAddress)
+      ).to.be.revertedWith(
+        'The user with this address has already started the exam'
+      );
+    });
+
+    it('Expects a revert when trying to set the score twice', async () => {
+      const { exam, participantAddress, backendSigner } = await loadFixture(
+        deployExamFixture
+      );
+
+      await exam.participateInExam(participantAddress);
+
+      await exam
+        .connect(backendSigner)
+        .saveParticipantScore(88, participantAddress);
+
+      await expect(
+        exam
+          .connect(backendSigner)
+          .saveParticipantScore(100, participantAddress)
+      ).to.be.revertedWith(
+        'The user with this address has already finished the exam'
+      );
     });
 
     it('Expects revert when adding a participant because of incorrect sender address', async () => {
@@ -156,7 +188,7 @@ describe('Exam tests', () => {
 
       expect(tokenUriData.name).equals(examName);
       expect(tokenUriData.description).equals(EXAM_DESCRIPTION);
-      expect(svg).includes(EXAM_SCORE);
+      expect(svg).includes(`Score ${EXAM_SCORE}`);
       // case doesn't matter in addresses
       expect(svg).includes(participantAddress.toLocaleLowerCase());
     });

@@ -10,7 +10,7 @@
       <a href="#2-technologies">Technologies</a>
     </li>
     <li>
-      <a href="#3-contact">Prerequisites</a>
+      <a href="#3-prerequisites">Prerequisites</a>
     </li>
     <li>
       <a href="#4-how-to-run">How to run</a>
@@ -50,11 +50,18 @@
   - Typescript
   - Expressjs
   - Prisma
+  - PostgreSQL
+  - Docker
 
   <div>
       <img alt="Typescript" width="26px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png" />
       <img  alt="Express" width="26px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/express/express.png" />
-      <img  alt="Prisma" width="50px" src="https://nextjs.org/_next/image?url=https%3A%2F%2Fwww.datocms-assets.com%2F35255%2F1665880279-sponsor-logo-prisma.png&w=750&q=75" />
+      <img  alt="Prisma" width="50px" src="https://nextjs.org/_next/image?url=https%3A%2F%2Fwww.datocms-assets.com%2F35255%2F1665880279-sponsor-logo-prisma.png&w=750&q=75" />      
+      <img  alt="Postgresql" width="26px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1985px-Postgresql_elephant.svg.png" />
+      <img  alt="Docker" width="100px" src="https://www.docker.com/wp-content/uploads/2022/03/horizontal-logo-monochromatic-white.png" />
+
+      
+      
   </div>
 
 - Blockchain:

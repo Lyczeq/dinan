@@ -16,11 +16,12 @@ export const Button = ({
 }: ButtonProps) => {
   const classnames = classNames(className, {
     'cursor-not-allowed bg-lightGrey': props.disabled,
+    'bg-primary': !props.disabled,
   });
 
   return (
     <button
-      className={`text-white rounded-md py-2 px-2 bg-primary  ${classnames}`}
+      className={` text-white rounded-md py-2 px-2 ${classnames}`}
       onClick={onClick}
       {...props}
     >

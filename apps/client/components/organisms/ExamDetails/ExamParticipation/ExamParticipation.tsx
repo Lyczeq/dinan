@@ -31,7 +31,7 @@ export const ExamParticipation = () => {
   return (
     <div className="w-full flex justify-center mt-4 flex-col">
       <Button
-        className="self-center"
+        className={`self-center`}
         onClick={handleParticipateInExam}
         disabled={isTransactionProceeding}
       >
@@ -39,7 +39,7 @@ export const ExamParticipation = () => {
       </Button>
       <ErrorMessage isError={status === 'Exception'} />
       <Loader isLoading={status === 'Mining'} />
-      {status === 'Success' && (
+      {questions && (
         <ExamParticipationForm
           questions={questions}
           examAddress={address as string}

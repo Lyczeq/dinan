@@ -1,8 +1,8 @@
 import z from 'zod';
 
-const participantAnswer = z.object({
+export const participantAnswerSchema = z.object({
   questionId: z.string(),
   answerIds: z.array(z.string()),
 });
 
-export type ParticipantAnswer = z.infer<typeof participantAnswer>;
+export type ParticipantAnswer = z.infer<typeof participantAnswerSchema>;

@@ -73,7 +73,7 @@ export const ExamParticipationForm = ({
         ))}
       </ul>
       <Button
-        className="self-center"
+        className={`self-center ${status !== 'idle' && 'bg-lightGrey'}`}
         onClick={handleSubmitExam}
         disabled={status !== 'idle'}
       >
@@ -81,16 +81,16 @@ export const ExamParticipationForm = ({
       </Button>
       <Loader isLoading={status === 'loading'} />
       <ErrorMessage isError={status === 'error'} />
-      {true && (
+      {examResult && (
         <div className="self-center">
-          <p>Congratulations, your score is {examResult?.score}!</p>
+          <p>Congratulations, your score is {examResult.score}!</p>
           <p>
-            <span>Go to </span>
+            <span>Go to your </span>
             <Link
-              href="certificates"
+              href="/certificates"
               className="text-primary border border-white hover:border-b-primary transition-colors"
             >
-              My Certificates
+              Certificates
             </Link>
             , to check your newest NFT!
           </p>
