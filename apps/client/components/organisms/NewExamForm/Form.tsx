@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form';
 import type { NewExam } from '@dinan/types/newExam';
 import { initialAnswer, initialQuestion } from './helpers';
+import { ErrorText } from 'components/atoms/ErrorText';
 
 type FormProps = {
   register: UseFormRegister<NewExam>;
@@ -58,35 +59,35 @@ export const Form = ({
     <section className="rounded-tl-md rounded-bl-md min-h-full pb-4 mb-16 w-full overflow-y-auto">
       <div className="w-4/5 mx-auto">
         <form className="flex flex-col items-start gap-4 mt-4 ">
-          <FormGroup label="Name">
-            <TextInput
-              type="text"
-              placeholder="Name"
-              className="w-2/3"
-              {...register('name')}
-            />
-            {errors.name?.message ? <p>{errors.name?.message}</p> : null}
-          </FormGroup>
-          <FormGroup label="Symbol">
-            <TextInput
-              type="text"
-              placeholder="Symbol"
-              {...register('symbol')}
-              className="w-2/3"
-            />
-            {errors.symbol?.message ? <p>{errors.symbol?.message}</p> : null}
-          </FormGroup>
-          <FormGroup label="Description">
-            <TextInput
-              type="text"
-              placeholder="Description"
-              className="w-2/3"
-              {...register('description')}
-            />
-            {errors.description?.message ? (
-              <p>{errors.description?.message}</p>
-            ) : null}
-          </FormGroup>
+          <div className="self-center flex flex-col gap-4 w-full">
+            <FormGroup label="Name">
+              <TextInput
+                type="text"
+                placeholder="Name"
+                className="w-2/3"
+                errorMessage={errors.name?.message}
+                {...register('name')}
+              />
+            </FormGroup>
+            <FormGroup label="Symbol">
+              <TextInput
+                type="text"
+                placeholder="Symbol"
+                className="w-2/3"
+                errorMessage={errors.symbol?.message}
+                {...register('symbol')}
+              />
+            </FormGroup>
+            <FormGroup label="Description">
+              <TextInput
+                type="text"
+                placeholder="Description"
+                className="w-2/3"
+                errorMessage={errors.description?.message}
+                {...register('description')}
+              />
+            </FormGroup>
+          </div>
           <div className="w-full self-center">
             {fields.map((question, questionIndex) => (
               <QuestionForm
@@ -111,7 +112,7 @@ export const Form = ({
           >
             Add question
           </Button>
-          {errors.questions?.message && <p>{errors.questions?.message}</p>}
+          <ErrorText errorMessage={errors.questions?.message} />
         </div>
       </div>
     </section>
