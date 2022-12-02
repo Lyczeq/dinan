@@ -23,7 +23,7 @@ type WrapperProps = {
 const Wrapper = ({ children }: WrapperProps) => (
   <div className="max-w-screen-2xl mx-auto bg-white flex flex-col items-center">
     <Header />
-    <div className="min-h-screen w-full mb-20">{children}</div>
+    <div className="min-h-[calc(3/4*100vh)] w-full mb-20">{children}</div>
     <Footer />
   </div>
 );
