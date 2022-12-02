@@ -65,7 +65,7 @@ export const Summary = ({
       <Button
         className="self-center px-8 my-4"
         onClick={handleSubmitExam(onSubmitExam)}
-        disabled={!!statusMessage() || !!isUserConnected}
+        disabled={!!statusMessage() || !isUserConnected}
       >
         Add Exam
       </Button>
