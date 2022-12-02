@@ -25,6 +25,7 @@ export class ContractHandler {
     examControllerContract.on(
       events.newExamCreation,
       async (newExamAddress: string, creatorAddress: string) => {
+        console.log('add exam', newExamAddress, creatorAddress);
         try {
           await prisma.exam.create({
             data: {
@@ -32,7 +33,9 @@ export class ContractHandler {
               creatorAddress: creatorAddress,
             },
           });
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       }
     );
   }
@@ -48,8 +51,9 @@ export class ContractHandler {
     examControllerContract.on(
       events.newExamParticipation,
       async (examAddress: string, participantAddress: string) => {
+        console.log('exam participation', examAddress, participantAddress);
         try {
-          const upsertParticipant = await prisma.participant.upsert({
+          await prisma.participant.upsert({
             include: {
               examParticipations: true,
             },
@@ -76,7 +80,9 @@ export class ContractHandler {
               },
             },
           });
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       }
     );
   }
