@@ -13,7 +13,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     });
 
     return (
-      <div className="w-full flex flex-col items-end">
+      <div className="flex flex-col items-end">
         <input
           type="text"
           className={`md:w-40 xl:w-96 border-secondary border-2 p-2 rounded-md focus:outline-none focus:border-inputFocus text-lightGrey placeholder:text-placeholderGrey ${classnames} `}
