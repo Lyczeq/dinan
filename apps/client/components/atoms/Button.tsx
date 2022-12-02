@@ -21,7 +21,7 @@ export const Button = ({
 
   return (
     <button
-      className={` text-white rounded-md py-2 px-2 ${classnames}`}
+      className={`text-white rounded-md py-2 px-2 ${classnames}`}
       onClick={onClick}
       {...props}
     >
