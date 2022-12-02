@@ -27,13 +27,13 @@ export const AnswerForm = ({
       <div className="flex gap-2 flex-row w-full justify-center">
         <TextAreaInput
           placeholder={`Answer ${answerIndex + 1}`}
+          errorMessage={textError}
           {...register(
             `questions.${questionIndex}.answers.${answerIndex}.text`
           )}
         />
-        {textError && <p>{textError}</p>}
         <TrashIcon
-          className="w-8 h-7 b hover:bg-red-600 hover:text-white text-red-600 border-none  border rounded-md px-1 transition-colors"
+          className="w-8 h-7 b hover:bg-error hover:text-white text-error border-none  border rounded-md px-1 transition-colors"
           onClick={() => removeAnswer(questionIndex, answerIndex)}
         />
       </div>

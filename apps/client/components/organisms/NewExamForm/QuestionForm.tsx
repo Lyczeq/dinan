@@ -3,6 +3,7 @@ import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { TextAreaInput } from 'components/atoms/TextAreaInput';
 import { Button } from 'components/atoms/Button';
+import { ErrorText } from 'components/atoms/ErrorText';
 import { AnswerForm } from './AnswerForm';
 import type { NewExam, NewQuestion } from '@dinan/types/newExam';
 
@@ -28,7 +29,7 @@ export const QuestionForm = React.memo(
     removeAnswer,
     errors,
   }: QuestionFormProps) => {
-    const questionErrror = errors?.text?.message;
+    const questionErrorMessage = errors?.text?.message;
 
     return (
       <div className="w-full border-2 border-inputFocus rounded-md py-4 mb-4">
@@ -37,11 +38,11 @@ export const QuestionForm = React.memo(
             <TextAreaInput
               placeholder={`Question ${questionIndex + 1}`}
               className="border-amber-"
+              errorMessage={questionErrorMessage}
               {...register(`questions.${questionIndex}.text`)}
             />
-            {questionErrror && <p>{questionErrror}</p>}
             <TrashIcon
-              className="w-8 h-7 b hover:bg-red-600 hover:text-white text-red-600 border-none  border rounded-md px-1 transition-colors"
+              className="w-8 h-7 b hover:bg-error hover:text-white text-error border-none  border rounded-md px-1 transition-colors"
               onClick={() => removeQuestion(questionIndex)}
             />
           </div>
@@ -65,7 +66,7 @@ export const QuestionForm = React.memo(
               >
                 Add answer
               </Button>
-              {errors?.answers?.message && <p>{errors?.answers?.message}</p>}
+              <ErrorText errorMessage={errors?.answers?.message} />
             </div>
           </>
         </div>
@@ -73,4 +74,5 @@ export const QuestionForm = React.memo(
     );
   }
 );
+
 QuestionForm.displayName = 'QuestionForm';
