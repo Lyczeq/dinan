@@ -9,6 +9,7 @@ module.exports = {
         inputFocus: '#fed7aa',
         lightGrey: '#6b7280',
         placeholderGrey: '#9ca3af',
+        error: '#dc2626',
       },
       fontFamily: {
         lobster: ['lobster', 'arial', 'sans-serif'],
