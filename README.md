@@ -10,7 +10,7 @@
       <a href="#2-technologies">Technologies</a>
     </li>
     <li>
-      <a href="#3-contact">Prerequisites</a>
+      <a href="#3-prerequisites">Prerequisites</a>
     </li>
     <li>
       <a href="#4-contact">How to run</a>
