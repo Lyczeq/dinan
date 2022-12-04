@@ -85,7 +85,7 @@ export const useAddExam = () => {
   return {
     addNewExam: addNewBlockchainExam,
     examUpdateStatus: status,
-    blockchainCallStatus: state,
+    blockchainCallStatus: state.status,
     isUserConnected: account,
   };
 };

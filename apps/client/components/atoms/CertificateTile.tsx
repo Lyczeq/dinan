@@ -30,7 +30,7 @@ export const CertificateTile = ({
           width={350}
           height={350}
         />
-        <p className="py-2 text-center text-orange-400">{cert.metadata.name}</p>
+        <p className="py-2 text-center text-primary">{cert.metadata.name}</p>
       </Link>
     </div>
   );

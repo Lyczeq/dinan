@@ -12,7 +12,7 @@ export const TextAreaInput = React.forwardRef<
   return (
     <div className="w-full h-1/2">
       <textarea
-        className={`w-full border-yellow-300 border-2 p-2 rounded-md focus:outline-none focus:border-inputFocus  text-lightGrey placeholder:text-placeholderGrey ${className}`}
+        className={`w-full border-secondary border-2 p-2 rounded-md focus:outline-none focus:border-inputFocus  text-lightGrey placeholder:text-placeholderGrey ${className}`}
         ref={ref}
         {...props}
       />
