@@ -33,6 +33,9 @@ export const Form = ({
   });
 
   const addQuestion = () => {
+    if (getExamValues('questions').length >= 30) {
+      return;
+    }
     append(initialQuestion);
   };
 
@@ -109,6 +112,7 @@ export const Form = ({
             onClick={addQuestion}
             className="flex gap-1 w-max items-center"
             icon={<PlusIcon className="w-5 h-5" />}
+            disabled={fields.length >= 30}
           >
             Add question
           </Button>

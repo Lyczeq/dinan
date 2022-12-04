@@ -6,6 +6,7 @@ import {
 import { NewExam } from '@dinan/types/NewExam/index';
 import { useAddExam } from './useAddExam';
 import { Button } from 'components/atoms/Button';
+import { ErrorText } from 'components/atoms/ErrorText';
 
 type SummaryProps = {
   handleSubmitExam: UseFormHandleSubmit<NewExam>;
@@ -32,7 +33,12 @@ export const Summary = ({
   handleSubmitExam,
   watch,
 }: SummaryProps) => {
-  const { addNewExam, blockchainCallStatus, examUpdateStatus } = useAddExam();
+  const {
+    addNewExam,
+    blockchainCallStatus,
+    examUpdateStatus,
+    isUserConnected,
+  } = useAddExam();
 
   const statusMessage = () => {
     if (blockchainCallStatus.status === 'None') return;
@@ -59,10 +65,17 @@ export const Summary = ({
       <Button
         className="self-center px-8 my-4"
         onClick={handleSubmitExam(onSubmitExam)}
-        disabled={!!statusMessage()}
+        disabled={!!statusMessage() || !isUserConnected}
       >
         Add Exam
       </Button>
+      <ErrorText
+        errorMessage={
+          !isUserConnected
+            ? 'You must connect your wallet to add a new exam'
+            : undefined
+        }
+      />
       <div>
         <p className="text-lg">Questions: </p>
         <ul>

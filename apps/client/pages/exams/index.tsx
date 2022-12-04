@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { NextPage } from 'next';
 import { useQuery } from 'react-query';
 import { ExamsView } from 'components/templates/ExamsView';
 import type { BasicExam } from 'types/basicExam';
@@ -9,7 +10,7 @@ const fetchExams = async (): Promise<BasicExam[]> => {
   return data.exams;
 };
 
-const Exams = () => {
+const Exams: NextPage = () => {
   const { data: exams, status } = useQuery<BasicExam[]>('exams', fetchExams);
 
   return (
@@ -21,5 +22,4 @@ const Exams = () => {
     </>
   );
 };
-
 export default Exams;

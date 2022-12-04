@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { NewExam } from 'types/newExam';
+import { NewExam } from '@dinan/types/NewExam';
 import { initialExam } from './helpers';
 import {
   methods,
@@ -86,5 +86,6 @@ export const useAddExam = () => {
     addNewExam: addNewBlockchainExam,
     examUpdateStatus: status,
     blockchainCallStatus: state,
+    isUserConnected: account,
   };
 };

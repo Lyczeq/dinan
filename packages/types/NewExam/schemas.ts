@@ -13,7 +13,7 @@ export const answerSchema = z.object({
     .string()
     .trim()
     .min(1, getErrorMessage('Answer', 1, false))
-    .max(70, getErrorMessage('Answer', 70, true)),
+    .max(250, getErrorMessage('Answer', 250, true)),
 });
 
 export const questionSchema = z.object({
