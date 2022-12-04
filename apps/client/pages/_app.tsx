@@ -5,8 +5,14 @@ import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Header } from 'components/molecules/Header';
 import { Footer } from 'components/atoms/Footer';
+import { Roboto } from '@next/font/google';
 
 import '../styles/globals.css';
+
+const robotoFont = Roboto({
+  subsets: ['latin-ext'],
+  weight: ['400', '700'],
+});
 
 const queryClient = new QueryClient();
 
@@ -21,7 +27,9 @@ type WrapperProps = {
 };
 
 const Wrapper = ({ children }: WrapperProps) => (
-  <div className="max-w-screen-2xl mx-auto bg-white flex flex-col items-center">
+  <div
+    className={`max-w-screen-2xl mx-auto bg-white flex flex-col items-center ${robotoFont.className}`}
+  >
     <Header />
     <div className="min-h-[calc(3/4*100vh)] w-full mb-20">{children}</div>
     <Footer />

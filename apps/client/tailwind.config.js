@@ -12,7 +12,7 @@ module.exports = {
         error: '#dc2626',
       },
       fontFamily: {
-        lobster: ['lobster', 'arial', 'sans-serif'],
+        lobster: ['arial', 'sans-serif'],
       },
       gridTemplateColumns: {
         '3/4': '3fr 1fr',
