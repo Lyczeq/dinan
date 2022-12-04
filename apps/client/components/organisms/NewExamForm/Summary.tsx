@@ -75,7 +75,7 @@ export const Summary = ({
   };
 
   return (
-    <aside className="h-full flex flex-col bg-orange-200 border-orange-200 border rounded-br-md rounded-tr-md sticky px-4 break-all">
+    <aside className="h-full flex flex-col bg-inputFocus border-inputFocus border rounded-br-md rounded-tr-md sticky px-4 break-all">
       <Button
         className="self-center px-8 my-4"
         onClick={handleSubmitExam(onSubmitExam)}

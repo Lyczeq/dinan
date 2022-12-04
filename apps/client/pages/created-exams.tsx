@@ -28,7 +28,7 @@ const CreatedExams: NextPage = () => {
     <Link
       href="/add-exam"
       key="add-exam-link"
-      className="text-yellow-400 font-bold border px-2 py-1 text-xl border-white hover:text-orange-400 hover:border-b-orange-400 transition-all"
+      className="text-secondary font-bold border px-2 py-1 text-xl border-white hover:text-primary hover:border-b-primary transition-all"
     >
       Add exam
     </Link>,

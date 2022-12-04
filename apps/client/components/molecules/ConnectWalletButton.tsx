@@ -15,7 +15,7 @@ export const ConnectWalletButton = () => {
 
   return (
     <Button
-      className="ml-6 px-4 bg-gradient-to-tr from-orange-400 to-yellow-400 font-bold 
+      className="ml-6 px-4 bg-gradient-to-tr from-primary to-secondary font-bold 
       w-40 text-ellipsis overflow-hidden"
       onClick={handleAccountConnection}
     >
