@@ -59,19 +59,24 @@ export const Summary = ({
     )
       return 'Oops, something went wrong!';
 
-    if (
-      blockchainCallStatus === 'PendingSignature' ||
-      blockchainCallStatus === 'Mining' ||
-      examUpdateStatus === 'loading'
-    )
-      return 'Loading...';
-
     if (blockchainCallStatus === 'Success' && examUpdateStatus === 'success')
       return 'Success!';
+
+    // if (
+    //   blockchainCallStatus === 'PendingSignature' ||
+    //   blockchainCallStatus === 'Mining' ||
+    //   examUpdateStatus === 'loading'
+    // )
+    return 'Loading...';
   };
 
   const onSubmitExam = (newExam: NewExam) => {
-    if (!isAddingDisabled()) addNewExam(newExam);
+    if (isAddingDisabled()) return;
+    addNewExam(newExam);
+
+    alert(
+      'DO NOT close or change the page, otherwise the questions will not be added!'
+    );
   };
 
   return (
