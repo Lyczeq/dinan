@@ -152,7 +152,7 @@ export const getUserScoreOfSpecificExam = async (
   req: Request,
   res: Response
 ) => {
-  if (getUserScoreOfSpecificExamParams.safeParse(req.params))
+  if (!getUserScoreOfSpecificExamParams.safeParse(req.params).success)
     return res.sendStatus(400);
 
   const { address, examAddress } =
@@ -175,7 +175,7 @@ export const getUserScoreOfSpecificExam = async (
     if (!examParticipation) return res.sendStatus(404);
 
     res.statusCode = 200;
-    return res.send({ score: examParticipation });
+    return res.send({ examParticipation });
   } catch (error) {
     return res.sendStatus(500);
   }
