@@ -75,11 +75,13 @@ export const useAddExam = () => {
 
     const examAddress = newExamCreation.args[0];
 
-    mutate({
-      userAddress: account as string,
-      examAddress,
-      exam,
-    });
+    setTimeout(() => {
+      mutate({
+        userAddress: account as string,
+        examAddress,
+        exam,
+      });
+    }, 1000);
   }, [events, account, exam, mutate, findUserExamAddress]);
 
   return {
