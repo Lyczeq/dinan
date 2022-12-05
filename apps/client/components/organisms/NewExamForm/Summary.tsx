@@ -62,11 +62,6 @@ export const Summary = ({
     if (blockchainCallStatus === 'Success' && examUpdateStatus === 'success')
       return 'Success!';
 
-    // if (
-    //   blockchainCallStatus === 'PendingSignature' ||
-    //   blockchainCallStatus === 'Mining' ||
-    //   examUpdateStatus === 'loading'
-    // )
     return 'Loading...';
   };
 
