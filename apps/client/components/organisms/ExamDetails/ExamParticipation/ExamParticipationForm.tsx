@@ -83,7 +83,7 @@ export const ExamParticipationForm = ({
       <ErrorMessage isError={status === 'error'} />
       {examResult && (
         <div className="self-center">
-          <p>Congratulations, your score is {examResult.score}!</p>
+          <p>Congratulations, your score is {examResult.score}%!</p>
           <p>
             <span>Go to your </span>
             <Link
