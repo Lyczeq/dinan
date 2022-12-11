@@ -2,7 +2,7 @@ import {
   methods,
   events as examControllerEvents,
 } from '@dinan/contracts/examController';
-import { TransactionState, TransactionStatus, useEthers } from '@usedapp/core';
+import { TransactionState, useEthers } from '@usedapp/core';
 import { LogDescription } from 'ethers/lib/utils';
 import { useExamControllerMethod } from 'hooks/useExamControllerMethod';
 import { useCallback, useEffect } from 'react';

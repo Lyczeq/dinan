@@ -138,3 +138,45 @@ export const getNFTMetadata = async (req: Request, res: Response) => {
     res.sendStatus(500);
   }
 };
+
+const getUserScoreOfSpecificExamParams = z.object({
+  address: z.string(),
+  examAddress: z.string(),
+});
+
+type GetUserScoreOfSpecificExamParams = z.infer<
+  typeof getUserScoreOfSpecificExamParams
+>;
+
+export const getUserScoreOfSpecificExam = async (
+  req: Request,
+  res: Response
+) => {
+  if (!getUserScoreOfSpecificExamParams.safeParse(req.params).success)
+    return res.sendStatus(400);
+
+  const { address, examAddress } =
+    req.params as GetUserScoreOfSpecificExamParams;
+
+  try {
+    const examParticipation = await prisma.examParticipation.findFirst({
+      where: {
+        examAddress: {
+          equals: examAddress,
+          mode: 'insensitive',
+        },
+        participantAddress: {
+          equals: address,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    if (!examParticipation) return res.sendStatus(404);
+
+    res.statusCode = 200;
+    return res.send({ examParticipation });
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
