@@ -4,6 +4,7 @@ export const initialAnswer: NewAnswer = {
   text: '',
   isCorrect: false,
 };
+
 export const initialQuestion: NewQuestion = {
   text: '',
   answers: [initialAnswer, initialAnswer],
