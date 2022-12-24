@@ -7,5 +7,12 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "client": "yarn workspace client dev",
+    "api": "yarn workspace api docker compose up -d",
+    "client:build": "yarn workspace client build",
+    "client:serve":"yarn workspace client start",
+    "api:build": "yarn workspace api build"
+  }
 }

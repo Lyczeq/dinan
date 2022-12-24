@@ -2,8 +2,6 @@
   "name": "@dinan/contracts",
   "version": "1.0.0",
   "main": "index.ts",
-  "private": true,
-  "type": "commonjs",
   "license": "MIT",
   "devDependencies": {
     "ethers": "*",
