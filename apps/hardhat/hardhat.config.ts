@@ -3,7 +3,12 @@ import { cleanEnv, str } from 'envalid';
 import { default as dotenv } from 'dotenv';
 import '@nomicfoundation/hardhat-toolbox';
 
-dotenv.config();
+//env file from the root folder
+dotenv.config({
+  path: '../../.env',
+});
+
+console.log(process.env);
 
 const env = cleanEnv(process.env, {
   PRIVATE_KEY: str(),
