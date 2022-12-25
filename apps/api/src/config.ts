@@ -8,7 +8,7 @@ dotenv.config({
 
 export const env = cleanEnv(process.env, {
   DATABASE_URL: str(),
-  POSTGRES_PORT: port(),
+  API_PORT: port(),
   PRIVATE_KEY: str(),
   ALCHEMY_HTTPS_LINK: str(),
   ALCHEMY_API_KEY: str(),

@@ -8,8 +8,6 @@ dotenv.config({
   path: '../../.env',
 });
 
-console.log(process.env);
-
 const env = cleanEnv(process.env, {
   PRIVATE_KEY: str(),
 });
