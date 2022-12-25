@@ -15,8 +15,8 @@ app.use('/api/v1/users', users);
 
 const main = async () => {
   ContractHandler.setupWebsockets();
-  app.listen(env.PORT, () =>
-    console.log(`🚀 Server ready at http://localhost:${env.PORT}`)
+  app.listen(env.API_PORT, () =>
+    console.log(`🚀 Server ready at http://localhost:${env.API_PORT}`)
   );
 };
 

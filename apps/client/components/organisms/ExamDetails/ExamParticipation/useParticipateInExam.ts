@@ -73,7 +73,8 @@ export const useParticipateInExam = (address: string) => {
     if (!newExamParticipatiom) return;
 
     getQuestions();
-  }, [events, account]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events, account, findUserExamAddress]);
 
   return {
     participateInExam: send,

@@ -7,5 +7,19 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "client": "yarn workspace client dev",
+    "client:build": "yarn workspace client build",
+    "client:serve": "yarn workspace client start",
+    "client:prod": "yarn client:build && yarn client:serve",
+    "api:prisma": "yarn workspace api prisma generate &&  dotenv -e .env -- yarn workspace api prisma migrate dev",
+    "api": "yarn workspace api dev",
+    "api:run": "yarn api:prisma && yarn api",
+    "start:prod": "yarn && concurrently 'yarn client:prod' 'yarn api:run' "
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "dotenv-cli": "^6.0.0"
+  }
 }

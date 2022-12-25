@@ -1,10 +1,11 @@
-import { NewExam, NewExamAnswer, NewExamQuestion } from 'types/newExam';
+import { NewExam, NewAnswer, NewQuestion } from '@dinan/types/newExam';
 
-export const initialAnswer: NewExamAnswer = {
+export const initialAnswer: NewAnswer = {
   text: '',
   isCorrect: false,
 };
-export const initialQuestion: NewExamQuestion = {
+
+export const initialQuestion: NewQuestion = {
   text: '',
   answers: [initialAnswer, initialAnswer],
 };

@@ -8,6 +8,7 @@
     "strict": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "skipLibCheck": true
   }
 }
