@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npx tsc",
-    "dev": "nodemon ./src/app.ts",
+    "dev": "nodemon --quiet ./src/app.ts",
     "test": "jest"
   },
   "dependencies": {
