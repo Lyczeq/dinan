@@ -6,7 +6,7 @@ async function main() {
   const examController = await ExamController.deploy();
 
   await examController.deployed();
-  console.log(examController.address);
+  console.log('Exam Controller address:', examController.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

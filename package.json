@@ -16,7 +16,12 @@
     "api:prisma": "yarn workspace api prisma generate &&  dotenv -e .env -- yarn workspace api prisma migrate dev",
     "api": "yarn workspace api dev",
     "api:run": "yarn api:prisma && yarn api",
-    "start:prod": "yarn && concurrently 'yarn client:prod' 'yarn api:run' "
+    "start:prod": "yarn && concurrently 'yarn client:prod' 'yarn api:run' ",
+    "deploy-exam-controller": "cd apps/hardhat && yarn hardhat clean && yarn hardhat run scripts/deployExamController.ts --network matic",
+    "move-exam-controller-abi": "cd apps/hardhat && cp artifacts/contracts/ExamController.sol/ExamController.json ../../packages/contracts/examController/ExamController.json",
+    "move-exam-abi": "cd apps/hardhat && cp artifacts/contracts/Exam.sol/Exam.json ../../packages/contracts/exam/Exam.json",
+    "move-abi-files": "yarn run move-exam-controller-abi && yarn run move-exam-abi",
+    "deploy-ec-move-abis": "yarn run deploy-exam-controller && yarn run move-abi-files"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
