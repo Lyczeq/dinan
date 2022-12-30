@@ -5,8 +5,10 @@ export const useExamControllerMethod = (methodName: string) => {
   const examControllerContract = getNewExamControllerContract();
   const { send, state, events } = useContractFunction(
     examControllerContract,
-    methodName
+    methodName,
+    {
+      gasLimitBufferPercentage: 25,
+    }
   );
-
   return { send, state, events };
 };
