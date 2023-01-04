@@ -3,7 +3,7 @@ import { ExternalLink } from './ExternalLink';
 
 export const Footer = () => {
   return (
-    <footer className="w-screen 2xl:w-[calc(99vw+1rem)] bg-gradient-to-tr from-primary to-secondary h-[calc(9.9rem)] flex justify-center items-center gap-6 text-white ">
+    <footer className="w-screen 2xl:w-[calc(99vw)] bg-gradient-to-tr from-primary to-secondary h-[calc(9.9rem)] flex justify-center items-center gap-6 text-white ">
       <ExternalLink
         url="https://www.linkedin.com/in/jakublyczko/"
         icon={<LinkedInLogoIcon className="w-6 h-6" />}
