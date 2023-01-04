@@ -1,0 +1,53 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Participant {
+  address String [pk]
+  examParticipations ExamParticipation [not null]
+}
+
+Table ExamParticipation {
+  id String [pk]
+  participant Participant [not null]
+  participantAddress String [not null]
+  exam Exam [not null]
+  examAddress String [not null]
+  isFinished Boolean [not null]
+  hasParticipantStarted Boolean [not null]
+  score Int
+}
+
+Table Exam {
+  address String [pk]
+  name String
+  symbol String
+  description String
+  questions Question [not null]
+  examParticipations ExamParticipation [not null]
+  creatorAddress String [not null]
+}
+
+Table Question {
+  id String [pk]
+  answers Answer [not null]
+  text String [not null]
+  exam Exam [not null]
+  examAddress String [not null]
+}
+
+Table Answer {
+  id String [pk]
+  text String [not null]
+  isCorrect Boolean [not null]
+  question Question [not null]
+  questionId String [not null]
+}
+
+Ref: ExamParticipation.participantAddress > Participant.address
+
+Ref: ExamParticipation.examAddress > Exam.address
+
+Ref: Question.examAddress > Exam.address
+
+Ref: Answer.questionId > Question.id
