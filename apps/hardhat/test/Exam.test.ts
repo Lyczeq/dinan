@@ -59,7 +59,7 @@ describe('Exam tests', () => {
     });
 
     it('Expects a revert when trying to participate to the exam twice', async () => {
-      const { exam, participantAddress, otherAccount } = await loadFixture(
+      const { exam, participantAddress } = await loadFixture(
         deployExamFixture
       );
 

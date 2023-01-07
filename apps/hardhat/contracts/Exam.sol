@@ -16,6 +16,7 @@ contract Exam is ERC721URIStorage, Ownable {
     // ownerOf() returns tokenId owner's address
 
     using Counters for Counters.Counter;
+
     struct ExamParticipation {
         bool isFinished;
         uint8 score;
