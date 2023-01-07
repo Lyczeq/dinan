@@ -33,7 +33,7 @@ export const examSchema = z.object({
     .string()
     .trim()
     .min(5, getErrorMessage('Name', 5, false))
-    .max(20, getErrorMessage('Answer', 25, true)),
+    .max(20, getErrorMessage('Name', 25, true)),
   symbol: z
     .string()
     .trim()
