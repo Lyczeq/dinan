@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { NewExam } from '@dinan/types/NewExam';
-import { initialExam } from './helpers';
+import { initialExam, readableDate } from './helpers';
 import {
   methods,
   events as examControllerEvents,
@@ -72,7 +72,7 @@ export const useAddExam = () => {
   useEffect(() => {
     const newExamCreation = events?.find(findUserExamAddress);
     if (!newExamCreation) return;
-
+    console.log({ newExamCreation }, readableDate());
     const examAddress = newExamCreation.args[0];
 
     setTimeout(() => {

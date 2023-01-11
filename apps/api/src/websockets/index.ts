@@ -7,6 +7,11 @@ import { getNewExamContract } from '@dinan/contracts/exam';
 import prisma from '../prisma';
 import { env } from '../config';
 
+const readableDate = () => {
+  const date = new Date();
+  return `${date.toLocaleTimeString()},${date.toDateString()}`;
+};
+
 export class ContractHandler {
   static readonly providerNetwork: string = 'maticmum';
   static readonly websocketProviderNetwork = {
@@ -25,7 +30,7 @@ export class ContractHandler {
     examControllerContract.on(
       events.newExamCreation,
       async (newExamAddress: string, creatorAddress: string) => {
-        console.log('add exam', newExamAddress, creatorAddress);
+        console.log('add exam', readableDate());
         try {
           await prisma.exam.create({
             data: {
@@ -45,9 +50,7 @@ export class ContractHandler {
       this.websocketProviderNetwork,
       env.ALCHEMY_API_KEY
     );
-
     const examControllerContract = getNewExamControllerContract(provider);
-
     examControllerContract.on(
       events.newExamParticipation,
       async (examAddress: string, participantAddress: string) => {
