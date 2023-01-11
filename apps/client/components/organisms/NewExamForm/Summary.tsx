@@ -7,6 +7,7 @@ import { NewExam } from '@dinan/types/NewExam/index';
 import { useAddExam } from './useAddExam';
 import { Button } from 'components/atoms/Button';
 import { ErrorText } from 'components/atoms/ErrorText';
+import { readableDate } from './helpers';
 
 type SummaryProps = {
   handleSubmitExam: UseFormHandleSubmit<NewExam>;
@@ -50,6 +51,8 @@ export const Summary = ({
   };
 
   const statusMessage = () => {
+    console.log({ blockchainCallStatus }, readableDate());
+    console.log({ examUpdateStatus }, readableDate());
     if (blockchainCallStatus === 'None') return;
 
     if (
