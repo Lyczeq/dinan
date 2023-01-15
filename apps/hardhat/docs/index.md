@@ -2,6 +2,8 @@
 
 ## Exam
 
+It holds NFTs that are used as the certifiactes of participating in the exam
+
 ### ExamParticipation
 
 ```solidity
@@ -42,7 +44,7 @@ base SVG string used to create NFT image
 function participateInExam(address _participantAddress) external
 ```
 
-Function that allows the user to participate
+Function that allows the user to participate in the exam
 
 #### Parameters
 
@@ -71,7 +73,7 @@ Function that saves participant's score
 modifier isBackendAddress()
 ```
 
-Function that checks whether sender address is the same as backend's
+Modifier that checks whether sender address is the same as backend's
 
 ### getParticipantResult
 
@@ -97,6 +99,8 @@ Function that has been overriden to disallow transfering certificates
 
 ## ExamController
 
+@notice ExamController manages Exam instances. It creates them and allows user to participate in them
+
 ### ExamHelper
 
 ```solidity
@@ -112,11 +116,15 @@ struct ExamHelper {
 event NewExamCreation(address newExamAddress, address creatorAddress)
 ```
 
+Event that is emited after new exam creation
+
 ### NewExamParticipation
 
 ```solidity
 event NewExamParticipation(address examAddress, address participantAddress)
 ```
+
+Event that is emited after new exam participation in the exam
 
 ### addExam
 
@@ -124,15 +132,35 @@ event NewExamParticipation(address examAddress, address participantAddress)
 function addExam(string _name, string _symbol, string _description) external
 ```
 
+Functiom that creates new Exam
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _name | string | new exam's name |
+| _symbol | string | new exam's NFT symbol |
+| _description | string | new exam's description |
+
 ### manageExamParticipation
 
 ```solidity
 function manageExamParticipation(address _examAddressToParticipate) external
 ```
 
+Functiom that manages new exam participations
+
+#### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _examAddressToParticipate | address | exam's address that user wants to participate in |
+
 ### getExams
 
 ```solidity
 function getExams() external view returns (struct ExamController.ExamHelper[])
 ```
+
+Functiom that returns exams data
 

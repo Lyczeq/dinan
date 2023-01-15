@@ -9,9 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 //TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
 
-// Exam holds its NFTs that are used as the certifiactes of participating in the exam
-/// @title Exam - contract for a single exam instance
-/// @author Jakub Łyczko
+///@notice It holds NFTs that are used as the certifiactes of participating in the exam
 contract Exam is ERC721URIStorage, Ownable {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
@@ -20,7 +18,6 @@ contract Exam is ERC721URIStorage, Ownable {
 
     using Counters for Counters.Counter;
 
-    /// @notice struct used to keep the result of the exam participation
     struct ExamParticipation {
         bool isFinished;
         uint8 score;
@@ -104,7 +101,7 @@ contract Exam is ERC721URIStorage, Ownable {
         _tokenIds.increment();
     }
 
-    /// @notice Function that allows the user to participate
+    /// @notice Function that allows the user to participate in the exam
     /// @param _participantAddress address of the participant
     function participateInExam(address _participantAddress) external onlyOwner {
         require(
@@ -139,7 +136,7 @@ contract Exam is ERC721URIStorage, Ownable {
         mintNFT(_participantAddress, _score);
     }
 
-    /// @notice Function that checks whether sender address is the same as backend's
+    /// @notice Modifier that checks whether sender address is the same as backend's
     modifier isBackendAddress() {
         require(
             msg.sender == backendAddress,
