@@ -27,22 +27,26 @@ export class ContractHandler {
 
     const examControllerContract = getNewExamControllerContract(provider);
 
-    examControllerContract.on(
-      events.newExamCreation,
-      async (newExamAddress: string, creatorAddress: string) => {
-        console.log('add exam', readableDate());
-        try {
-          await prisma.exam.create({
-            data: {
-              address: newExamAddress,
-              creatorAddress: creatorAddress,
-            },
-          });
-        } catch (error) {
-          console.log(error);
+    try {
+      examControllerContract.on(
+        events.newExamCreation,
+        async (newExamAddress: string, creatorAddress: string) => {
+          console.log('add exam', readableDate());
+          try {
+            await prisma.exam.create({
+              data: {
+                address: newExamAddress,
+                creatorAddress: creatorAddress,
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
         }
-      }
-    );
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   static async listenOnNewExamParticipation() {
@@ -51,43 +55,47 @@ export class ContractHandler {
       env.ALCHEMY_API_KEY
     );
     const examControllerContract = getNewExamControllerContract(provider);
-    examControllerContract.on(
-      events.newExamParticipation,
-      async (examAddress: string, participantAddress: string) => {
-        console.log('exam participation', examAddress, participantAddress);
-        try {
-          await prisma.participant.upsert({
-            include: {
-              examParticipations: true,
-            },
-            where: {
-              address: participantAddress,
-            },
-            update: {
-              examParticipations: {
-                create: {
-                  hasParticipantStarted: false,
-                  isFinished: false,
-                  examAddress,
+    try {
+      examControllerContract.on(
+        events.newExamParticipation,
+        async (examAddress: string, participantAddress: string) => {
+          console.log('exam participation', examAddress, participantAddress);
+          try {
+            await prisma.participant.upsert({
+              include: {
+                examParticipations: true,
+              },
+              where: {
+                address: participantAddress,
+              },
+              update: {
+                examParticipations: {
+                  create: {
+                    hasParticipantStarted: false,
+                    isFinished: false,
+                    examAddress,
+                  },
                 },
               },
-            },
-            create: {
-              address: participantAddress,
-              examParticipations: {
-                create: {
-                  hasParticipantStarted: false,
-                  isFinished: false,
-                  examAddress,
+              create: {
+                address: participantAddress,
+                examParticipations: {
+                  create: {
+                    hasParticipantStarted: false,
+                    isFinished: false,
+                    examAddress,
+                  },
                 },
               },
-            },
-          });
-        } catch (error) {
-          console.log(error);
+            });
+          } catch (error) {
+            console.log(error);
+          }
         }
-      }
-    );
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   static setupWebsockets() {
