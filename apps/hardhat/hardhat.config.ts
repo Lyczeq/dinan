@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import { cleanEnv, str } from 'envalid';
 import { default as dotenv } from 'dotenv';
+import 'solidity-docgen';
 import '@nomicfoundation/hardhat-toolbox';
 
 //env file from the root folder
@@ -14,6 +15,7 @@ const env = cleanEnv(process.env, {
 
 const config: HardhatUserConfig = {
   solidity: '0.8.9',
+  docgen: {},
   networks: {
     hardhat: {},
     matic: {

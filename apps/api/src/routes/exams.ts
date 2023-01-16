@@ -10,7 +10,7 @@ import {
 export const router = express.Router();
 
 router.route('/').get(getAllExams);
-router.route('/:address').put(updateExamWithQuestions);
 router.route('/:address').get(getSingleExam);
+router.route('/:address').put(updateExamWithQuestions);
 router.route('/:address/participate').get(getExamsQuestionsAndAnswers);
 router.route('/:address/compare').post(compareParticipantAnswers);

@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-//TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
 
+///@notice It holds NFTs that are used as the certifiactes of participating in the exam
 contract Exam is ERC721URIStorage, Ownable {
     // name() method returns Exam's name
     // symbol() method returns Exam's symbol
@@ -30,6 +30,10 @@ contract Exam is ERC721URIStorage, Ownable {
 
     mapping(address => ExamParticipation) private partcipantsScores;
 
+    /// @notice Constructor initialize basic properties and add description
+    /// @param _name exam's name
+    /// @param _symbol exam's NFT symbol
+    /// @param _description exam's description
     constructor(
         string memory _name,
         string memory _symbol,
@@ -38,9 +42,13 @@ contract Exam is ERC721URIStorage, Ownable {
         description = _description;
     }
 
+    /// @notice base SVG string used to create NFT image
     string BASE_SVG =
         "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='#FB923C' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
 
+    /// @notice Function for minting NFT for the participant who has already finished exam
+    /// @param _participantAddress address of the participant
+    /// @param _score score that participant has got
     function mintNFT(address _participantAddress, uint8 _score) private {
         uint256 newItemId = _tokenIds.current();
 
@@ -92,6 +100,8 @@ contract Exam is ERC721URIStorage, Ownable {
         _tokenIds.increment();
     }
 
+    /// @notice Function that allows the user to participate in the exam
+    /// @param _participantAddress address of the participant
     function participateInExam(address _participantAddress) external onlyOwner {
         require(
             partcipantsScores[_participantAddress].hasStarted == false,
@@ -105,6 +115,9 @@ contract Exam is ERC721URIStorage, Ownable {
         );
     }
 
+    /// @notice Function that saves participant's score
+    /// @param _participantAddress address of the participant
+    /// @param _score score that participant has got
     function saveParticipantScore(
         uint8 _score,
         address _participantAddress
@@ -122,6 +135,7 @@ contract Exam is ERC721URIStorage, Ownable {
         mintNFT(_participantAddress, _score);
     }
 
+    /// @notice Modifier that checks whether sender address is the same as backend's
     modifier isBackendAddress() {
         require(
             msg.sender == backendAddress,
@@ -130,6 +144,8 @@ contract Exam is ERC721URIStorage, Ownable {
         _; // function code
     }
 
+    /// @notice Function that gets the result of exam of a certain participant
+    /// @param _userAddress address of the user
     function getParticipantResult(
         address _userAddress
     ) external view returns (ExamParticipation memory) {
@@ -140,6 +156,7 @@ contract Exam is ERC721URIStorage, Ownable {
         return partcipantsScores[_userAddress];
     }
 
+    /// @notice Function that has been overriden to disallow transfering certificates
     function _transfer(address, address, uint256) internal virtual override {
         revert("You cannot transfer Exam tokens");
     }

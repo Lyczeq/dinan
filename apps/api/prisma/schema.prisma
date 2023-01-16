@@ -2,7 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator dbml {
-  provider = "prisma-dbml-generator"
+  provider = "prisma-client-js"
+  //uncomment line below to generate DBML data
+  // provider = "prisma-dbml-generator"
 }
 
 datasource db {
