@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-//TODO: change encode method to public and use it as library
 import {Base64} from "../libraries/Base64.sol";
 
 ///@notice It holds NFTs that are used as the certifiactes of participating in the exam
