@@ -499,3 +499,39 @@ This directory includes custom hooks. These are special React functions that man
 ```ts
 const useExamControllerMethod = (methodName: string) => {};
 ```
+
+# Pages directory
+
+`Next.js` framework's feature is file-based routing. Each file in that directory is responsible for a separate route.
+
+## Certificates directory
+
+- `[address].tsx` file
+  Component in that file is responsible for displaying details of a certain certificate. Given URL is `/certificates/:address`
+
+- `index.tsx` file
+  Component in that file is responsible for displaying list with certificates. Given URL is `/certificates`
+
+## Exams directory
+
+- `[address].tsx` file
+  Component in that file is responsible for displaying details of a certain exam. Given URL is `/exams/:address`
+
+- `index.tsx` file
+  Component in that file is responsible for displaying list with exams. Given URL is `/exams`
+
+## \_app.tsx file
+
+Component in this file is a root of the application with all the providers and configuration.
+
+## add-exam.tsx file
+
+Component in this file displays page that allows adding an exam.
+
+## created-exams.tsx file
+
+Component in this file displays list of created exams
+
+## index.tsx file
+
+Component in this file displays main page of the web application.
