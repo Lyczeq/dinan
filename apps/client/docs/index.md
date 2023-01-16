@@ -256,6 +256,220 @@ const Header = () => {};
 export const Navbar = () => {};
 ```
 
+## Organisms directory
+
+This directory consists of React components that have a lot of logic behind. For example creating new exam or participating in it.
+
+### ExamsDetails directory
+
+- #### ExamParticipation directory
+
+That directory includes all files responsible for participating in the exam.
+
+- #### ExamParticipation
+  Component that displays the whole exam participation.
+
+```ts
+const ExamParticipation = () => {};
+```
+
+- #### ExamParticipationForm
+  Component that displays form of exam participation
+
+```ts
+type ExamParticipationFormProps = {
+  questions: Question[];
+  examAddress: string;
+};
+```
+
+```ts
+const ExamParticipationForm = ({
+  questions,
+  examAddress,
+}: ExamParticipationFormProps) => {};
+```
+
+- #### QuestionParticipationForm
+  Component that handles logic of choosing answers of exam questions.
+
+```ts
+type QuestionParticipationFormProps = {
+  question: Question;
+  questionIndex: number;
+  toggleAnswer: toggleAnswerFn;
+};
+```
+
+```ts
+const QuestionParticipationForm = ({
+  question,
+  questionIndex,
+  toggleAnswer,
+}: QuestionParticipationFormProps) => {};
+```
+
+- #### UserScore
+  Component that displays user score.
+
+```ts
+type UserScoreProps = {
+  score: number;
+};
+```
+
+```ts
+export const UserScore = ({ score }: UserScoreProps) => {};
+```
+
+- #### ExamBasics
+  Component used to display basic information of the exam on its details page.
+
+```ts
+const ExamBasics = () => {};
+```
+
+- #### ExamDetails
+
+  A simple component that includes only `ExamDetails` and `ExamParticipation` components.
+
+```ts
+const ExamDetails = () => {};
+```
+
+### NewExamForm directory
+
+This directory consists of all the components responsible for adding a new exam
+
+- #### AnswerForm
+  Component that is used to display simple form for a question's answer
+
+```ts
+type AnswerFormProps = {
+  questionId: string;
+  questionIndex: number;
+  answerIndex: number;
+  removeAnswer: (questionIndex: number, answerIndex: number) => void;
+  register: UseFormRegister<NewExam>;
+  textError?: string;
+};
+```
+
+```ts
+const AnswerForm = ({
+  questionId,
+  questionIndex,
+  answerIndex,
+  removeAnswer,
+  register,
+  textError,
+}: AnswerFormProps) => {};
+```
+
+- #### ExamForm
+  Compnent that displays a whole exam form.
+
+```ts
+const ExamForm = () => {};
+```
+
+- #### Exam
+  Component that controls behaviour of all the inputs and values of the new exam.
+
+```ts
+type FormProps = {
+  register: UseFormRegister<NewExam>;
+  getExamValues: UseFormGetValues<NewExam>;
+  control: Control<NewExam, any>;
+  errors: FieldErrors<NewExam>;
+};
+```
+
+```ts
+const Form = ({ register, getExamValues, control, errors }: FormProps) => {};
+```
+
+- #### QuestionForm
+  Component that is reponsible for control single question in new exam
+
+```ts
+type QuestionFormProps = {
+  register: UseFormRegister<NewExam>;
+  questionId: string;
+  question: NewQuestion;
+  questionIndex: number;
+  removeQuestion: (questionIndex: number) => void;
+  addAnswer: (questionIndex: number) => void;
+  removeAnswer: (questionIndex: number, answerIndex: number) => void;
+  errors?: FieldErrors<NewQuestion>;
+};
+```
+
+```ts
+const QuestionForm = React.memo(
+  ({
+    question,
+    questionId,
+    questionIndex,
+    register,
+    removeQuestion,
+    addAnswer,
+    removeAnswer,
+    errors,
+  }: QuestionFormProps) => {}
+);
+```
+
+- #### Summary
+  Component that displays summary of the added questions
+
+```ts
+type SummaryProps = {
+  handleSubmitExam: UseFormHandleSubmit<NewExam>;
+  getExamValues: UseFormGetValues<NewExam>;
+  watch: UseFormWatch<NewExam>;
+};
+```
+
+```ts
+const Summary = ({
+  getExamValues,
+  handleSubmitExam,
+  watch,
+}: SummaryProps) => {};
+```
+
+- ### Table directory
+
+  This directory consists of the components used to display table
+
+  ```ts
+  export type TableProps = {
+    children: ReactNode | ReactNode[];
+  };
+  ```
+
+- #### Table
+  Main component responsible for the table.
+
+```ts
+const Table = ({ children }: TableProps) => {};
+```
+
+- #### TableContent
+  Component that displays content of the table
+
+```ts
+const TableContent = ({ children }: TableProps) => {};
+```
+
+- #### TableHeader
+  Component that displays header of the table
+
+```ts
+const TableHeader = ({ children }: TableProps) => {};
+```
+
 ## Templates directory
 
 This directory includes complex React components that usually are used as a template of the page
