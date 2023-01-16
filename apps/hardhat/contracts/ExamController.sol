@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import "./Exam.sol";
 
-///  @notice ExamController manages Exam instances. It creates them and allows user to participate in them
+/// ExamController manages Exam instances. It creates them and allows user to participate in them
 contract ExamController {
     /// Strucute to keep information about created Exams
     struct ExamHelper {

@@ -99,7 +99,7 @@ Function that has been overriden to disallow transfering certificates
 
 ## ExamController
 
-@notice ExamController manages Exam instances. It creates them and allows user to participate in them
+ExamController manages Exam instances. It creates them and allows user to participate in them
 
 ### ExamHelper
 
